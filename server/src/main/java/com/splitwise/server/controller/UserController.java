@@ -7,8 +7,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 public class UserController {
-    @GetMapping
-    public String greet(){
-        return "Hello World";
-    }
+
 }
