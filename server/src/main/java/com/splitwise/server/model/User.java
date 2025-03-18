@@ -1,6 +1,7 @@
 package com.splitwise.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -29,23 +30,23 @@ public class User implements UserDetails{
     private String name;
 
     @Column(nullable = false)
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "user", cascade = CascadeType.ALL)
     private Set<UserGroup> userGroups;
 
-    @OneToMany(mappedBy = "payer", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "payer", cascade = CascadeType.ALL)
     private Set<Expense> expensesPaid;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.emptyList(); // No roles for now, can be added later
+        return Collections.emptyList();
     }
 
     @Override
     public String getUsername() {
-        return email; // Use email as username for authentication
+        return email;
     }
 
     @Override

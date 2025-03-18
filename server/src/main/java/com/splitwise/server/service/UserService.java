@@ -27,18 +27,23 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User registerUser(String email, String name, String password) {
-        if (userRepo.findByEmail(email).isPresent()) {
-            throw new RuntimeException("User already exists");
+    public User getUserByEmail(String email) {
+        return userRepo.findByEmail(email).orElse(null);
+    }
+
+    @Transactional
+    public User registerUser(User user) {
+        if (user.getPassword() == null || user.getPassword().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
         }
 
-        User user = new User();
-        user.setEmail(email);
-        user.setName(name);
-        user.setPassword(passwordEncoder.encode(password)); // ✅ Encrypt password
+        // Encrypt the password
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         return userRepo.save(user);
     }
 
+    @Transactional
     public boolean authenticateUser(String email, String rawPassword) {
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));

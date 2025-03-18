@@ -17,17 +17,18 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationManager authManager;
     private final UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserService userService) {
-        this.authenticationManager = authenticationManager;
+    public AuthController(AuthenticationManager authManager, UserService userService) {
+        this.authManager = authManager;
         this.userService = userService;
     }
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
-        User newUser = userService.registerUser(user.getEmail(), user.getName(), user.getPassword());
+        System.out.println("Received password: " + user.getPassword());
+        User newUser = userService.registerUser(user);
         return ResponseEntity.ok(newUser);
     }
 
@@ -37,36 +38,43 @@ public class AuthController {
         String password = loginRequest.get("password");
 
         if (email == null || password == null) {
-            return ResponseEntity.badRequest().body("{\"message\": \"Missing email or password\"}");
+            return ResponseEntity.badRequest().body(Map.of("message", "Missing email or password"));
         }
 
         try {
-            Authentication authentication = authenticationManager.authenticate(
+            Authentication auth = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
             );
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            session.setAttribute("user", authentication.getName());
 
-            return ResponseEntity.ok("{\"message\": \"Login Successful\", \"user\": \"" + authentication.getName() + "\"}");
+            // Store authentication in SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(auth);
+
+            // Attach Spring Security context to session
+            session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
+
+            return ResponseEntity.ok(Map.of("message", "Login Successful", "user", auth.getName()));
         } catch (Exception e) {
-            return ResponseEntity.status(401).body("{\"message\": \"Bad credentials\"}");
+            return ResponseEntity.status(401).body(Map.of("message", "Bad credentials"));
         }
     }
 
 
+
     @GetMapping("/status")
-    public ResponseEntity<?> checkAuthStatus(HttpSession session) {
-        String user = (String) session.getAttribute("user");
-        if (user != null) {
-            return ResponseEntity.ok("{\"message\": \"Authenticated\", \"user\": \"" + user + "\"}");
+    public ResponseEntity<?> checkAuthStatus() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+                && !"anonymousUser".equals(authentication.getPrincipal())) {
+            return ResponseEntity.ok(Map.of("message", "Authenticated", "user", authentication.getName()));
         }
-        return ResponseEntity.ok("{\"message\": \"Not authenticated\", \"user\": null}");
+        return ResponseEntity.ok(Map.of("message", "Not authenticated", "user", null));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpSession session) {
         session.invalidate(); // Destroy session
-        SecurityContextHolder.clearContext();
-        return ResponseEntity.ok("{\"message\": \"Logged Out Successfully\", \"user\": null}");
+        SecurityContextHolder.clearContext(); // Clear Spring Security authentication
+
+        return ResponseEntity.ok(Map.of("message", "Logged Out Successfully", "user", null));
     }
 }
