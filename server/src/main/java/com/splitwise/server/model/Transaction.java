@@ -35,4 +35,7 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     private Group group;
+
+    @Column(nullable = false)
+    private boolean settled = false;
 }

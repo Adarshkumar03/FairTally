@@ -58,6 +58,7 @@
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-core -->
 		<dependency>
 			<groupId>org.springframework.session</groupId>

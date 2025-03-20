@@ -1,5 +1,8 @@
 package com.splitwise.server.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +12,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class UserGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +19,17 @@ public class UserGroup {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
+    @JsonBackReference
     private Group group;
+
+    @Override
+    public String toString() {
+        return "UserGroup{id=" + id + ", userId=" + (user != null ? user.getId() : "null") +
+                ", groupId=" + (group != null ? group.getId() : "null") + "}";
+    }
 }

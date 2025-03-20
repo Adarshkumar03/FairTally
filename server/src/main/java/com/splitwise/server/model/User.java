@@ -1,6 +1,7 @@
 package com.splitwise.server.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,7 +18,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -34,9 +34,11 @@ public class User implements UserDetails{
     private String password;
 
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
     private Set<UserGroup> userGroups;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "payer", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Expense> expensesPaid;
 
     @Override
@@ -67,5 +69,10 @@ public class User implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "User{id=" + id + ", email='" + email + "', name='" + name + "'}";
     }
 }

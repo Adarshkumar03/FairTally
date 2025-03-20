@@ -1,22 +1,21 @@
 package com.splitwise.server.controller;
 
+import com.splitwise.server.dto.AddUsersToGroupRequest;
+import com.splitwise.server.dto.GroupDTO;
 import com.splitwise.server.model.Group;
 import com.splitwise.server.model.User;
 import com.splitwise.server.service.GroupService;
 import com.splitwise.server.service.UserService;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -29,21 +28,24 @@ public class GroupController {
     private UserService userService;
 
     @GetMapping("/groups")
-    public List<Group> getAllGroups() {
-        HttpSession session = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes())
-                .getRequest().getSession();
-        System.out.println("Session ID: " + session.getId());
+    public List<GroupDTO> getAllGroups() {
         return groupService.getAllGroups();
     }
 
-    @GetMapping("/group/{id}")
+    @GetMapping("/groups/{id}")
     public ResponseEntity<?> getGroup(@PathVariable Long id) {
-        Group group = groupService.getGroupById(id);
-        if (group != null) {
-            return ResponseEntity.ok(group);
+        GroupDTO group = groupService.getGroupById(id);
+        return ResponseEntity.ok(group);
+    }
+
+    @PostMapping("/group/{id}/users")
+    public ResponseEntity<?> addUsersToGroup(@PathVariable Long id, @RequestBody AddUsersToGroupRequest request){
+        try{
+            Group updatedGroup = groupService.addUsersToGroup(id, request.getUserIds());
+            return ResponseEntity.ok(Collections.singletonMap("message", "Users added to group successfully"));
+        }catch(IllegalArgumentException e){
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Collections.singletonMap("error", "Group not found"));
     }
 
     @PostMapping("/groups")
@@ -54,7 +56,6 @@ public class GroupController {
         }
 
         try {
-            // Get the logged-in user
             String email = authentication.getName();
             User user = userService.getUserByEmail(email);
 
@@ -63,13 +64,11 @@ public class GroupController {
                         .body(Collections.singletonMap("error", "User not found"));
             }
 
-            // Check if a group with the same name already exists
             if (groupService.existsByName(group.getName())) {
                 return ResponseEntity.status(HttpStatus.CONFLICT)
                         .body(Collections.singletonMap("error", "Group name already exists"));
             }
 
-            // Save the group
             Group savedGroup = groupService.addGroup(group, user);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedGroup);
 
@@ -81,8 +80,5 @@ public class GroupController {
                     .body(Collections.singletonMap("error", "Failed to create group"));
         }
     }
-
-
-
 }
 
