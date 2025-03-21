@@ -23,7 +23,7 @@ public class Group {
     private String name;
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @JsonManagedReference("group-usergroup")
     private Set<UserGroup> userGroups = new HashSet<>();
 
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)

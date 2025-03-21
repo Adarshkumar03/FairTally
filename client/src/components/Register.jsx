@@ -1,28 +1,23 @@
 import { useState } from "react";
-import axios from "axios";
-import { useNavigate, Link } from "react-router";
+import { useNavigate } from "react-router";
+import api from "../utils/api";
 
 export default function Register() {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/register", {
-        name,
-        email,
-        password,
-      }, { withCredentials: true });
-
-      console.log("Login Successful:", response.data);
-      navigate("/dashboard"); // Redirect after login
-    } catch (err) {
-      console.log(err);
-      setError("Error in registering!!");
+      console.log(name, email, password);
+      
+      await api.post("/auth/register", { name, email, password });
+      navigate("/login");
+    } catch {
+      setError("Error registering user");
     }
   };
 
@@ -31,7 +26,7 @@ export default function Register() {
       <div className="bg-white p-6 rounded-lg shadow-md w-96">
         <h2 className="text-2xl font-semibold text-center mb-4">Register</h2>
         {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleRegister} className="space-y-4">
           <input
             type="text"
             placeholder="Name"
@@ -39,7 +34,7 @@ export default function Register() {
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-          />  
+          />
           <input
             type="email"
             placeholder="Email"
@@ -56,13 +51,11 @@ export default function Register() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
-            Login
+          <button className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">
+            Register
           </button>
+          <p>Already have an account? <a onClick={() => navigate("/login")}>Login</a></p>
         </form>
-        <p className="text-sm text-center mt-4">
-          Already have an account? <Link to="/login">Login</Link>
-        </p>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
-import { useNavigate, Link } from "react-router";
+import { useNavigate } from "react-router";
+import api from "../utils/api";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -11,16 +11,9 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/auth/login", {
-        email,
-        password,
-      }, { withCredentials: true });
-
-      console.log("Login Successful:", response.data);
-      navigate("/dashboard"); // Redirect after login
-    } catch (err) {
-      console.log(err);
-      
+      await api.post("/auth/login", { email, password });
+      navigate("/dashboard");
+    } catch {
       setError("Invalid email or password");
     }
   };
@@ -50,10 +43,8 @@ export default function Login() {
           <button className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
             Login
           </button>
+          <p>Dont have an account? <a onClick={() => navigate("/register")}>Register</a></p>
         </form>
-        <p className="text-sm text-center mt-4">
-          Don't have an account? <Link to="/register">Register</Link>
-        </p>
       </div>
     </div>
   );

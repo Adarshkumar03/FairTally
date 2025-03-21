@@ -19,12 +19,12 @@ public class UserGroup {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("user-usergroup")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference("group-usergroup")
     private Group group;
 
     @Override
