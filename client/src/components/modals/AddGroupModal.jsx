@@ -1,13 +1,21 @@
 import { useState } from "react";
 import api from "../../utils/api";
 
-const AddGroupModal = ({ onClose }) => {
+const AddGroupModal = ({ onClose, onGroupAdded }) => {
     const [name, setName] = useState("");
 
     const handleSubmit = async () => {
         if (!name.trim()) return;
-        await api.post("/groups", { name });
-        onClose();
+    
+        try {
+            const response = await api.post("/groups", { name });
+    
+            if (response.status === 201) {
+                onGroupAdded(response.data); // Ensure state updates correctly
+            }
+        } catch (error) {
+            console.error("Error creating group:", error.response?.data || error.message);
+        }
     };
 
     return (
