@@ -63,7 +63,15 @@ public class AuthController {
             return ResponseEntity.ok(Collections.singletonMap("message", "Not authenticated"));
         }
 
-        return ResponseEntity.ok(Map.of("message", "Authenticated", "user", authentication.getName()));
+        Object principal = authentication.getPrincipal();
+        if (principal instanceof User user) {
+            return ResponseEntity.ok(Map.of(
+                    "message", "Authenticated",
+                    "name", user.getName()
+            ));
+        }
+
+        return ResponseEntity.ok(Collections.singletonMap("message", "Authenticated but user details not found"));
     }
 
     @PostMapping("/logout")

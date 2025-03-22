@@ -1,64 +1,81 @@
-import { useState } from "react";
-import LogoutButton from "./LogoutButton"
+import { useState, useEffect } from "react";
+import GroupList from "./GroupList";
+import TransactionHistory from "./TransactionHistory";
+import UserSidebar from "./UserSidebar";
+import AddGroupModal from "./modals/AddGroupModal";
+import AddExpenseModal from "./modals/AddExpenseModal";
+import SettleExpenseModal from "./modals/SettleExpenseModal";
+import api from "../utils/api";
 
 const Dashboard = () => {
-  const [groups, setGroups] = useState(["Puri", "TestGroup"]);
-  const [friends, setFriends] = useState([
-    "Abhinandan",
-    "Kartik Singh Nit Rai...",
-    "Kashish",
-    "Ramaneesh P V",
-    "Ravi Bhatt",
-    "Srajan Goyal",
-  ]);
+    const [isGroupModalOpen, setGroupModalOpen] = useState(false);
+    const [isExpenseModalOpen, setExpenseModalOpen] = useState(false);
+    const [isSettleModalOpen, setSettleModalOpen] = useState(false);
+    const [selectedGroup, setSelectedGroup] = useState(null);
+    const [transactions, setTransactions] = useState([]);
 
-  return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <aside className="w-1/4 bg-white p-4 shadow-lg">
-        <h2 className="text-lg font-bold">Dashboard</h2>
-        <h3 className="text-red-500 font-semibold mt-2">Recent Activity</h3>
-        <div>
-          <h3 className="font-semibold mt-4">GROUPS</h3>
-          {groups.map((group, index) => (
-            <p key={index} className="text-green-600 cursor-pointer">{group}</p>
-          ))}
-        </div>
-        <div className="mt-4">
-          <h3 className="font-semibold">FRIENDS</h3>
-          {friends.map((friend, index) => (
-            <p key={index} className="text-gray-600 cursor-pointer">{friend}</p>
-          ))}
-        </div>
-      </aside>
+    useEffect(() => {
+        fetchTransactions();
+    }, [selectedGroup]);
 
-      {/* Main Content */}
-      <main className="flex-1 p-6">
-        <LogoutButton/>
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold">TestGroup</h2>
-          <div>
-            <button className="bg-orange-500 text-white px-4 py-2 rounded-lg mr-2">Add an expense</button>
-            <button className="bg-green-500 text-white px-4 py-2 rounded-lg">Settle up</button>
-          </div>
-        </div>
-        <div className="border p-6 rounded-lg bg-white shadow-md">
-          <p className="text-gray-600 text-center">You have not added any expenses yet</p>
-          <p className="text-gray-500 text-center">To add a new expense, click the orange "Add an expense" button.</p>
-        </div>
-      </main>
+    const fetchTransactions = async () => {
+        try {
+            const endpoint = selectedGroup 
+                ? `/transactions/group/${selectedGroup.id}`
+                : `/transactions/user`;
+            const response = await api.get(endpoint);
+            setTransactions(response.data);
+        } catch (error) {
+            console.error("Error fetching transactions:", error);
+        }
+    };
 
-      {/* Right Sidebar */}
-      <aside className="w-1/4 bg-white p-4 shadow-lg">
-        <h3 className="font-semibold">GROUP BALANCES</h3>
-        <div className="flex items-center mt-2">
-          <img src="https://via.placeholder.com/40" alt="User" className="w-10 h-10 rounded-full" />
-          <p className="ml-2 font-medium">Adarsh Kumar settled up</p>
+    return (
+        <div className="grid grid-cols-4 h-screen">
+            {/* Left Sidebar (Groups List) */}
+            <div className="col-span-1 bg-gray-100 p-4">
+                <GroupList 
+                    selectedGroup={selectedGroup}
+                    onSelectGroup={setSelectedGroup}
+                    onAddGroup={() => setGroupModalOpen(true)} 
+                />
+            </div>
+
+            {/* Middle Section (Transaction History) */}
+            <div className="col-span-2 p-6">
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-2xl font-bold">
+                        {selectedGroup ? selectedGroup.name : "Dashboard"}
+                    </h2>
+                    <div className="flex gap-4">
+                        <button 
+                            onClick={() => setExpenseModalOpen(true)} 
+                            className="bg-green-500 text-white p-2 rounded-md"
+                        >
+                            Add Expense
+                        </button>
+                        <button 
+                            onClick={() => setSettleModalOpen(true)} 
+                            className="bg-blue-500 text-white p-2 rounded-md"
+                        >
+                            Settle
+                        </button>
+                    </div>
+                </div>
+                <TransactionHistory transactions={transactions} />
+            </div>
+
+            {/* Right Sidebar (User Info & Logout) */}
+            <div className="col-span-1 bg-gray-100 p-4">
+                <UserSidebar />
+            </div>
+
+            {/* Modals */}
+            {isGroupModalOpen && <AddGroupModal onClose={() => setGroupModalOpen(false)} />}
+            {isExpenseModalOpen && <AddExpenseModal groupId={selectedGroup?.id} onClose={() => setExpenseModalOpen(false)} />}
+            {isSettleModalOpen && <SettleExpenseModal groupId={selectedGroup?.id} onClose={() => setSettleModalOpen(false)} />}
         </div>
-        <a href="#" className="text-blue-500 mt-2 block">View details »</a>
-      </aside>
-    </div>
-  );
+    );
 };
 
 export default Dashboard;
