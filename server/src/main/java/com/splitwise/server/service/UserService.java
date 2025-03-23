@@ -2,7 +2,6 @@ package com.splitwise.server.service;
 
 import com.splitwise.server.model.User;
 import com.splitwise.server.repo.UserRepo;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,7 +22,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public User loadUserByUsername(String email) throws UsernameNotFoundException {
         return userRepo.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
@@ -43,11 +42,12 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException("Password cannot be null or empty");
         }
 
-        // Encrypt the password
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole("ROLE_USER");
 
         return userRepo.save(user);
     }
+
 
     @Transactional
     public boolean authenticateUser(String email, String rawPassword) {

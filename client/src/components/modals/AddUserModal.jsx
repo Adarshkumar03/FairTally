@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
 
-const AddUserModal = ({ groupId, onClose, onUsersAdded }) => {
+const AddUserModal = ({ groupId, onClose }) => {
     const [users, setUsers] = useState([]);
-    const [selectedUserIds, setSelectedUserIds] = useState([]);
+    const [selectedUsers, setSelectedUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
@@ -13,32 +13,36 @@ const AddUserModal = ({ groupId, onClose, onUsersAdded }) => {
 
     const fetchUsers = async () => {
         try {
-            const response = await api.get("/users");
-            setUsers(response.data);
+            // Fetch all users
+            const allUsersRes = await api.get("/users");
+            const allUsers = allUsersRes.data;
+
+            // Fetch group members
+            const groupRes = await api.get(`/groups/${groupId}`);
+            const groupMembers = groupRes.data.users;
+
+            // Filter out users who are already in the group
+            const availableUsers = allUsers.filter(
+                (user) => !groupMembers.some((member) => member.id === user.id)
+            );
+
+            setUsers(availableUsers);
         } catch (err) {
             console.error("Error fetching users:", err);
+            setError("Failed to load users");
         }
-    };
-
-    const handleUserSelection = (userId) => {
-        setSelectedUserIds((prev) =>
-            prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]
-        );
     };
 
     const handleAddUsers = async () => {
-        if (selectedUserIds.length === 0) {
-            setError("Please select at least one user.");
-            return;
-        }
+        if (selectedUsers.length === 0) return;
         setLoading(true);
         setError(null);
+
         try {
-            await api.post(`/groups/${groupId}/users`, { userIds: selectedUserIds });
-            onUsersAdded(); // Refresh group users list
+            await api.post(`/group/${groupId}/users`, { userIds: selectedUsers });
             onClose();
         } catch (err) {
-            setError("Failed to add users. Please try again.");
+            setError("Failed to add users");
         } finally {
             setLoading(false);
         }
@@ -52,16 +56,22 @@ const AddUserModal = ({ groupId, onClose, onUsersAdded }) => {
                 {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
                 {/* User List with Checkboxes */}
-                <div className="max-h-40 overflow-y-auto border p-2 rounded-md">
+                <div className="max-h-40 overflow-y-auto">
                     {users.length === 0 ? (
-                        <p>No users found</p>
+                        <p className="text-gray-500 text-sm">No users available to add.</p>
                     ) : (
                         users.map((user) => (
-                            <label key={user.id} className="flex items-center gap-2 p-1">
+                            <label key={user.id} className="flex items-center gap-2 mb-2">
                                 <input
                                     type="checkbox"
-                                    checked={selectedUserIds.includes(user.id)}
-                                    onChange={() => handleUserSelection(user.id)}
+                                    value={user.id}
+                                    onChange={(e) => {
+                                        const { checked, value } = e.target;
+                                        setSelectedUsers((prev) =>
+                                            checked ? [...prev, value] : prev.filter((id) => id !== value)
+                                        );
+                                    }}
+                                    className="form-checkbox"
                                 />
                                 {user.name}
                             </label>
@@ -71,7 +81,7 @@ const AddUserModal = ({ groupId, onClose, onUsersAdded }) => {
 
                 <button
                     onClick={handleAddUsers}
-                    disabled={loading}
+                    disabled={loading || selectedUsers.length === 0}
                     className="bg-blue-500 text-white p-2 rounded-md mt-4 w-full hover:bg-blue-600 transition"
                 >
                     {loading ? "Adding..." : "Add Users"}

@@ -11,11 +11,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -28,8 +28,17 @@ public class GroupController {
     private UserService userService;
 
     @GetMapping("/groups")
-    public List<GroupDTO> getAllGroups() {
-        return groupService.getAllGroups();
+    public ResponseEntity<List<GroupDTO>> getUserGroups() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal() == "anonymousUser") {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Collections.emptyList());
+        }
+
+        User user = (User) authentication.getPrincipal();
+        List<GroupDTO> groups = groupService.getUserGroups(user.getId());
+
+        return ResponseEntity.ok(groups);
     }
 
     @GetMapping("/groups/{id}")
@@ -38,7 +47,7 @@ public class GroupController {
         return ResponseEntity.ok(group);
     }
 
-    @PostMapping("/group/{id}/users")
+    @PostMapping("/groups/{id}/users")
     public ResponseEntity<?> addUsersToGroup(@PathVariable Long id, @RequestBody AddUsersToGroupRequest request){
         try{
             Group updatedGroup = groupService.addUsersToGroup(id, request.getUserIds());

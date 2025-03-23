@@ -67,11 +67,12 @@ public class AuthController {
         if (principal instanceof User user) {
             return ResponseEntity.ok(Map.of(
                     "message", "Authenticated",
+                    "id", user.getId(),   // ✅ Include userId
                     "name", user.getName()
             ));
+        } else {
+            return ResponseEntity.ok(Collections.singletonMap("message", "Authenticated but user details not found"));
         }
-
-        return ResponseEntity.ok(Collections.singletonMap("message", "Authenticated but user details not found"));
     }
 
     @PostMapping("/logout")

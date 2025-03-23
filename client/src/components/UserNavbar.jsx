@@ -8,7 +8,7 @@ const UserNavbar = () => {
         <div className="w-full bg-gray-200 p-4 flex justify-between items-center">
             <h1 className="text-xl font-bold">Splitwise</h1>
             <div className="flex items-center gap-4">
-                <span>{user}</span>
+                <span>{user?.name}</span>
                 <LogoutButton/>
             </div>
         </div>

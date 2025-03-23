@@ -29,8 +29,8 @@ public class GroupService {
         this.userRepo = userRepo;
     }
 
-    public List<GroupDTO> getAllGroups() {
-        return repo.findAll().stream()
+    public List<GroupDTO> getUserGroups(Long userId) {
+        return repo.findByUserGroups_User_Id(userId).stream() // Fetch only groups where user is a member
                 .map(group -> new GroupDTO(
                         group.getId(),
                         group.getName(),

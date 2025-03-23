@@ -11,9 +11,11 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/auth/login", { email, password });
+      const res = await api.post("/auth/login", { email, password });
+      console.log("Login successful:", res.data);
       navigate("/dashboard");
-    } catch {
+    } catch (error) {
+      console.error("Login error:", error.response?.data || error.message);
       setError("Invalid email or password");
     }
   };

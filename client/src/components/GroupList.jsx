@@ -6,10 +6,6 @@ const GroupList = ({ groups, selectedGroup, onSelectGroup, onAddGroup }) => {
     return (
         <div>
             <h2 className="text-lg font-bold mb-4">Groups</h2>
-            
-            {/* Add Group Button */}
-            
-
             {groups.length === 0 ? (
                 <p>No groups available</p>
             ) : (

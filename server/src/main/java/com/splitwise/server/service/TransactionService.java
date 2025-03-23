@@ -2,7 +2,6 @@ package com.splitwise.server.service;
 
 import com.splitwise.server.dto.TransactionDTO;
 import com.splitwise.server.model.Transaction;
-import com.splitwise.server.model.User;
 import com.splitwise.server.repo.TransactionRepo;
 import com.splitwise.server.repo.UserRepo;
 import org.springframework.stereotype.Service;

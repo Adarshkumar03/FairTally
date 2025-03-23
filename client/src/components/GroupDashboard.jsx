@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
 import TransactionHistory from "./TransactionHistory";
 import AddUserModal from "./modals/AddUserModal";
+import AddExpenseModal from "./modals/AddExpenseModal";
 import api from "../utils/api";
+import useAuthStore from "../store/authStore";
 
 const GroupDashboard = () => {
     const { selectedGroup, setSettleModalOpen } = useOutletContext();
@@ -10,6 +12,7 @@ const GroupDashboard = () => {
     const [groupDetails, setGroupDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [userModalOpen, setUserModalOpen] = useState(false);
+    const [expenseModalOpen, setExpenseModalOpen] = useState(false);
 
     useEffect(() => {
         if (selectedGroup) {
@@ -51,10 +54,10 @@ const GroupDashboard = () => {
                 {/* Buttons for Actions */}
                 <div className="flex gap-4 mt-4">
                     <button 
-                        onClick={() => setUserModalOpen(true)} 
+                        onClick={() => setExpenseModalOpen(true)} 
                         className="bg-green-500 text-white p-2 rounded-md"
                     >
-                        Add User
+                        Add Expense
                     </button>
                     <button 
                         onClick={() => setSettleModalOpen(true)} 
@@ -91,7 +94,7 @@ const GroupDashboard = () => {
                     onClick={() => setUserModalOpen(true)}
                     className="bg-green-500 text-white p-2 rounded-md mt-4 w-full hover:bg-green-600 transition"
                 >
-                    Add User
+                    Add Users
                 </button>
             </div>
 
@@ -100,9 +103,18 @@ const GroupDashboard = () => {
                 <AddUserModal
                     groupId={selectedGroup.id}
                     onClose={() => setUserModalOpen(false)}
-                    onUsersAdded={fetchGroupDetails}
+                    userId = {useAuthStore.getState().user}
                 />
             )}
+            {expenseModalOpen && (
+    <AddExpenseModal 
+        groupId={selectedGroup.id} 
+        groupName={selectedGroup.name} // ✅ Pass group name
+        groupMembers={groupDetails?.users || []} // ✅ Pass group members safely
+        onClose={() => setExpenseModalOpen(false)}
+    />
+)}
+
         </div>
     );
 };
