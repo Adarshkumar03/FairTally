@@ -16,6 +16,7 @@ public class TransactionController {
 
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
+        System.out.println("✅ TransactionController initialized!");
     }
 
     @GetMapping("/debug/group/{groupId}")
@@ -26,6 +27,13 @@ public class TransactionController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<TransactionDTO>> getUserTransactions(@PathVariable Long userId) {
         return ResponseEntity.ok(transactionService.getUserTransactions(userId));
+    }
+
+    @GetMapping("/groups/{groupId}")
+    public ResponseEntity<List<TransactionDTO>> getGroupTransactions(@PathVariable Long groupId) {
+        System.out.println("Fetching transactions for group ID: " + groupId);
+        List<TransactionDTO> transactions = transactionService.getGroupTransactions(groupId);
+        return ResponseEntity.ok(transactions);
     }
 
     @PutMapping("/{transactionId}/settle")

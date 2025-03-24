@@ -114,4 +114,22 @@ public class TransactionService {
         transaction.setSettled(true);
         return transactionRepo.save(transaction);
     }
+
+    public List<TransactionDTO> getGroupTransactions(Long groupId) {
+        List<Transaction> transactions = transactionRepo.findByGroupIdAndSettledFalse(groupId);
+        return transactions.stream()
+                .map(t -> new TransactionDTO(
+                        t.getId(),
+                        t.getPayer().getId(),
+                        t.getPayer().getName(),
+                        t.getPayee().getId(),
+                        t.getPayee().getName(),
+                        t.getAmount(),
+                        t.getDate(),
+                        t.getGroup().getId(),
+                        t.getGroup().getName(),
+                        t.isSettled()
+                ))
+                .collect(Collectors.toList());
+    }
 }

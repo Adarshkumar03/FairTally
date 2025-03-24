@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router";
-import TransactionHistory from "./TransactionHistory";
 import AddUserModal from "./modals/AddUserModal";
 import AddExpenseModal from "./modals/AddExpenseModal";
 import OweDetailsModal from "./modals/OweDetailsModal";
 import api from "../utils/api";
 import useAuthStore from "../store/authStore";
+import TransactionList from "./TransactionList";
 
 const GroupDashboard = () => {
     const { selectedGroup, setSettleModalOpen } = useOutletContext();
-    const [transactions, setTransactions] = useState([]);
     const [groupDetails, setGroupDetails] = useState(null);
-    const [loading, setLoading] = useState(true);
     const [userModalOpen, setUserModalOpen] = useState(false);
     const [expenseModalOpen, setExpenseModalOpen] = useState(false);
 
@@ -26,7 +24,6 @@ const GroupDashboard = () => {
     useEffect(() => {
         if (selectedGroup) {
             fetchGroupDetails();
-            fetchTransactions();
         }
     }, [selectedGroup]);
 
@@ -39,17 +36,6 @@ const GroupDashboard = () => {
         }
     };
 
-    const fetchTransactions = async () => {
-        try {
-            const response = await api.get(`/transactions/group/${selectedGroup.id}`);
-            setTransactions(response.data);
-        } catch (error) {
-            console.error("Error fetching transactions:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     if (!selectedGroup) {
         return <p>No group selected</p>;
     }
@@ -58,28 +44,21 @@ const GroupDashboard = () => {
         <div className="grid grid-cols-3 gap-6">
             {/* Middle Section: Transactions */}
             <div className="col-span-2">
-                <h2 className="text-2xl font-bold">{selectedGroup.name}</h2>
-
                 {/* Buttons for Actions */}
-                <div className="flex gap-4 mt-4">
+                <div className="flex justify-between mt-4">
+                <h2 className="text-2xl font-bold">{selectedGroup.name}</h2>
                     <button 
                         onClick={() => setExpenseModalOpen(true)} 
                         className="bg-green-500 text-white p-2 rounded-md"
                     >
                         Add Expense
                     </button>
-                    <button 
-                        onClick={() => setSettleModalOpen(true)} 
-                        className="bg-blue-500 text-white p-2 rounded-md"
-                    >
-                        Settle Expenses
-                    </button>
                 </div>
 
                 {/* Transaction History */}
                 <div className="mt-6">
                     <h3 className="text-xl font-semibold mb-2">Group Transactions</h3>
-                    {loading ? <p>Loading transactions...</p> : <TransactionHistory transactions={transactions} />}
+                    <TransactionList groupId={selectedGroup.id}/>
                 </div>
             </div>
 

@@ -42,4 +42,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
         GROUP BY t.payer.id, u.name
     """)
     List<Object[]> getOweDetails(@Param("userId") Long userId, @Param("groupId") Long groupId);
+
+    @Query("SELECT t FROM Transaction t WHERE t.group.id = :groupId AND t.settled = false")
+    List<Transaction> findByGroupIdAndSettledFalse(@Param("groupId") Long groupId);
 }

@@ -27,9 +27,7 @@ const GroupList = ({ groups, selectedGroup, onSelectGroup, onAddGroup }) => {
             <button 
                 onClick={onAddGroup} 
                 className="w-full mb-4 bg-green-500 text-white p-2 rounded-md"
-            >
-                + Add Group
-            </button>
+            >Add Group</button>
         </div>
     );
 };
