@@ -6,13 +6,17 @@ import com.splitwise.server.model.Group;
 import com.splitwise.server.model.User;
 import com.splitwise.server.model.UserGroup;
 import com.splitwise.server.repo.GroupRepo;
+import com.splitwise.server.repo.TransactionRepo;
 import com.splitwise.server.repo.UserGroupRepo;
 import com.splitwise.server.repo.UserRepo;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -21,35 +25,36 @@ public class GroupService {
     private final GroupRepo repo;
     private final UserGroupRepo userGroupRepo;
     private final UserRepo userRepo;
+    private final TransactionRepo transactionRepo;
+    TransactionService transactionService;
 
     @Autowired
-    public GroupService(GroupRepo groupRepo, UserGroupRepo userGroupRepo, UserRepo userRepo) {
+    public GroupService(GroupRepo groupRepo, UserGroupRepo userGroupRepo, UserRepo userRepo, TransactionRepo transactionRepo, TransactionService transactionService) {
         this.repo = groupRepo;
         this.userGroupRepo = userGroupRepo;
         this.userRepo = userRepo;
+        this.transactionRepo = transactionRepo;
+        this.transactionService = transactionService;
     }
 
     public List<GroupDTO> getUserGroups(Long userId) {
-        return repo.findByUserGroups_User_Id(userId).stream() // Fetch only groups where user is a member
-                .map(group -> new GroupDTO(
-                        group.getId(),
-                        group.getName(),
-                        group.getUserGroups().stream()
-                                .map(userGroup -> new UserDTO(userGroup.getUser().getId(), userGroup.getUser().getName()))
-                                .collect(Collectors.toList())
-                ))
+        return repo.findByUserGroups_User_Id(userId).stream()
+                .map(group -> new GroupDTO(group.getId(), group.getName(), Collections.emptyList())) // No members here
                 .collect(Collectors.toList());
     }
 
     public GroupDTO getGroupById(Long id) {
         Group group = repo.findById(id).orElseThrow(() -> new RuntimeException("Group not found"));
-        return new GroupDTO(
-                group.getId(),
-                group.getName(),
-                group.getUserGroups().stream()
-                        .map(userGroup -> new UserDTO(userGroup.getUser().getId(), userGroup.getUser().getName()))
-                        .collect(Collectors.toList())
-        );
+
+        List<UserDTO> members = transactionRepo.getTotalOwedPerUser(group.getId()).stream()
+                .map(row -> new UserDTO(
+                        ((Number) row[0]).longValue(),  // user_id
+                        (String) row[1],               // user_name
+                        (BigDecimal) row[2]            // total_owed
+                ))
+                .collect(Collectors.toList());
+
+        return new GroupDTO(group.getId(), group.getName(), members);
     }
 
     public boolean existsByName(String name) {

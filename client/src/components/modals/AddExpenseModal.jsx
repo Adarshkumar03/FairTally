@@ -1,12 +1,12 @@
 import { useState } from "react";
-import useAuthStore from "../../store/authStore"; // To get logged-in user
+import useAuthStore from "../../store/authStore";
 import api from "../../utils/api";
 
 const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
-    const { user } = useAuthStore(); // Get logged-in user (id, name, id)
+    const { user } = useAuthStore();
     const [amount, setAmount] = useState("");
     const [sharedWith, setSharedWith] = useState(groupMembers.map((member) => member.id)); 
-    const [perPersonAmount, setPerPersonAmount] = useState(0); // ✅ Number
+    const [perPersonAmount, setPerPersonAmount] = useState(0);
 
     const handleAmountChange = (e) => {
         const newAmount = e.target.value;
@@ -51,12 +51,7 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
                     <span className="text-gray-600">
                         With you and: <strong>All of {groupName}</strong>
                     </span>
-                    <button 
-                        className="text-gray-500 hover:text-gray-700 text-lg"
-                        onClick={() => setSharedWith([])} // Clears selection
-                    >
-                        ×
-                    </button>
+                    
                 </div>
 
                 {/* Amount Input */}

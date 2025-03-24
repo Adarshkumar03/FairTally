@@ -3,6 +3,7 @@ import { useOutletContext } from "react-router";
 import TransactionHistory from "./TransactionHistory";
 import AddUserModal from "./modals/AddUserModal";
 import AddExpenseModal from "./modals/AddExpenseModal";
+import OweDetailsModal from "./modals/OweDetailsModal";
 import api from "../utils/api";
 import useAuthStore from "../store/authStore";
 
@@ -13,6 +14,14 @@ const GroupDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [userModalOpen, setUserModalOpen] = useState(false);
     const [expenseModalOpen, setExpenseModalOpen] = useState(false);
+
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [oweModalOpen, setOweModalOpen] = useState(false);
+
+    const openOweDetailsModal = (user) => {
+        setSelectedUser(user);
+        setOweModalOpen(true);
+    };
 
     useEffect(() => {
         if (selectedGroup) {
@@ -79,12 +88,26 @@ const GroupDashboard = () => {
                 <h3 className="text-xl font-semibold mb-4">Group Members</h3>
                 {groupDetails ? (
                     <ul>
-                        {groupDetails.users.map((user) => (
-                            <li key={user.id} className="p-2 border-b">
-                                {user.name}
-                            </li>
-                        ))}
-                    </ul>
+                    {groupDetails.users.map((user) => (
+                        <div 
+                            key={user.id} 
+                            onClick={() => openOweDetailsModal(user)}
+                            className="flex items-center gap-4 p-2 border-b cursor-pointer hover:bg-gray-200 rounded-md"
+                        >
+                            {/* Circular div for profile */}
+                            <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-500 text-white text-lg font-semibold">
+                                {user.name.charAt(0)}
+                            </div>
+        
+                            {/* Name & Amount Owed */}
+                            <div className="flex flex-col">
+                                <span className="font-semibold">{user.name}</span>
+                                <span className="text-sm text-gray-600">Owes ₹{user.totalOwedAmount || 0}</span>
+                            </div>
+                        </div>
+                    ))}
+                </ul>
+        
                 ) : (
                     <p>Loading members...</p>
                 )}
@@ -106,12 +129,18 @@ const GroupDashboard = () => {
                     userId = {useAuthStore.getState().user}
                 />
             )}
+            {oweModalOpen && (
+    <OweDetailsModal user={selectedUser} groupId={selectedGroup.id} onClose={() => setOweModalOpen(false)} />
+)}
             {expenseModalOpen && (
     <AddExpenseModal 
         groupId={selectedGroup.id} 
         groupName={selectedGroup.name} // ✅ Pass group name
         groupMembers={groupDetails?.users || []} // ✅ Pass group members safely
-        onClose={() => setExpenseModalOpen(false)}
+        onClose={() => {
+            setExpenseModalOpen(false);
+            fetchGroupDetails();
+        }}
     />
 )}
 

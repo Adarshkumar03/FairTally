@@ -71,6 +71,8 @@ public class ExpenseService {
             sharedWithUsers.add(user);
         }
 
+        sharedWithUsers.remove(payer);
+
         if (sharedWithUsers.isEmpty()) {
             throw new RuntimeException("Cannot split expense among 0 users");
         }
@@ -78,6 +80,8 @@ public class ExpenseService {
         // Calculate equal split amount
         BigDecimal splitAmount = expenseRequestDTO.getAmount()
                 .divide(BigDecimal.valueOf(sharedWithUsers.size()), 2, RoundingMode.HALF_UP);
+
+        System.out.println("SplitAMount: " + splitAmount);
 
         // Create and save the expense
         Expense expense = new Expense();
@@ -90,7 +94,7 @@ public class ExpenseService {
 
         // Create transactions (who owes whom)
         for (User user : sharedWithUsers) {
-            if (!user.equals(payer)) {  // Payer doesn't owe themselves
+            if (!user.equals(payer)) {
                 Transaction transaction = new Transaction();
                 transaction.setPayer(payer);
                 transaction.setPayee(user);

@@ -1,5 +1,6 @@
 package com.splitwise.server.controller;
 
+import com.splitwise.server.dto.OweDetailsDTO;
 import com.splitwise.server.dto.TransactionDTO;
 import com.splitwise.server.model.Transaction;
 import com.splitwise.server.service.TransactionService;
@@ -17,6 +18,11 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+    @GetMapping("/debug/group/{groupId}")
+    public ResponseEntity<List<Object[]>> debugOwedAmount(@PathVariable Long groupId) {
+        return ResponseEntity.ok(transactionService.debugTotalOwedPerUser(groupId));
+    }
+
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<TransactionDTO>> getUserTransactions(@PathVariable Long userId) {
         return ResponseEntity.ok(transactionService.getUserTransactions(userId));
@@ -25,5 +31,14 @@ public class TransactionController {
     @PutMapping("/{transactionId}/settle")
     public Transaction settleTransaction(@PathVariable Long transactionId) {
         return transactionService.markTransactionAsSettled(transactionId);
+    }
+
+    @GetMapping("/owe-details")
+    public ResponseEntity<List<OweDetailsDTO>> getOweDetails(
+            @RequestParam Long userId,
+            @RequestParam Long groupId) {
+
+        List<OweDetailsDTO> oweDetails = transactionService.getOweDetails(userId, groupId);
+        return ResponseEntity.ok(oweDetails);
     }
 }
