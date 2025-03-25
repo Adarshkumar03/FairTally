@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import api from "../utils/api";
 
@@ -14,6 +15,7 @@ export default function Login() {
       const res = await api.post("/auth/login", { email, password });
       console.log("Login successful:", res.data);
       navigate("/dashboard");
+      toast("Login Successfull!!");
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
       setError("Invalid email or password");

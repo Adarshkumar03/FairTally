@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import api from "../utils/api";
 import useAuthStore from "../store/authStore"; // Assuming you have a Zustand store for auth
+import { toast } from "react-toastify";
 
-const TransactionList = ({ groupId }) => {
+const TransactionList = ({ groupId, refreshGroupDetails }) => {
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
     const { user } = useAuthStore(); // Get logged-in user
@@ -25,8 +26,11 @@ const TransactionList = ({ groupId }) => {
     const handleSettleTransaction = async (transactionId) => {
         try {
             await api.put(`/groups/transactions/${transactionId}/settle`);
-            alert("Transaction settled!");
-            fetchGroupTransactions(groupId); // Refresh transaction list
+            fetchGroupTransactions(groupId);
+            if (refreshGroupDetails) {
+                refreshGroupDetails(groupId);
+            }
+            toast("Transaction settled!!");
         } catch (error) {
             console.error("Error settling transaction:", error);
         }
@@ -36,14 +40,13 @@ const TransactionList = ({ groupId }) => {
 
     return (
         <div>
-            <h2 className="text-lg font-semibold mb-4">Transactions</h2>
             {transactions.length > 0 ? (
                 <ul className="space-y-3">
                     {transactions.map((tx) => {
                         const isUserInvolved = user?.id === tx.payerId || user?.id === tx.payeeId;
 
                         return (
-                            <li key={tx.id} className="border-b pb-2 flex justify-between">
+                            <li key={tx.id} className="p-3 flex justify-between bg-[#121729] text-[#f9f9fa] rounded-md">
                                 <span>
                                     <strong>{tx.payerName}</strong> paid <strong>₹{tx.amount}</strong> to <strong>{tx.payeeName}</strong>
                                 </span>
@@ -53,7 +56,7 @@ const TransactionList = ({ groupId }) => {
                                 {!tx.settled && isUserInvolved && (
                                     <button
                                         onClick={() => handleSettleTransaction(tx.id)}
-                                        className="bg-blue-500 text-white px-3 py-1 rounded text-sm"
+                                        className="bg-linear-65 from-[##202e5f] to-[#1e2a57] text-[#fbfbfb] px-3 py-1 rounded text-sm"
                                     >
                                         Settle
                                     </button>

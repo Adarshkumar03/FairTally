@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import api from "../utils/api";
+import { toast } from "react-toastify";
 
 export default function Register() {
   const [name, setName] = useState("");
@@ -16,6 +17,7 @@ export default function Register() {
       
       await api.post("/auth/register", { name, email, password });
       navigate("/login");
+      toast("User registered");
     } catch {
       setError("Error registering user");
     }

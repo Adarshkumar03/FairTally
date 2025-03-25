@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../../utils/api";
+import { toast } from "react-toastify";
 
 const AddGroupModal = ({ onClose, onGroupAdded }) => {
     const [name, setName] = useState("");
@@ -11,8 +12,9 @@ const AddGroupModal = ({ onClose, onGroupAdded }) => {
             const response = await api.post("/groups", { name });
     
             if (response.status === 201) {
-                onGroupAdded(response.data); // Ensure state updates correctly
+                onGroupAdded(response.data);
             }
+            toast("Group added successfully!!");
         } catch (error) {
             console.error("Error creating group:", error.response?.data || error.message);
         }
@@ -20,20 +22,20 @@ const AddGroupModal = ({ onClose, onGroupAdded }) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
-            <div className="bg-white w-80 p-6 rounded-lg shadow-lg relative">
-                <h2 className="text-lg font-semibold mb-4 text-center">Create New Group</h2>
+            <div className="bg-[#202e5f] w-80 p-6 rounded-lg shadow-lg relative">
+                <h2 className="text-xl font-semibold mb-4 text-center text-[#fbfbfb]">Create New Group</h2>
 
                 <input 
                     type="text" 
                     value={name} 
                     onChange={(e) => setName(e.target.value)} 
                     placeholder="Group Name" 
-                    className="border p-2 w-full rounded-md"
+                    className="border p-2 w-full rounded-md bg-[#fbfbfb] text-[#202e5f]"
                 />
 
                 <button 
                     onClick={handleSubmit} 
-                    className="bg-blue-500 text-white p-2 rounded-md mt-4 w-full hover:bg-blue-600 transition"
+                    className="bg-[#57bb4f] text-[#fbfbfb] p-2 rounded-md mt-4 w-full hover:bg-green-600 transition"
                 >
                     Create
                 </button>

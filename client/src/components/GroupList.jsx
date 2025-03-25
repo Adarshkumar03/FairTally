@@ -9,11 +9,11 @@ const GroupList = ({ groups, selectedGroup, onSelectGroup, onAddGroup }) => {
             {groups.length === 0 ? (
                 <p>No groups available</p>
             ) : (
-                <ul>
+                <ul className="mb-4">
                     {groups.map((group) => (
                         <li 
                             key={group.id} 
-                            className={`p-2 border-b cursor-pointer ${selectedGroup?.id === group.id ? 'bg-gray-300' : ''}`}
+                            className={`p-2 cursor-pointer rounded-md ${selectedGroup?.id === group.id ? 'bg-[#141f45]' : ''}`}
                             onClick={() => {
                                 onSelectGroup(group);
                                 navigate(`/dashboard/groups/${group.id}`);
@@ -26,7 +26,7 @@ const GroupList = ({ groups, selectedGroup, onSelectGroup, onAddGroup }) => {
             )}
             <button 
                 onClick={onAddGroup} 
-                className="w-full mb-4 bg-green-500 text-white p-2 rounded-md"
+                className="w-full mb-4 bg-linear-65 from-[#57bc4d] to-[#398c31] text-[#fbfbfb] p-2 rounded-md font-bold"
             >Add Group</button>
         </div>
     );

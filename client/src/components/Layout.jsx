@@ -4,8 +4,8 @@ import GroupList from "./GroupList";
 import UserNavbar from "./UserNavbar";
 import AddGroupModal from "./modals/AddGroupModal";
 import AddUserModal from "./modals/AddUserModal";
-import SettleExpenseModal from "./modals/SettleExpenseModal";
 import api from "../utils/api";
+import { toast } from "react-toastify";
 
 const Layout = () => {
     const [groups, setGroups] = useState([]);
@@ -15,7 +15,6 @@ const Layout = () => {
     // Modal States
     const [isGroupModalOpen, setGroupModalOpen] = useState(false);
     const [isUserModalOpen, setUserModalOpen] = useState(false);
-    const [isSettleModalOpen, setSettleModalOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -35,8 +34,9 @@ const Layout = () => {
     };
 
     const handleGroupAdded = (newGroup) => {
-        setGroups((prevGroups) => [...prevGroups, newGroup]); // Update the group list
-        setGroupModalOpen(false); // Close the modal
+        setGroups((prevGroups) => [...prevGroups, newGroup]);
+        setGroupModalOpen(false);
+        toast("Group added successfully!!") 
     };
 
     return (
@@ -47,13 +47,13 @@ const Layout = () => {
             {/* Main Content */}
             <div className="grid grid-cols-4 flex-grow">
                 {/* Left Sidebar (Groups List) */}
-                <div className="col-span-1 bg-gray-100 p-4">
+                <div className="col-span-1 bg-[#070d2d] text-[#fbfbfc] p-4">
                 <button 
                         onClick={() => {
                             setSelectedGroup(null);
                             navigate("/dashboard");
                         }}
-                        className="w-full mt-4 bg-blue-500 text-white p-2 rounded-md"
+                        className="w-full mt-4 mb-4 bg-linear-65 from-[#9920e3] to-[#2f1b80] text-[#fbfbfb] font-bold p-2 rounded-md"
                     >
                         Go to Dashboard
                     </button>
@@ -73,8 +73,8 @@ const Layout = () => {
                 </div>
 
                 {/* Middle & Right Sections */}
-                <div className="col-span-3 p-6">
-                    <Outlet context={{ selectedGroup, groups, fetchGroups, setUserModalOpen, setSettleModalOpen }} />
+                <div className="col-span-3 p-6 bg-[#141f45] ">
+                    <Outlet context={{ selectedGroup, groups, fetchGroups, setUserModalOpen}} />
                 </div>
             </div>
 
@@ -86,7 +86,6 @@ const Layout = () => {
     />
 )}
             {isUserModalOpen && <AddUserModal groupId={selectedGroup?.id} onClose={() => setUserModalOpen(false)} />}
-            {isSettleModalOpen && <SettleExpenseModal groupId={selectedGroup?.id} onClose={() => setSettleModalOpen(false)} />}
         </div>
     );
 };
