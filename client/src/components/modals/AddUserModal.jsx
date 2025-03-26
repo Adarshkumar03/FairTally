@@ -52,18 +52,18 @@ const AddUserModal = ({ groupId, onClose }) => {
 
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
-            <div className="bg-[#202e5f] w-80 p-6 rounded-lg shadow-lg relative">
-                <h2 className="text-xl font-semibold mb-4 text-center text-[#fbfbfb]">Add Users to Group</h2>
+            <div className="bg-[#FFF6E5] w-80 p-6 rounded-lg shadow-lg relative">
+                <h2 className="text-xl font-semibold mb-4 text-center text-[#030303]">Add Users to Group</h2>
 
                 {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
 
                 {/* User List with Checkboxes */}
-                <div className="max-h-40 overflow-y-auto bg-[#121729] p-2">
+                <div className="max-h-40 overflow-y-auto bg-[#F7C236] p-2">
                     {users.length === 0 ? (
                         <p className="text-gray-500 text-sm">No users available to add.</p>
                     ) : (
                         users.map((user) => (
-                            <label key={user.id} className="flex items-center gap-2 mb-2 text-[#fbfbfb]">
+                            <label key={user.id} className="flex items-center gap-2 mb-2 text-[#030303]">
                                 <input
                                     type="checkbox"
                                     value={user.id}
@@ -80,21 +80,24 @@ const AddUserModal = ({ groupId, onClose }) => {
                         ))
                     )}
                 </div>
-
+                <div className="flex justify-between">
                 <button
                     onClick={handleAddUsers}
                     disabled={loading || selectedUsers.length === 0}
-                    className="bg-linear-65 from-[#57bc4d] to-[#398c31] text-[#fbfbfb] p-2 rounded-md mt-4 w-full font-semibold"
+                    className="bg-[#306B34] text-[#fbfbfb] p-2 rounded-md mt-4 font-semibold"
                 >
                     {loading ? "Adding..." : "Add Users"}
                 </button>
 
                 <button
                     onClick={onClose}
-                    className="absolute top-5 right-3 bg-[#141f45] text-[#fbfbfb] text-xl py-1 px-2 rounded-md"
+                    className= "bg-[#909CC2] text-[#fbfbfb] p-2 rounded-md mt-4 font-semibold"
                 >
-                    X
+                    Cancel
                 </button>
+                </div>
+
+                
             </div>
         </div>
     );

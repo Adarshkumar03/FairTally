@@ -36,56 +36,58 @@ const Layout = () => {
     const handleGroupAdded = (newGroup) => {
         setGroups((prevGroups) => [...prevGroups, newGroup]);
         setGroupModalOpen(false);
-        toast("Group added successfully!!") 
+        toast("Group added successfully!");
     };
 
     return (
-        <div className="h-screen flex flex-col">
+        <div className="h-screen flex flex-col bg-[#FFF6E5]">
             {/* Top Navbar */}
             <UserNavbar />
 
             {/* Main Content */}
             <div className="grid grid-cols-4 flex-grow">
                 {/* Left Sidebar (Groups List) */}
-                <div className="col-span-1 bg-[#070d2d] text-[#fbfbfc] p-4">
-                <button 
+                <div className="col-span-1 bg-[#AAD7B8] p-6 border-r border-[#AAD7B8]">
+                    <button
                         onClick={() => {
                             setSelectedGroup(null);
                             navigate("/dashboard");
                         }}
-                        className="w-full mt-4 mb-4 bg-linear-65 from-[#9920e3] to-[#2f1b80] text-[#fbfbfb] font-bold p-2 rounded-md"
+                        className="w-full bg-[#F7C236] text-black font-semibold py-2 rounded-lg shadow-md transition hover:brightness-110"
                     >
                         Go to Dashboard
                     </button>
-                    {loading ? (
-                        <p>Loading groups...</p>
-                    ) : (
-                        <GroupList 
-                            groups={groups} 
-                            selectedGroup={selectedGroup} 
-                            onSelectGroup={setSelectedGroup}
-                            onAddGroup={() => setGroupModalOpen(true)} // Open Add Group Modal
-                        />
-                    )}
-                    
-                    {/* "Go to Dashboard" Button */}
-                    
+
+                    <div className="mt-6">
+                        {loading ? (
+                            <p className="text-gray-700 text-center">Loading groups...</p>
+                        ) : (
+                            <GroupList
+                                groups={groups}
+                                selectedGroup={selectedGroup}
+                                onSelectGroup={setSelectedGroup}
+                                onAddGroup={() => setGroupModalOpen(true)}
+                            />
+                        )}
+                    </div>
                 </div>
 
                 {/* Middle & Right Sections */}
-                <div className="col-span-3 p-6 bg-[#141f45] ">
-                    <Outlet context={{ selectedGroup, groups, fetchGroups, setUserModalOpen}} />
+                <div className="col-span-3 p-8 border-3">
+                    <Outlet context={{ selectedGroup, groups, fetchGroups, setUserModalOpen }} />
                 </div>
             </div>
 
             {/* Modals */}
             {isGroupModalOpen && (
-    <AddGroupModal 
-        onClose={() => setGroupModalOpen(false)} 
-        onGroupAdded={handleGroupAdded} 
-    />
-)}
-            {isUserModalOpen && <AddUserModal groupId={selectedGroup?.id} onClose={() => setUserModalOpen(false)} />}
+                <AddGroupModal
+                    onClose={() => setGroupModalOpen(false)}
+                    onGroupAdded={handleGroupAdded}
+                />
+            )}
+            {isUserModalOpen && (
+                <AddUserModal groupId={selectedGroup?.id} onClose={() => setUserModalOpen(false)} />
+            )}
         </div>
     );
 };
