@@ -24,7 +24,7 @@ public class TransactionController {
         return ResponseEntity.ok(transactionService.debugTotalOwedPerUser(groupId));
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<List<TransactionDTO>> getUserTransactions(@PathVariable Long userId) {
         return ResponseEntity.ok(transactionService.getUserTransactions(userId));
     }

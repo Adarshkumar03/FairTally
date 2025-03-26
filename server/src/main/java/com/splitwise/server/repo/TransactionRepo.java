@@ -45,4 +45,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
 
     @Query("SELECT t FROM Transaction t WHERE t.group.id = :groupId AND t.settled = false")
     List<Transaction> findByGroupIdAndSettledFalse(@Param("groupId") Long groupId);
+
+    @Query("SELECT t FROM Transaction t WHERE (t.payee.id = :userId OR t.payer.id = :userId) AND t.settled = false")
+    List<Transaction> findByUserIdAndSettledFalse(@Param("userId") Long userId);
 }

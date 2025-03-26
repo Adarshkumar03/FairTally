@@ -1,18 +1,24 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import useAuthStore from "../../store/authStore";
+import useTransactionStore from "../../store/transactionStore";
 import api from "../../utils/api";
 import { toast } from "react-toastify";
 
 const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
     const { user } = useAuthStore();
+    const { fetchGroupTransactions } = useTransactionStore(); 
     const [amount, setAmount] = useState("");
-    const [sharedWith, setSharedWith] = useState(groupMembers.map((member) => member.id)); 
+    const [sharedWith, setSharedWith] = useState(groupMembers.map((member) => member.id));
     const [perPersonAmount, setPerPersonAmount] = useState(0);
+
+    const calculatePerPersonAmount = useCallback((amt, members) => {
+        return amt && members.length > 0 ? (parseFloat(amt) / members.length).toFixed(2) : 0;
+    }, []);
 
     const handleAmountChange = (e) => {
         const newAmount = e.target.value;
         setAmount(newAmount);
-        setPerPersonAmount(newAmount && sharedWith.length > 0 ? parseFloat(newAmount) / sharedWith.length : 0);
+        setPerPersonAmount(calculatePerPersonAmount(newAmount, sharedWith));
     };
 
     const handleUserSelect = (userId) => {
@@ -21,7 +27,7 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
             : [...sharedWith, userId];
 
         setSharedWith(updatedSharedWith);
-        setPerPersonAmount(amount && updatedSharedWith.length > 0 ? parseFloat(amount) / updatedSharedWith.length : 0);
+        setPerPersonAmount(calculatePerPersonAmount(amount, updatedSharedWith));
     };
 
     const handleSubmit = async () => {
@@ -36,10 +42,12 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
 
         try {
             await api.post("/expenses", expenseData);
+            await fetchGroupTransactions(groupId); // ✅ Refresh transactions after adding an expense
             onClose();
-            toast("Expense added successfully!!");
+            toast("Successfully Added Expense!!");
         } catch (error) {
             console.error("Error adding expense:", error);
+            toast.error("Failed to add expense!");
         }
     };
 
@@ -67,7 +75,7 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
                 {/* Split Info */}
                 <p className="text-sm text-[#306B34] font-semibold">
                     Paid by <strong>you</strong> and split <strong>equally</strong>. <br />
-                    (<span className="text-lg font-bold text-[#306B34]">₹{perPersonAmount.toFixed(2)}</span> per person)
+                    (<span className="text-lg font-bold text-[#306B34]">₹{perPersonAmount}</span> per person)
                 </p>
 
                 {/* Select Users */}

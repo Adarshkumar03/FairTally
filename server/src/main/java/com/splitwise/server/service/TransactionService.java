@@ -83,26 +83,6 @@ public class TransactionService {
 
 
     @Transactional
-    public List<TransactionDTO> getUserTransactions(Long userId) {
-        List<Transaction> transactions = transactionRepo.findByPayeeIdOrPayerId(userId, userId);
-
-        return transactions.stream()
-                .map(transaction -> new TransactionDTO(
-                        transaction.getId(),
-                        transaction.getPayer().getId(),
-                        transaction.getPayer().getName(),
-                        transaction.getPayee().getId(),
-                        transaction.getPayee().getName(),
-                        transaction.getAmount(),
-                        transaction.getDate(),
-                        transaction.getGroup().getId(),
-                        transaction.getGroup().getName(),
-                        transaction.isSettled()
-                ))
-                .collect(Collectors.toList());
-    }
-
-    @Transactional
     public Transaction markTransactionAsSettled(Long transactionId) {
         Transaction transaction = transactionRepo.findById(transactionId)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
@@ -117,6 +97,24 @@ public class TransactionService {
 
     public List<TransactionDTO> getGroupTransactions(Long groupId) {
         List<Transaction> transactions = transactionRepo.findByGroupIdAndSettledFalse(groupId);
+        return transactions.stream()
+                .map(t -> new TransactionDTO(
+                        t.getId(),
+                        t.getPayer().getId(),
+                        t.getPayer().getName(),
+                        t.getPayee().getId(),
+                        t.getPayee().getName(),
+                        t.getAmount(),
+                        t.getDate(),
+                        t.getGroup().getId(),
+                        t.getGroup().getName(),
+                        t.isSettled()
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<TransactionDTO> getUserTransactions(Long userId) {
+        List<Transaction> transactions = transactionRepo.findByUserIdAndSettledFalse(userId);
         return transactions.stream()
                 .map(t -> new TransactionDTO(
                         t.getId(),

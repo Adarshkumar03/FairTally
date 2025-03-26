@@ -15,7 +15,6 @@ const UserTransactionList = () => {
     const fetchUserTransactions = async (userId) => {
         try {
             const response = await api.get(`/transactions/users/${userId}`);
-            console.log("Transactions:", response.data);
             setTransactions(response.data);
         } catch (error) {
             console.error("Error fetching transactions:", error);

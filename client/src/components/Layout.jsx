@@ -33,10 +33,16 @@ const Layout = () => {
         }
     };
 
-    const handleGroupAdded = (newGroup) => {
-        setGroups((prevGroups) => [...prevGroups, newGroup]);
-        setGroupModalOpen(false);
-        toast("Group added successfully!");
+    const handleGroupAdded = async (newGroup) => {
+        try {
+            await fetchGroups(); // Fetch updated group list
+            setSelectedGroup(newGroup); // Set the new group as selected
+            toast("Group added successfully!");
+        } catch (error) {
+            console.error("Error updating groups:", error);
+        } finally {
+            setGroupModalOpen(false);
+        }
     };
 
     return (
@@ -53,7 +59,7 @@ const Layout = () => {
                             setSelectedGroup(null);
                             navigate("/dashboard");
                         }}
-                        className="w-full bg-[#F7C236] text-black font-semibold py-2 rounded-lg shadow-md transition hover:brightness-110"
+                        className="w-full bg-[#F7C236] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303]  text-black font-semibold py-2 rounded-md shadow-md transition hover:brightness-110"
                     >
                         Go to Dashboard
                     </button>

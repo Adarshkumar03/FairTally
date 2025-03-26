@@ -1,35 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import api from "../utils/api";
-import useAuthStore from "../store/authStore"; // Assuming Zustand for auth
+import useAuthStore from "../store/authStore";
+import useTransactionStore from "../store/transactionStore";
 import { toast } from "react-toastify";
 
 const TransactionList = ({ groupId, refreshGroupDetails }) => {
-    const [transactions, setTransactions] = useState([]);
+    const { transactions, fetchGroupTransactions } = useTransactionStore();
     const [loading, setLoading] = useState(true);
     const { user } = useAuthStore(); // Get logged-in user
 
-    useEffect(() => {
-        fetchGroupTransactions(groupId);
-    }, [groupId]);
+    // ✅ Memoizing fetch function to avoid re-renders
+    const fetchTransactions = useCallback(() => {
+        setLoading(true);
+        fetchGroupTransactions(groupId).finally(() => setLoading(false));
+    }, [groupId, fetchGroupTransactions]);
 
-    const fetchGroupTransactions = async (groupId) => {
-        try {
-            const response = await api.get(`/transactions/groups/${groupId}`);
-            console.log("Transactions:", response.data);
-            setTransactions(response.data);
-        } catch (error) {
-            console.error("Error fetching transactions:", error);
-        }
-        setLoading(false);
-    };
+    useEffect(() => {
+        fetchTransactions();
+    }, [fetchTransactions]);
 
     const handleSettleTransaction = async (transactionId) => {
         try {
             await api.put(`/groups/transactions/${transactionId}/settle`);
-            fetchGroupTransactions(groupId);
-            if (refreshGroupDetails) {
-                refreshGroupDetails(groupId);
-            }
+            fetchTransactions(); // ✅ Refresh after settling
+            if (refreshGroupDetails) refreshGroupDetails(groupId);
             toast("Transaction settled!!");
         } catch (error) {
             console.error("Error settling transaction:", error);

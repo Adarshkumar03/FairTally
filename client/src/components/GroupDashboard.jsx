@@ -22,14 +22,15 @@ const GroupDashboard = () => {
 
     useEffect(() => {
         if (selectedGroup) {
-            fetchGroupDetails(selectedGroup.id);
+            fetchGroupDetails();
         }
     }, [selectedGroup]);
 
-    const fetchGroupDetails = async (groupId) => {
+    const fetchGroupDetails = async () => {
         try {
-            const response = await api.get(`/groups/${groupId}`);
-            setGroupDetails(response.data);
+            const response = await api.get(`/groups/${selectedGroup.id}`);
+            setGroupDetails(null);
+            setTimeout(() => setGroupDetails(response.data), 0);
         } catch (error) {
             console.error("Error fetching group details:", error);
         }
@@ -95,7 +96,7 @@ const GroupDashboard = () => {
                 {/* Add User Button */}
                 <button
                     onClick={() => setUserModalOpen(true)}
-                    className="w-full mt-6 bg-[#306B34] text-[#fff] hover:bg-green-700 font-semibold px-4 py-2 rounded-lg transition"
+                    className="w-full mt-6 bg-[#306B34] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-[#fff] hover:bg-green-700 font-semibold px-4 py-2 rounded-lg transition"
                 >
                     Add Users
                 </button>
@@ -105,8 +106,10 @@ const GroupDashboard = () => {
             {userModalOpen && (
                 <AddUserModal
                     groupId={selectedGroup.id}
-                    onClose={() => setUserModalOpen(false)}
-                    userId={useAuthStore.getState().user.id}
+                    onClose={() => {
+                        setUserModalOpen(false);
+                    }}
+                    refreshGroupDetails={fetchGroupDetails}
                 />
             )}
             {oweModalOpen && (
@@ -114,14 +117,13 @@ const GroupDashboard = () => {
             )}
             {expenseModalOpen && (
                 <AddExpenseModal
-                    groupId={selectedGroup.id}
-                    groupName={selectedGroup.name}
-                    groupMembers={groupDetails?.users || []}
-                    onClose={() => {
-                        setExpenseModalOpen(false);
-                        fetchGroupDetails(selectedGroup.id);
-                    }}
-                />
+                groupId={selectedGroup.id}
+                groupName={selectedGroup.name}
+                groupMembers={groupDetails?.users || []}
+                onClose={() => {
+                    setExpenseModalOpen(false); 
+                    fetchGroupDetails()}}
+            />
             )}
         </div>
     );

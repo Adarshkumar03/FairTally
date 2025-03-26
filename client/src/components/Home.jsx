@@ -20,13 +20,13 @@ const Home = () => {
           <div className="mt-6 space-x-4">
             <Link
               to="/register"
-              className="px-6 py-2 bg-[#306B34] text-white rounded-lg shadow-md hover:bg-[#245824] transition duration-300"
+              className="px-6 py-2 bg-[#306B34] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-white rounded-md shadow-md hover:bg-[#245824] transition duration-300"
             >
               Sign Up
             </Link>
             <Link
               to="/login"
-              className="px-6 py-2 border-2 border-[#030C03] text-[#030C03] rounded-lg shadow-md hover:bg-[#F7C236] transition duration-300"
+              className="px-6 py-2 border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-[#030C03] rounded-lg shadow-md hover:bg-[#F7C236] transition duration-300"
             >
               Log In
             </Link>

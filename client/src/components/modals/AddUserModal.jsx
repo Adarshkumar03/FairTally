@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../../utils/api";
 import { toast } from "react-toastify";
 
-const AddUserModal = ({ groupId, onClose }) => {
+const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
     const [users, setUsers] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -40,7 +40,8 @@ const AddUserModal = ({ groupId, onClose }) => {
         setError(null);
 
         try {
-            await api.post(`/group/${groupId}/users`, { userIds: selectedUsers });
+            await api.post(`/groups/${groupId}/users`, { userIds: selectedUsers });
+            refreshGroupDetails();
             onClose();
             toast("User added to group successfully!!");
         } catch (err) {

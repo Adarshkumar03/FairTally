@@ -9,7 +9,7 @@ const UserNavbar = () => {
     return (
         <div className="w-full bg-[#AAD7B8] text-[#030303] p-4 flex justify-between items-center">
             {/* Logo - Conditional Link */}
-            <Link to={logoLink} className="text-2xl font-extrabold tracking-wide">
+            <Link to={logoLink} className="text-3xl font-extrabold hover:text-[#FFF6E5]">
                 Splitwise
             </Link>
 
@@ -26,13 +26,13 @@ const UserNavbar = () => {
                     <div className="flex gap-4">
                         <Link
                             to="/login"
-                            className="px-4 py-2 text-sm font-semibold bg-[#F7C236] text-[#030C03] hover:bg-[#e0ae2b] transition rounded-md"
+                            className="px-4 py-2 text-sm font-semibold bg-[#F7C236] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-[#030C03] hover:bg-[#e0ae2b] transition rounded-md"
                         >
                             Login
                         </Link>
                         <Link
                             to="/register"
-                            className="px-4 py-2 text-sm font-semibold bg-[#306B34] text-white hover:bg-[#245824] transition rounded-md"
+                            className="px-4 py-2 text-sm font-semibold bg-[#306B34] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-white hover:bg-[#245824] transition rounded-md"
                         >
                             Register
                         </Link>

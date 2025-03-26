@@ -3,7 +3,6 @@ package com.splitwise.server.controller;
 import com.splitwise.server.dto.AddUsersToGroupRequest;
 import com.splitwise.server.dto.GroupDTO;
 import com.splitwise.server.dto.OweDetailsDTO;
-import com.splitwise.server.dto.UserDebtDTO;
 import com.splitwise.server.model.Group;
 import com.splitwise.server.model.User;
 import com.splitwise.server.service.GroupService;
