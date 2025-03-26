@@ -3,14 +3,14 @@ import UserNavbar from "./UserNavbar";
 
 const Home = () => {
   return (
-    <div className="min-h-screen bg-[#909CC2]">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#FFF6E5] via-[#F7C236] to-[#AAD7B8]">
       {/* Navbar */}
       <UserNavbar />
 
       {/* Main Content */}
-      <div className="flex items-center justify-center h-[calc(100vh-64px)] px-10">
+      <div className="flex flex-1 items-center justify-center px-10 overflow-hidden">
         {/* Left Section */}
-        <div className="w-1/2">
+        <div className="max-w-lg">
           <h1 className="text-5xl font-bold text-[#030C03]">Splitwise</h1>
           <p className="mt-4 text-lg text-[#030C03]">
             Easily split bills and track expenses with friends, family, and roommates.

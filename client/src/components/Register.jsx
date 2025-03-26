@@ -31,7 +31,7 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-[#AAD7B8] flex flex-col">
+    <div className="min-h-screen bg-gradient-to-tr from-[#F7C236] via-[#909CC2] to-[#306B34] flex flex-col">
       {/* Navbar */}
       <UserNavbar />
 

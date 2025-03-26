@@ -24,7 +24,7 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#AAD7B8] flex flex-col">
+    <div className="min-h-screen bg-gradient-to-tl from-[#FFF6E5] via-[#909CC2] to-[#F7C236] flex flex-col">
       {/* Navbar */}
       <UserNavbar />
 
