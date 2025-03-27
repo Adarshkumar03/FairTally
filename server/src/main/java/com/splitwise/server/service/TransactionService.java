@@ -3,10 +3,8 @@ package com.splitwise.server.service;
 import com.splitwise.server.dto.OweDetailsDTO;
 import com.splitwise.server.dto.TransactionDTO;
 import com.splitwise.server.dto.UserDTO;
-import com.splitwise.server.dto.UserDebtDTO;
 import com.splitwise.server.model.Transaction;
 import com.splitwise.server.repo.TransactionRepo;
-import com.splitwise.server.repo.UserRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

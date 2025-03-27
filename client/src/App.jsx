@@ -4,7 +4,7 @@ import { Slide, ToastContainer } from 'react-toastify'
 
 function App() {
   return (
-    <div>
+    <div className='font-montserrat'>
       <RouterProvider router={router}/>
       <ToastContainer
 position="bottom-right"

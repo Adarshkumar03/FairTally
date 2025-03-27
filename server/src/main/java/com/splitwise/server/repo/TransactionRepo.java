@@ -1,14 +1,11 @@
 package com.splitwise.server.repo;
 
 import com.splitwise.server.model.Transaction;
-import com.splitwise.server.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 public interface TransactionRepo extends JpaRepository<Transaction, Long> {
     @Query("SELECT t.payer.id, t.payer.name, SUM(t.amount) " +

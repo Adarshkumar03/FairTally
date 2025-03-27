@@ -38,7 +38,7 @@ export default function Register() {
       {/* Main Content */}
       <div className="flex items-center justify-center flex-grow px-5 bg-gradient-to-b from-[#AAD7B8] via-[#909CC2] to-[#306B34]">
         <div className="bg-[#909CC2] border-l-2 border-t-2 border-r-5 border-b-5 border-[#030303] p-8 sm:p-10 rounded-lg shadow-lg w-full max-w-md sm:w-96 md:w-[28rem]">
-          <h2 className="text-3xl font-bold text-center mb-6 text-[#030C03]">
+          <h2 className="text-4xl font-bold text-center mb-6 text-[#030C03] font-bebas tracking-wider">
             Register
           </h2>
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
@@ -115,7 +115,7 @@ export default function Register() {
           </form>
 
           {/* Login Link */}
-          <p className="text-center text-sm mt-4">
+          <p className="text-center text-sm mt-4 font-medium">
             Already have an account?{" "}
             <span
               onClick={() => navigate("/login")}

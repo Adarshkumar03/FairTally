@@ -56,7 +56,7 @@ const Layout = () => {
                             setSelectedGroup(null);
                             navigate("/dashboard");
                         }}
-                        className="w-full bg-[#F7C236] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303]  text-black font-semibold py-2 rounded-md shadow-md hover:brightness-110 transition duration-300"
+                        className="w-full bg-[#F7C236] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-black font-bold py-2 rounded-md shadow-md hover:brightness-110 transition duration-300"
                     >
                         Go to Dashboard
                     </button>
