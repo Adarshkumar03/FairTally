@@ -24,7 +24,7 @@ const TransactionList = ({ groupId, refreshGroupDetails }) => {
             await api.put(`/groups/transactions/${transactionId}/settle`);
             fetchTransactions(); // ✅ Refresh after settling
             if (refreshGroupDetails) refreshGroupDetails(groupId);
-            toast("Transaction settled!!");
+            toast.success("Transaction settled!!");
         } catch (error) {
             console.error("Error settling transaction:", error);
         }
@@ -60,7 +60,7 @@ const TransactionList = ({ groupId, refreshGroupDetails }) => {
                     })}
                 </ul>
             ) : (
-                <p className="text-gray-500 text-center">No transactions yet</p>
+                <p className=" text-center">No transactions yet</p>
             )}
         </div>
     );

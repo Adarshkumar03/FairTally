@@ -44,7 +44,7 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
             await api.post("/expenses", expenseData);
             await fetchGroupTransactions(groupId); // ✅ Refresh transactions after adding an expense
             onClose();
-            toast("Successfully Added Expense!!");
+            toast.success("Successfully Added Expense!!");
         } catch (error) {
             console.error("Error adding expense:", error);
             toast.error("Failed to add expense!");

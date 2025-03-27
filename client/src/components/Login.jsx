@@ -13,9 +13,9 @@ export default function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/auth/login", { email, password });
+      await api.post("/auth/login", { email, password });
       navigate("/dashboard");
-      toast("Login Successful!!");
+      toast.success("Login Successful!!");
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
       setError("Invalid email or password");
@@ -23,13 +23,13 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-[#F7C236] via-[#909CC2] to-[#306B34] flex flex-col">
+    <div className="min-h-screen flex flex-col">
       {/* Navbar */}
       <UserNavbar />
 
       {/* Main Content */}
-      <div className="flex items-center justify-center flex-grow px-5">
-        <div className="bg-[#FFF6E5] border-l-[3px] border-t-[3px] border-r-[6px] border-b-[6px] border-[#030303] p-10 rounded-lg shadow-lg w-[450px]">
+      <div className="flex items-center justify-center flex-grow px-5 bg-gradient-to-b from-[#AAD7B8] via-[#F7C236] to-[#306B34]">
+        <div className="bg-[#FFF6E5] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] p-8 sm:p-10 rounded-lg shadow-lg w-full max-w-md sm:w-96 md:w-[28rem]">
           <h2 className="text-3xl font-bold text-center mb-6 text-[#030C03]">
             Login
           </h2>
@@ -38,7 +38,7 @@ export default function Login() {
           <form onSubmit={handleLogin} className="space-y-4">
             {/* Email Input */}
             <div>
-              <label className="block text-[#030C03] font-semibold">
+              <label className="block text-[#030C03] font-semibold mb-1">
                 Email
               </label>
               <input
@@ -53,7 +53,7 @@ export default function Login() {
 
             {/* Password Input */}
             <div>
-              <label className="block text-[#030C03] font-semibold">
+              <label className="block text-[#030C03] font-semibold mb-1">
                 Password
               </label>
               <input

@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import GroupList from "./GroupList";
 import UserNavbar from "./UserNavbar";
 import AddGroupModal from "./modals/AddGroupModal";
-import AddUserModal from "./modals/AddUserModal";
 import api from "../utils/api";
 import { toast } from "react-toastify";
 
@@ -12,9 +11,7 @@ const Layout = () => {
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    // Modal States
     const [isGroupModalOpen, setGroupModalOpen] = useState(false);
-    const [isUserModalOpen, setUserModalOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -35,9 +32,9 @@ const Layout = () => {
 
     const handleGroupAdded = async (newGroup) => {
         try {
-            await fetchGroups(); // Fetch updated group list
-            setSelectedGroup(newGroup); // Set the new group as selected
-            toast("Group added successfully!");
+            await fetchGroups();
+            setSelectedGroup(newGroup);
+            navigate("/dashboard");
         } catch (error) {
             console.error("Error updating groups:", error);
         } finally {
@@ -46,7 +43,7 @@ const Layout = () => {
     };
 
     return (
-        <div className="h-screen flex flex-col bg-[#FFF6E5]">
+        <div className="h-screen flex flex-col bg-[#FFF6E5] p-0 m-0">
             {/* Top Navbar */}
             <UserNavbar />
 
@@ -59,7 +56,7 @@ const Layout = () => {
                             setSelectedGroup(null);
                             navigate("/dashboard");
                         }}
-                        className="w-full bg-[#F7C236] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303]  text-black font-semibold py-2 rounded-md shadow-md transition hover:brightness-110"
+                        className="w-full bg-[#F7C236] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303]  text-black font-semibold py-2 rounded-md shadow-md hover:brightness-110 transition duration-300"
                     >
                         Go to Dashboard
                     </button>
@@ -79,8 +76,8 @@ const Layout = () => {
                 </div>
 
                 {/* Middle & Right Sections */}
-                <div className="col-span-3 p-8 border-3">
-                    <Outlet context={{ selectedGroup, groups, fetchGroups, setUserModalOpen }} />
+                <div className="col-span-3 p-8 border-4 bg-[#FFF6E5]">
+                    <Outlet context={{ selectedGroup, groups, fetchGroups}} />
                 </div>
             </div>
 
@@ -90,9 +87,6 @@ const Layout = () => {
                     onClose={() => setGroupModalOpen(false)}
                     onGroupAdded={handleGroupAdded}
                 />
-            )}
-            {isUserModalOpen && (
-                <AddUserModal groupId={selectedGroup?.id} onClose={() => setUserModalOpen(false)} />
             )}
         </div>
     );

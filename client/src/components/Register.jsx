@@ -31,13 +31,13 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-[#F7C236] via-[#909CC2] to-[#306B34] flex flex-col">
+    <div className="min-h-screen flex flex-col">
       {/* Navbar */}
       <UserNavbar />
 
       {/* Main Content */}
-      <div className="flex items-center justify-center flex-grow px-5">
-        <div className="bg-[#FFF6E5] border-l-[3px] border-t-[3px] border-r-[6px] border-b-[6px] border-[#030303] p-10 rounded-lg shadow-lg w-[450px]">
+      <div className="flex items-center justify-center flex-grow px-5 bg-gradient-to-b from-[#AAD7B8] via-[#909CC2] to-[#306B34]">
+        <div className="bg-[#FFF6E5] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] p-8 sm:p-10 rounded-lg shadow-lg w-full max-w-md sm:w-96 md:w-[28rem]">
           <h2 className="text-3xl font-bold text-center mb-6 text-[#030C03]">
             Register
           </h2>

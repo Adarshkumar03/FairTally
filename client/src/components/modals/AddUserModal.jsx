@@ -43,7 +43,7 @@ const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
             await api.post(`/groups/${groupId}/users`, { userIds: selectedUsers });
             refreshGroupDetails();
             onClose();
-            toast("User added to group successfully!!");
+            toast.success("User added to group successfully!!");
         } catch (err) {
             setError("Failed to add users");
         } finally {

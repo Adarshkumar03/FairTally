@@ -11,17 +11,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TransactionRepo extends JpaRepository<Transaction, Long> {
-    List<Transaction> findByPayerOrPayee(User user, User user1);
-
-    List<Transaction> findByPayeeIdOrPayerId(Long userId, Long userId1);
-
     @Query("SELECT t.payer.id, t.payer.name, SUM(t.amount) " +
             "FROM Transaction t WHERE t.payee.id = :userId AND t.group.id = :groupId AND t.settled = false " +
             "GROUP BY t.payer.id, t.payer.name")
     List<Object[]> findDebtsByUser(@Param("userId") Long userId, @Param("groupId") Long groupId);
 
-    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.payer.id = :userId AND t.group.id = :groupId AND t.settled = false")
-    BigDecimal getTotalDebtForUserInGroup(@Param("userId") Long userId, @Param("groupId") Long groupId);
 
     @Query("""
     SELECT u.id, u.name, COALESCE(SUM(t.amount), 0)\s

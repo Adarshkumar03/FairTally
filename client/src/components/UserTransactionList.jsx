@@ -26,7 +26,7 @@ const UserTransactionList = () => {
         try {
             await api.put(`/groups/transactions/${transactionId}/settle`);
             fetchUserTransactions(user.id);
-            toast("Transaction settled!!");
+            toast.success("Transaction settled!!");
         } catch (error) {
             console.error("Error settling transaction:", error);
         }

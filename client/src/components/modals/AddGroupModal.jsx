@@ -10,10 +10,11 @@ const AddGroupModal = ({ onClose, onGroupAdded }) => {
 
         try {
             await api.post("/groups", { name: groupName });
-            toast("Group added successfully!");
+            toast.success("Group added successfully!");
             onGroupAdded();
             onClose();
         } catch (error) {
+            toast.error("Failed to add group");
             console.error("Error adding group:", error);
         }
     };

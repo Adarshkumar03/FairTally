@@ -17,11 +17,9 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionService {
     private final TransactionRepo transactionRepo;
-    private final UserRepo userRepo;
 
-    public TransactionService(TransactionRepo transactionRepo, UserRepo userRepo) {
+    public TransactionService(TransactionRepo transactionRepo) {
         this.transactionRepo = transactionRepo;
-        this.userRepo = userRepo;
     }
 
     public List<OweDetailsDTO> getDebtsForUser(Long userId, Long groupId) {
@@ -43,10 +41,6 @@ public class TransactionService {
         transaction.setSettled(true);
         transactionRepo.save(transaction);
     }
-
-//    public BigDecimal getTotalOwedByUser(Long userId, Long groupId) {
-//        return transactionRepo.getTotalOwedByUser(userId, groupId).orElse(BigDecimal.ZERO);
-//    }
 
     public List<UserDTO> getTotalOwedPerUser(Long groupId) {
         List<Object[]> results = transactionRepo.getTotalOwedPerUser(groupId);

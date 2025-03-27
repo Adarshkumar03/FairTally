@@ -1,12 +1,25 @@
 import { RouterProvider } from 'react-router'
 import { router } from './constants/router/router'
-import { ToastContainer } from 'react-toastify'
+import { Slide, ToastContainer } from 'react-toastify'
 
 function App() {
   return (
     <div>
       <RouterProvider router={router}/>
-      <ToastContainer/>
+      <ToastContainer
+position="bottom-right"
+autoClose={2000}
+limit={1}
+hideProgressBar={false}
+newestOnTop={false}
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+theme="dark"
+transition={Slide}
+/>
     </div>
   )
 }

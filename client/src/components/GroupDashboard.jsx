@@ -65,7 +65,7 @@ const GroupDashboard = () => {
 
             {/* Right Section: Group Members */}
             <div className="p-6 rounded-md shadow-2xl bg-[#909CC2] border-t-3 border-l-3 border-r-5 border-b-5 border-[#000]">
-                <h3 className="text-2xl font-semibold text-white mb-4 text-center">Group Members</h3>
+                <h3 className="text-2xl font-bold text-white mb-4 text-center">Group Members</h3>
 
                 {groupDetails ? (
                     <ul className="space-y-3">

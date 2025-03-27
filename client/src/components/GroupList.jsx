@@ -7,7 +7,7 @@ const GroupList = ({ groups, selectedGroup, onSelectGroup, onAddGroup }) => {
         <div>
             <h2 className="text-2xl font-bold mb-4 text-center">Groups</h2>
             {groups.length === 0 ? (
-                <p className="text-center text-gray-600">No groups available</p>
+                <p className="text-centertex-[#030303] mb-4">No groups available</p>
             ) : (
                 <ul className="mb-4 space-y-2">
                     {groups.map((group) => (

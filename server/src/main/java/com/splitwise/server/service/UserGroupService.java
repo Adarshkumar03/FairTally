@@ -22,7 +22,7 @@ public class UserGroupService {
         userGroup.setUser(user);
         userGroup.setGroup(group);
 
-        return userGroupRepo.save(userGroup); // Save and return the UserGroup entity
+        return userGroupRepo.save(userGroup);
     }
 }
 
