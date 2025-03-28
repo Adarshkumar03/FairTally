@@ -47,9 +47,9 @@ public class GroupService {
 
         List<UserDTO> members = transactionRepo.getTotalOwedPerUser(group.getId()).stream()
                 .map(row -> new UserDTO(
-                        ((Number) row[0]).longValue(),  // user_id
-                        (String) row[1],               // user_name
-                        (BigDecimal) row[2]            // total_owed
+                        ((Number) row[0]).longValue(),
+                        (String) row[1],
+                        (BigDecimal) row[2]
                 ))
                 .collect(Collectors.toList());
 

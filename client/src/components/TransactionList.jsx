@@ -21,7 +21,7 @@ const TransactionList = ({ groupId, refreshGroupDetails }) => {
 
     const handleSettleTransaction = async (transactionId) => {
         try {
-            await api.put(`/groups/transactions/${transactionId}/settle`);
+            await api.put(`/transactions/${transactionId}/settle`);
             fetchTransactions();
             if (refreshGroupDetails) refreshGroupDetails(groupId);
             toast.success("Transaction settled!!");

@@ -2,11 +2,9 @@ package com.splitwise.server.service;
 
 import com.splitwise.server.dto.OweDetailsDTO;
 import com.splitwise.server.dto.TransactionDTO;
-import com.splitwise.server.dto.UserDTO;
 import com.splitwise.server.model.Transaction;
 import com.splitwise.server.repo.TransactionRepo;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,47 +18,12 @@ public class TransactionService {
         this.transactionRepo = transactionRepo;
     }
 
-    public List<OweDetailsDTO> getDebtsForUser(Long userId, Long groupId) {
-        List<Object[]> results = transactionRepo.findDebtsByUser(userId, groupId);
-
-        return results.stream()
-                .map(row -> new OweDetailsDTO(
-                        (Long) row[0],  // payeeId
-                        (String) row[1],  // payeeName
-                        (BigDecimal) row[2] // amountOwed
-                ))
-                .collect(Collectors.toList());
-    }
-
     public void settleTransaction(Long transactionId) {
         Transaction transaction = transactionRepo.findById(transactionId)
                 .orElseThrow(() -> new RuntimeException("Transaction not found"));
 
         transaction.setSettled(true);
         transactionRepo.save(transaction);
-    }
-
-    public List<UserDTO> getTotalOwedPerUser(Long groupId) {
-        List<Object[]> results = transactionRepo.getTotalOwedPerUser(groupId);
-
-        return results.stream()
-                .map(row -> new UserDTO(
-                        ((Number) row[0]).longValue(),  // User ID
-                        (String) row[1],                // User Name
-                        (BigDecimal) row[2]             // Total Owed
-                ))
-                .collect(Collectors.toList());
-    }
-
-    public List<Object[]> debugTotalOwedPerUser(Long groupId) {
-        List<Object[]> results = transactionRepo.getTotalOwedPerUser(groupId);
-
-        // Debugging: Print raw results
-        for (Object[] row : results) {
-            System.out.println("User ID: " + row[0] + ", Name: " + row[1] + ", Total Owed: " + row[2]);
-        }
-
-        return results;
     }
 
     public List<OweDetailsDTO> getOweDetails(Long userId, Long groupId) {
@@ -73,19 +36,6 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
-
-    @Transactional
-    public Transaction markTransactionAsSettled(Long transactionId) {
-        Transaction transaction = transactionRepo.findById(transactionId)
-                .orElseThrow(() -> new RuntimeException("Transaction not found"));
-
-        if (transaction.isSettled()) {
-            throw new RuntimeException("Transaction is already settled.");
-        }
-
-        transaction.setSettled(true);
-        return transactionRepo.save(transaction);
-    }
 
     public List<TransactionDTO> getGroupTransactions(Long groupId) {
         List<Transaction> transactions = transactionRepo.findByGroupIdAndSettledFalse(groupId);

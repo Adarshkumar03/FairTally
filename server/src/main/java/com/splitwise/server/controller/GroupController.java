@@ -2,7 +2,6 @@ package com.splitwise.server.controller;
 
 import com.splitwise.server.dto.AddUsersToGroupRequest;
 import com.splitwise.server.dto.GroupDTO;
-import com.splitwise.server.dto.OweDetailsDTO;
 import com.splitwise.server.model.Group;
 import com.splitwise.server.model.User;
 import com.splitwise.server.service.GroupService;
@@ -95,15 +94,5 @@ public class GroupController {
         }
     }
 
-    @GetMapping("/users/{userId}/owes/{groupId}")
-    public List<OweDetailsDTO> getUserDebts(@PathVariable Long userId, @PathVariable Long groupId) {
-        return transactionService.getDebtsForUser(userId, groupId);
-    }
-
-    @PutMapping("/transactions/{transactionId}/settle")
-    public ResponseEntity<String> settleTransaction(@PathVariable Long transactionId) {
-        transactionService.settleTransaction(transactionId);
-        return ResponseEntity.ok("Transaction settled successfully");
-    }
 }
 

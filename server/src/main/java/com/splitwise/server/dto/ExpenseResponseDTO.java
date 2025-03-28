@@ -16,7 +16,7 @@ import java.util.Set;
 public class ExpenseResponseDTO {
     private Long id;
     private BigDecimal amount;
-    private String description; // ✅ Added Description Field
+    private String description;
     private LocalDateTime date;
     private String payerName;
     private Set<String> sharedWithNames;

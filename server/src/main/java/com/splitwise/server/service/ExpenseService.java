@@ -106,11 +106,11 @@ public class ExpenseService {
         return new ExpenseResponseDTO(
                 expense.getId(),
                 expense.getAmount(),
-                expense.getDescription(), // ✅ Pass the description
+                expense.getDescription(),
                 expense.getDate(),
-                expense.getPayer().getName(), // ✅ Convert payer ID to payer Name
+                expense.getPayer().getName(),
                 expense.getSharedWith().stream()
-                        .map(User::getName) // ✅ Convert User ID to User Name
+                        .map(User::getName)
                         .collect(Collectors.toSet())
         );
     }

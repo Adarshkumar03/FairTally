@@ -67,7 +67,7 @@ public class AuthController {
         if (principal instanceof User user) {
             return ResponseEntity.ok(Map.of(
                     "message", "Authenticated",
-                    "id", user.getId(),   // ✅ Include userId
+                    "id", user.getId(),
                     "name", user.getName()
             ));
         } else {

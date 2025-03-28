@@ -2,7 +2,6 @@ package com.splitwise.server.controller;
 
 import com.splitwise.server.dto.OweDetailsDTO;
 import com.splitwise.server.dto.TransactionDTO;
-import com.splitwise.server.model.Transaction;
 import com.splitwise.server.service.TransactionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +31,9 @@ public class TransactionController {
     }
 
     @PutMapping("/{transactionId}/settle")
-    public Transaction settleTransaction(@PathVariable Long transactionId) {
-        return transactionService.markTransactionAsSettled(transactionId);
+    public ResponseEntity<String> settleTransaction(@PathVariable Long transactionId) {
+        transactionService.settleTransaction(transactionId);
+        return ResponseEntity.ok("Transaction settled successfully");
     }
 
     @GetMapping("/owe-details")
