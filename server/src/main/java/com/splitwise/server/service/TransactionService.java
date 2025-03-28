@@ -100,10 +100,12 @@ public class TransactionService {
                         t.getDate(),
                         t.getGroup().getId(),
                         t.getGroup().getName(),
-                        t.isSettled()
+                        t.isSettled(),
+                        t.getDescription()
                 ))
                 .collect(Collectors.toList());
     }
+
 
     public List<TransactionDTO> getUserTransactions(Long userId) {
         List<Transaction> transactions = transactionRepo.findByUserIdAndSettledFalse(userId);
@@ -118,8 +120,10 @@ public class TransactionService {
                         t.getDate(),
                         t.getGroup().getId(),
                         t.getGroup().getName(),
-                        t.isSettled()
+                        t.isSettled(),
+                        t.getDescription()
                 ))
                 .collect(Collectors.toList());
     }
+
 }

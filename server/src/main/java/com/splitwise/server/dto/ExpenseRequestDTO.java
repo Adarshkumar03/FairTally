@@ -15,11 +15,14 @@ public class ExpenseRequestDTO {
     private Long groupId;
     private Long payerId;
     private Set<Long> sharedWithUserIds;
+    private String description; // ✅ Added Description Field
 
-    public ExpenseRequestDTO(BigDecimal amount, Long groupId, Long payerId, Set<Long> sharedWithUserIds) {
+    public ExpenseRequestDTO(BigDecimal amount, Long groupId, Long payerId, Set<Long> sharedWithUserIds, String description) {
         this.amount = amount;
         this.groupId = groupId;
         this.payerId = payerId;
         this.sharedWithUserIds = sharedWithUserIds;
+        this.description = description; // ✅ Assigning Description
     }
 }
+

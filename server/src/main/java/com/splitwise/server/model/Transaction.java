@@ -38,4 +38,7 @@ public class Transaction {
 
     @Column(nullable = false)
     private boolean settled = false;
+
+    @Column(nullable = false)
+    private String description;
 }

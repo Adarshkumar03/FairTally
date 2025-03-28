@@ -55,15 +55,12 @@ public class ExpenseService {
 
     @Transactional
     public ExpenseResponseDTO addExpense(ExpenseRequestDTO expenseRequestDTO) {
-        // Fetch the group
         Group group = groupRepo.findById(expenseRequestDTO.getGroupId())
                 .orElseThrow(() -> new RuntimeException("Group not found"));
 
-        // Fetch the payer
         User payer = userRepo.findById(expenseRequestDTO.getPayerId())
                 .orElseThrow(() -> new RuntimeException("Payer not found"));
 
-        // Fetch users sharing the expense
         Set<User> sharedWithUsers = new HashSet<>();
         for (Long userId : expenseRequestDTO.getSharedWithUserIds()) {
             User user = userRepo.findById(userId)
@@ -72,27 +69,22 @@ public class ExpenseService {
         }
 
         sharedWithUsers.remove(payer);
-
         if (sharedWithUsers.isEmpty()) {
             throw new RuntimeException("Cannot split expense among 0 users");
         }
 
-        // Calculate equal split amount
         BigDecimal splitAmount = expenseRequestDTO.getAmount()
-                .divide(BigDecimal.valueOf(sharedWithUsers.size()+1), 2, RoundingMode.HALF_UP);
+                .divide(BigDecimal.valueOf(sharedWithUsers.size() + 1), 2, RoundingMode.HALF_UP);
 
-        System.out.println("SplitAMount: " + splitAmount);
-
-        // Create and save the expense
         Expense expense = new Expense();
         expense.setAmount(expenseRequestDTO.getAmount());
         expense.setDate(LocalDateTime.now());
         expense.setGroup(group);
         expense.setPayer(payer);
         expense.setSharedWith(sharedWithUsers);
+        expense.setDescription(expenseRequestDTO.getDescription());
         expenseRepo.save(expense);
 
-        // Create transactions (who owes whom)
         for (User user : sharedWithUsers) {
             if (!user.equals(payer)) {
                 Transaction transaction = new Transaction();
@@ -101,6 +93,7 @@ public class ExpenseService {
                 transaction.setAmount(splitAmount);
                 transaction.setDate(LocalDateTime.now());
                 transaction.setGroup(group);
+                transaction.setDescription(expenseRequestDTO.getDescription());
                 transactionRepo.save(transaction);
             }
         }
@@ -108,14 +101,17 @@ public class ExpenseService {
         return mapToResponseDTO(expense);
     }
 
+
     private ExpenseResponseDTO mapToResponseDTO(Expense expense) {
         return new ExpenseResponseDTO(
                 expense.getId(),
                 expense.getAmount(),
+                expense.getDescription(), // ✅ Pass the description
                 expense.getDate(),
-                expense.getGroup().getId(),
-                expense.getPayer().getId(),
-                expense.getSharedWith().stream().map(User::getId).collect(Collectors.toSet())
+                expense.getPayer().getName(), // ✅ Convert payer ID to payer Name
+                expense.getSharedWith().stream()
+                        .map(User::getName) // ✅ Convert User ID to User Name
+                        .collect(Collectors.toSet())
         );
     }
 }

@@ -8,9 +8,8 @@ import TransactionComponent from "./TransactionComponent";
 const TransactionList = ({ groupId, refreshGroupDetails }) => {
     const { transactions, fetchGroupTransactions } = useTransactionStore();
     const [loading, setLoading] = useState(true);
-    const { user } = useAuthStore(); // Get logged-in user
+    const { user } = useAuthStore();
 
-    // ✅ Memoizing fetch function to avoid re-renders
     const fetchTransactions = useCallback(() => {
         setLoading(true);
         fetchGroupTransactions(groupId).finally(() => setLoading(false));
@@ -23,7 +22,7 @@ const TransactionList = ({ groupId, refreshGroupDetails }) => {
     const handleSettleTransaction = async (transactionId) => {
         try {
             await api.put(`/groups/transactions/${transactionId}/settle`);
-            fetchTransactions(); // ✅ Refresh after settling
+            fetchTransactions();
             if (refreshGroupDetails) refreshGroupDetails(groupId);
             toast.success("Transaction settled!!");
         } catch (error) {

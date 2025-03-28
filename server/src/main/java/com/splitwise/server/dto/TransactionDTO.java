@@ -18,9 +18,11 @@ public class TransactionDTO {
     private Long groupId;
     private String groupName;
     private boolean settled;
+    private String description;
 
     public TransactionDTO(Long id, Long payerId, String payerName, Long payeeId, String payeeName,
-                          BigDecimal amount, LocalDateTime date, Long groupId, String groupName, boolean settled) {
+                          BigDecimal amount, LocalDateTime date, Long groupId, String groupName,
+                          boolean settled, String description) {
         this.id = id;
         this.payerId = payerId;
         this.payerName = payerName;
@@ -31,5 +33,6 @@ public class TransactionDTO {
         this.groupId = groupId;
         this.groupName = groupName;
         this.settled = settled;
+        this.description = description;
     }
 }

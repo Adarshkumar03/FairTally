@@ -34,6 +34,9 @@ public class Expense {
     @JoinColumn(name = "payer_id", nullable = false)
     private User payer;
 
+    @Column(nullable = false)
+    private String description;
+
     @ManyToMany
     @JoinTable(
             name="expense_users",
@@ -41,4 +44,6 @@ public class Expense {
             inverseJoinColumns = @JoinColumn(name="user_id")
     )
     private Set<User> sharedWith;
+
+
 }

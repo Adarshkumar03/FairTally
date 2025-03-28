@@ -19,11 +19,6 @@ public class TransactionController {
         System.out.println("✅ TransactionController initialized!");
     }
 
-    @GetMapping("/debug/group/{groupId}")
-    public ResponseEntity<List<Object[]>> debugOwedAmount(@PathVariable Long groupId) {
-        return ResponseEntity.ok(transactionService.debugTotalOwedPerUser(groupId));
-    }
-
     @GetMapping("/users/{userId}")
     public ResponseEntity<List<TransactionDTO>> getUserTransactions(@PathVariable Long userId) {
         return ResponseEntity.ok(transactionService.getUserTransactions(userId));

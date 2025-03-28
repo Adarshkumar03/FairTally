@@ -8,6 +8,7 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
     const { user } = useAuthStore();
     const { fetchGroupTransactions } = useTransactionStore(); 
     const [amount, setAmount] = useState("");
+    const [description, setDescription] = useState("");
     const [sharedWith, setSharedWith] = useState(groupMembers.map((member) => member.id));
     const [perPersonAmount, setPerPersonAmount] = useState(0);
 
@@ -38,6 +39,7 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
             groupId,
             payerId: user.id,
             sharedWithUserIds: sharedWith,
+            description,
         };
 
         try {
@@ -62,6 +64,14 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
                         With you and all of <strong>{groupName}</strong>
                     </span>
                 </div>
+
+                <input 
+    type="text"
+    value={description}
+    onChange={(e) => setDescription(e.target.value)}
+    placeholder="Enter description"
+    className="border p-2 w-full rounded-md mb-3 text-[#030C03] text-lg font-medium"
+/>
 
                 {/* Amount Input */}
                 <input 

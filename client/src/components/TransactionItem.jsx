@@ -2,20 +2,27 @@ const TransactionItem = ({ tx, isUserInvolved, onSettle }) => {
     return (
         <li
             key={tx.id}
-            className="p-4 flex justify-between items-center bg-[#F6D47A] text-[#1F0600] rounded-md shadow-md border-t-2 border-l-2 border-b-4 border-r-4 border-[#000]"
+            className="p-4 flex justify-between items-center bg-[#F7C236] text-[#1F0600] rounded-md shadow-md border-t-2 border-l-2 border-b-4 border-r-4 border-[#000]"
         >
             <div className="flex flex-col">
-                <span className="text-lg font-bold">
+                <span className="text-lg font-bold leading-tight">
                     <span className="text-[#030C03]">{tx.payerName}</span>{" "}
                     <span className="text-[#306B34] font-extrabold">paid</span>{" "}
                     <span className="text-[#030303]">₹{tx.amount}</span>{" "}
                     <span className="text-[#030C03]">on behalf of</span>{" "}
                     <span className="text-[#030303] font-bold">{tx.payeeName}</span>
                 </span>
-                <span className={`text-sm ${tx.settled ? "text-green-400" : "text-[#A31621]"} font-bold`}>
-                    Settle Status: {tx.settled ? "Settled" : "Pending"}
+
+                {/* Description with normal text styling */}
+                <span className="mt-1 text-sm text-[#030C03] italic font-medium">
+                    {tx.description}
+                </span>
+
+                <span className={`text-sm ${tx.settled ? "text-green-500 font-bold" : "text-[#A31621] font-semibold"} mt-1`}>
+                    {tx.settled ? "Settled" : "Pending"}
                 </span>
             </div>
+
             {!tx.settled && isUserInvolved && (
                 <button
                     onClick={() => onSettle(tx.id)}
@@ -28,4 +35,4 @@ const TransactionItem = ({ tx, isUserInvolved, onSettle }) => {
     );
 };
 
-export default TransactionItem
+export default TransactionItem;

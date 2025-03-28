@@ -2,6 +2,7 @@ package com.splitwise.server.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
@@ -10,12 +11,14 @@ import java.util.Set;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class ExpenseResponseDTO {
     private Long id;
     private BigDecimal amount;
+    private String description; // ✅ Added Description Field
     private LocalDateTime date;
-    private Long groupId;
-    private Long payerId;
-    private Set<Long> sharedWithUserIds;
+    private String payerName;
+    private Set<String> sharedWithNames;
 }
+
