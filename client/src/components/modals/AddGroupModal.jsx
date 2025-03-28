@@ -37,13 +37,13 @@ const AddGroupModal = ({ onClose, onGroupAdded }) => {
                 <div className="flex justify-between">
                     <button 
                         onClick={onClose} 
-                        className="bg-[#D9534F] text-[#FFF6E5] hover:bg-[#C9302C] p-2 rounded-md font-semibold text-lg transition"
+                        className="bg-[#D9534F] text-[#FFF6E5] hover:bg-[#C9302C] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] p-2 rounded-md font-semibold text-lg transition"
                     >
                         Cancel
                     </button>
                     <button 
                         onClick={handleSubmit} 
-                        className="bg-[#306B34] text-[#FFF6E5] p-2 rounded-md hover:bg-[#265427] transition font-semibold text-lg"
+                        className="bg-[#306B34] text-[#FFF6E5] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] p-2 rounded-md hover:bg-[#265427] transition-all duration-300 font-semibold text-lg"
                     >
                         Create
                     </button>

@@ -42,7 +42,7 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
 
         try {
             await api.post("/expenses", expenseData);
-            await fetchGroupTransactions(groupId); // ✅ Refresh transactions after adding an expense
+            await fetchGroupTransactions(groupId);
             onClose();
             toast.success("Successfully Added Expense!!");
         } catch (error) {
@@ -83,7 +83,7 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
                     <h3 className="text-md font-semibold mt-3 text-[#030C03] text-center">Select Members to Split With</h3>
                     <div className="border rounded-md p-2 max-h-40 overflow-y-auto bg-[#FFF6E5]">
                         {groupMembers.map((member) => (
-                            <label key={member.id} className="flex items-center gap-2 text-[#030C03] text-lg">
+                            member.id != user.id && <label key={member.id} className="flex items-center gap-2 text-[#030C03] text-lg">
                                 <input 
                                     type="checkbox"
                                     checked={sharedWith.includes(member.id)}
@@ -99,15 +99,15 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
                 <div className="flex justify-between">
                     <button 
                         onClick={onClose} 
-                        className="bg-[#D9534F] text-[#FFF6E5] hover:bg-[#C9302C] p-2 rounded-md font-semibold text-lg transition"
+                        className="bg-[#D9534F] text-[#FFF6E5] hover:bg-[#C9302C] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] p-2 rounded-md font-semibold text-lg transition"
                     >
                         Cancel
                     </button>
                     <button 
                         onClick={handleSubmit} 
-                        className="bg-[#306B34] text-[#FFF6E5] p-2 rounded-md hover:bg-[#265427] transition font-semibold text-lg"
+                        className="bg-[#306B34] text-[#FFF6E5] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] p-2 rounded-md hover:bg-[#265427] transition-all duration-300 font-semibold text-lg"
                     >
-                        Save
+                        Add Expense
                     </button>
                 </div>
             </div>

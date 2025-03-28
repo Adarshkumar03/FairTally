@@ -4,13 +4,11 @@ import GroupList from "./GroupList";
 import UserNavbar from "./UserNavbar";
 import AddGroupModal from "./modals/AddGroupModal";
 import api from "../utils/api";
-import { toast } from "react-toastify";
 
 const Layout = () => {
     const [groups, setGroups] = useState([]);
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [loading, setLoading] = useState(true);
-
     const [isGroupModalOpen, setGroupModalOpen] = useState(false);
 
     const navigate = useNavigate();
@@ -48,7 +46,7 @@ const Layout = () => {
             <UserNavbar />
 
             {/* Main Content */}
-            <div className="grid grid-cols-4 flex-grow">
+            <div className="grid grid-cols-4 flex-grow mt-15">
                 {/* Left Sidebar (Groups List) */}
                 <div className="col-span-1 bg-[#AAD7B8] p-6 border-r border-[#AAD7B8]">
                     <button
@@ -76,8 +74,8 @@ const Layout = () => {
                 </div>
 
                 {/* Middle & Right Sections */}
-                <div className="col-span-3 p-8 border-4 bg-[#FFF6E5]">
-                    <Outlet context={{ selectedGroup, groups, fetchGroups}} />
+                <div className="col-span-3 p-8 border-4 bg-[#FFF6E5] min-h-[calc(100vh-4rem)]">
+                    <Outlet context={{ selectedGroup, groups, fetchGroups }} />
                 </div>
             </div>
 

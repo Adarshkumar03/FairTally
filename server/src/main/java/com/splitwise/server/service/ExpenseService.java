@@ -79,7 +79,7 @@ public class ExpenseService {
 
         // Calculate equal split amount
         BigDecimal splitAmount = expenseRequestDTO.getAmount()
-                .divide(BigDecimal.valueOf(sharedWithUsers.size()), 2, RoundingMode.HALF_UP);
+                .divide(BigDecimal.valueOf(sharedWithUsers.size()+1), 2, RoundingMode.HALF_UP);
 
         System.out.println("SplitAMount: " + splitAmount);
 
