@@ -54,11 +54,10 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
+        <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] mt-16">
             <div className="bg-[#FEF5E4] w-96 p-6 rounded-lg shadow-lg relative">
                 <h2 className="text-2xl font-bold text-center text-[#030C03]">Add an Expense</h2>
 
-                {/* "With you and: All of {GroupName}" */}
                 <div className="flex items-center justify-center bg-[#F7C236] p-3 rounded-md mt-3 mb-3">
                     <span className="text-[#030C03] text-lg font-medium">
                         With you and all of <strong>{groupName}</strong>
@@ -66,14 +65,13 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
                 </div>
 
                 <input 
-    type="text"
-    value={description}
-    onChange={(e) => setDescription(e.target.value)}
-    placeholder="Enter description"
-    className="border p-2 w-full rounded-md mb-3 text-[#030C03] text-lg font-medium"
-/>
+                    type="text"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Enter description"
+                    className="border p-2 w-full rounded-md mb-3 text-[#030C03] text-lg font-medium"
+                />
 
-                {/* Amount Input */}
                 <input 
                     type="number" 
                     value={amount} 
@@ -82,18 +80,16 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
                     className="border p-2 w-full rounded-md mb-3 text-[#030C03] text-lg font-medium"
                 />
 
-                {/* Split Info */}
                 <p className="text-sm text-[#306B34] font-semibold">
                     Paid by <strong>you</strong> and split <strong>equally</strong>. <br />
                     (<span className="text-lg font-bold text-[#306B34]">₹{perPersonAmount}</span> per person)
                 </p>
 
-                {/* Select Users */}
                 <div className="mb-4">
                     <h3 className="text-md font-semibold mt-3 text-[#030C03] text-center">Select Members to Split With</h3>
                     <div className="border rounded-md p-2 max-h-40 overflow-y-auto bg-[#FFF6E5]">
                         {groupMembers.map((member) => (
-                            member.id != user.id && <label key={member.id} className="flex items-center gap-2 text-[#030C03] text-lg">
+                            member.id !== user.id && <label key={member.id} className="flex items-center gap-2 text-[#030C03] text-lg">
                                 <input 
                                     type="checkbox"
                                     checked={sharedWith.includes(member.id)}
@@ -105,7 +101,6 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
                     </div>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex justify-between">
                     <button 
                         onClick={onClose} 

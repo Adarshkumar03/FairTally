@@ -33,17 +33,16 @@ const GroupDashboard = () => {
     if (!selectedGroup) return <p className="text-center text-gray-400">No group selected</p>;
 
     return (
-        <div className="grid grid-cols-3 gap-6 p-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 md:p-6 w-full">
             {/* Middle Section: Transactions */}
-            <div className="col-span-2 bg-[#F7C236] p-6 rounded-md shadow-2xl 
-                            border-t-3 border-l-3 border-r-5 border-b-5 border-[#000] hover:shadow-3xl">
+            <div className="col-span-2 bg-[#F7C236] p-4 md:p-6 rounded-md shadow-2xl border-t-3 border-l-3 border-r-5 border-b-5 border-[#000] hover:shadow-3xl w-full">
                 
                 {/* Group Header */}
                 <GroupHeader groupName={selectedGroup.name} onOpenExpenseModal={() => setExpenseModalOpen(true)} />
 
                 {/* Transaction List */}
-                <div className="mt-6">
-                    <h3 className="text-2xl font-bold text-[#040404] text-center mb-4">Group Transactions</h3>
+                <div className="mt-4 md:mt-6">
+                    <h3 className="text-xl md:text-2xl font-bold text-[#040404] text-center mb-4">Group Transactions</h3>
                     <TransactionList groupId={selectedGroup.id} refreshGroupDetails={fetchGroupDetails} />
                 </div>
             </div>
@@ -54,6 +53,7 @@ const GroupDashboard = () => {
                 onOpenOweDetails={setSelectedUser} 
                 setOweModalOpen={setOweModalOpen}
                 onOpenUserModal={() => setUserModalOpen(true)}
+                className="w-full"
             />
 
             {/* Modals */}
