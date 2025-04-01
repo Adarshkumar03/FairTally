@@ -47,13 +47,4 @@ public class UserService implements UserDetailsService {
 
         return userRepo.save(user);
     }
-
-
-    @Transactional
-    public boolean authenticateUser(String email, String rawPassword) {
-        User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        return passwordEncoder.matches(rawPassword, user.getPassword());
-    }
 }
