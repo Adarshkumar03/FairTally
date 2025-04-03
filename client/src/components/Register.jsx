@@ -15,7 +15,6 @@ export default function Register() {
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    // Check if passwords match
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -25,7 +24,7 @@ export default function Register() {
       await api.post("/auth/register", { name, email, password });
       toast.success("User registered successfully!");
       navigate("/login");
-    } catch (err) {
+    } catch{
       setError("Error registering user");
     }
   };
@@ -36,16 +35,19 @@ export default function Register() {
       <UserNavbar />
 
       {/* Main Content */}
-      <div className="flex items-center justify-center flex-grow px-5 bg-gradient-to-b from-[#AAD7B8] via-[#909CC2] to-[#306B34]">
-        <div className="bg-[#909CC2] border-l-2 border-t-2 border-r-5 border-b-5 border-[#030303] p-8 sm:p-10 rounded-lg shadow-lg w-full max-w-md sm:w-96 md:w-[28rem]">
-          <h2 className="text-4xl font-bold text-center mb-6 text-[#030C03] font-bebas tracking-wider">
-            Register
-          </h2>
+      <main className="flex items-center justify-center flex-grow px-5 bg-gradient-to-b from-[#AAD7B8] via-[#909CC2] to-[#306B34]">
+        <section className="bg-[#909CC2] border-l-2 border-t-2 border-r-5 border-b-5 border-[#030303] p-8 sm:p-10 rounded-lg shadow-lg w-full max-w-md sm:w-96 md:w-[28rem]">
+          <header className="text-center mb-6">
+            <h2 className="text-4xl font-bold text-[#030C03] font-bebas tracking-wider">
+              Register
+            </h2>
+          </header>
+
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
           <form onSubmit={handleRegister} className="space-y-4">
             {/* Name Input */}
-            <div>
+            <article>
               <label className="block text-[#030C03] font-semibold">
                 Name <span className="text-red-600">*</span>
               </label>
@@ -57,10 +59,10 @@ export default function Register() {
                 onChange={(e) => setName(e.target.value)}
                 required
               />
-            </div>
+            </article>
 
             {/* Email Input */}
-            <div>
+            <article>
               <label className="block text-[#030C03] font-semibold">
                 Email <span className="text-red-600">*</span>
               </label>
@@ -72,10 +74,10 @@ export default function Register() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-            </div>
+            </article>
 
             {/* Password Input */}
-            <div>
+            <article>
               <label className="block text-[#030C03] font-semibold">
                 Password <span className="text-red-600">*</span>
               </label>
@@ -87,10 +89,10 @@ export default function Register() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-            </div>
+            </article>
 
             {/* Confirm Password Input */}
-            <div>
+            <article>
               <label className="block text-[#030C03] font-semibold">
                 Confirm Password <span className="text-red-600">*</span>
               </label>
@@ -104,7 +106,7 @@ export default function Register() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
               />
-            </div>
+            </article>
 
             {/* Submit Button */}
             <button
@@ -115,7 +117,7 @@ export default function Register() {
           </form>
 
           {/* Login Link */}
-          <p className="text-center text-sm mt-4 font-medium">
+          <footer className="text-center text-sm mt-4 font-medium">
             Already have an account?{" "}
             <span
               onClick={() => navigate("/login")}
@@ -123,9 +125,9 @@ export default function Register() {
             >
               Login
             </span>
-          </p>
-        </div>
-      </div>
+          </footer>
+        </section>
+      </main>
     </div>
   );
 }

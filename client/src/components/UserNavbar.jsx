@@ -13,7 +13,7 @@ const UserNavbar = () => {
     // Routes where navbar should NOT be fixed
     const isAuthRoute = ["/", "/login", "/register"].includes(location.pathname);
     return (
-        <nav className={`w-full bg-[#AAD7B8] text-[#030303] flex justify-between items-center px-10 ${isAuthRoute ? "" : "fixed top-0 left-0 right-0 z-50"}`}>
+        <header className={`w-full bg-[#AAD7B8] text-[#030303] flex justify-between items-center px-10 ${isAuthRoute ? "" : "fixed top-0 left-0 right-0 z-50"}`}>
             <Link
                 to={logoLink}
                 className="text-[#fff6e5] bg-[#030303] text-3xl hover:text-[#030303] hover:bg-[#fff6e5] transition-all duration-500 font-bebas px-3 py-3 tracking-wide"
@@ -22,7 +22,7 @@ const UserNavbar = () => {
             </Link>
 
             {/* Desktop Menu (Hidden on Small Screens) */}
-            <div className="hidden md:flex items-center gap-6">
+            <nav className="hidden md:flex items-center gap-6">
                 {user ? (
                     <div className="flex items-center gap-4">
                         <span className="text-xl  font-semibold opacity-90">
@@ -46,7 +46,7 @@ const UserNavbar = () => {
                         </Link>
                     </div>
                 )}
-            </div>
+            </nav>
 
             {/* Mobile Menu Button */}
             <button
@@ -58,7 +58,7 @@ const UserNavbar = () => {
 
             {/* Mobile Dropdown Menu (Fixed Z-Index & Margin) */}
             {menuOpen && (
-                <div className="absolute top-full left-0 w-full bg-[#AAD7B8] text-center flex flex-col items-center gap-4 py-6 shadow-lg z-[100] md:hidden">
+                <nav className="absolute top-full left-0 w-full bg-[#AAD7B8] text-center flex flex-col items-center gap-4 py-6 shadow-lg z-[100] md:hidden">
                     {user ? (
                         <>
                             <span className="text-lg font-medium opacity-90">
@@ -82,9 +82,9 @@ const UserNavbar = () => {
                             </Link>
                         </>
                     )}
-                </div>
+                </nav>
             )}
-        </nav>
+        </header>
     );
 };
 

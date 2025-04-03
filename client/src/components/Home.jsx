@@ -8,11 +8,11 @@ const Home = () => {
       <UserNavbar />
 
       {/* Main Content */}
-      <div className="flex flex-1 items-center justify-center px-6 sm:px-10 overflow-hidden bg-gradient-to-b from-[#AAD7B8] via-[#CDC1FF] to-[#A594F9] pb-16">
+      <main className="flex flex-1 items-center justify-center px-6 sm:px-10 overflow-hidden bg-gradient-to-b from-[#AAD7B8] via-[#CDC1FF] to-[#A594F9] pb-16">
         {/* Content Container */}
-        <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-5xl gap-12 md:gap-x-24">
+        <section className="flex flex-col md:flex-row items-center justify-between w-full max-w-5xl gap-12 md:gap-x-24">
           {/* Left Section */}
-          <div className="text-center md:text-left max-w-lg">
+          <article className="text-center md:text-left max-w-lg">
             <h1 className="text-5xl sm:text-6xl font-bebas tracking-wide font-extrabold text-[#030303] drop-shadow-md mb-6 leading-tight">
               Splitwise
             </h1>
@@ -48,18 +48,18 @@ const Home = () => {
                 Log In
               </Link>
             </div>
-          </div>
+          </article>
 
           {/* Right Section (Image) - Hidden on small screens */}
-          <div className="flex justify-center md:block hidden">
+          <figure className="flex justify-center md:block hidden">
             <img
               src="./image.png"
               alt="Expense Sharing"
               className="max-w-xs sm:max-w-sm md:max-w-lg"
             />
-          </div>
-        </div>
-      </div>
+          </figure>
+        </section>
+      </main>
     </div>
   );
 };

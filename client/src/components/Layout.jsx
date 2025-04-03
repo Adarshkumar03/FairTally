@@ -10,7 +10,6 @@ const Layout = () => {
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [loading, setLoading] = useState(true);
     const [isGroupModalOpen, setGroupModalOpen] = useState(false);
-
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -42,13 +41,12 @@ const Layout = () => {
 
     return (
         <div className="h-screen flex flex-col bg-[#FFF6E5] p-0 m-0">
-            {/* Top Navbar */}
-            <UserNavbar />
+            <header>
+                <UserNavbar />
+            </header>
 
-            {/* Main Content */}
-            <div className="flex flex-grow flex-col md:grid md:grid-cols-4 mt-15">
-                {/* Left Sidebar (Groups List) */}
-                <div className="md:col-span-1 bg-[#AAD7B8] p-6 border-r border-[#AAD7B8] min-h-[80px] md:min-h-screen overflow-y-auto">
+            <main className="flex flex-grow flex-col md:grid md:grid-cols-4 mt-15">
+                <aside className="md:col-span-1 bg-[#AAD7B8] p-6 border-r border-[#AAD7B8] min-h-[80px] md:min-h-screen overflow-y-auto">
                     <button
                         onClick={() => {
                             setSelectedGroup(null);
@@ -59,7 +57,7 @@ const Layout = () => {
                         Go to Dashboard
                     </button>
 
-                    <div className="mt-6">
+                    <section className="mt-6">
                         {loading ? (
                             <p className="text-gray-700 text-center">Loading groups...</p>
                         ) : (
@@ -70,16 +68,14 @@ const Layout = () => {
                                 onAddGroup={() => setGroupModalOpen(true)}
                             />
                         )}
-                    </div>
-                </div>
+                    </section>
+                </aside>
 
-                {/* Middle & Right Sections */}
-                <div className="md:col-span-3 p-8 border-4 bg-[#FFF6E5] min-h-[calc(100vh-4rem)] flex flex-col">
+                <section className="md:col-span-3 p-8 border-4 bg-[#FFF6E5] min-h-[calc(100vh-4rem)] flex flex-col">
                     <Outlet context={{ selectedGroup, groups, fetchGroups }} />
-                </div>
-            </div>
+                </section>
+            </main>
 
-            {/* Modals */}
             {isGroupModalOpen && (
                 <AddGroupModal
                     onClose={() => setGroupModalOpen(false)}

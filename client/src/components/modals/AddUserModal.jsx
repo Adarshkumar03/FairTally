@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import api from "../../utils/api";
 import { toast } from "react-toastify";
 
@@ -8,11 +8,7 @@ const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        fetchUsers();
-    }, []);
-
-    const fetchUsers = async () => {
+    const fetchUsers = useCallback(async () => {
         try {
             // Fetch all users
             const allUsersRes = await api.get("/users");
@@ -32,7 +28,11 @@ const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
             console.error("Error fetching users:", err);
             setError("Failed to load users");
         }
-    };
+    }, [groupId]);
+
+    useEffect(() => {
+        fetchUsers();
+    }, [fetchUsers]);
 
     const handleAddUsers = async () => {
         if (selectedUsers.length === 0) return;
@@ -44,7 +44,7 @@ const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
             refreshGroupDetails();
             onClose();
             toast.success("User added to group successfully!!");
-        } catch (err) {
+        } catch{
             setError("Failed to add users");
         } finally {
             setLoading(false);
