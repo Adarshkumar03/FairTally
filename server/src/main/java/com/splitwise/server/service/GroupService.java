@@ -73,6 +73,7 @@ public class GroupService {
         return savedGroup;
     }
 
+
     public Group addUsersToGroup(Long groupId, List<Long> userIds) {
         Group group = repo.findById(groupId)
                 .orElseThrow(() -> new IllegalArgumentException("Group not found"));

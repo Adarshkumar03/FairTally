@@ -15,7 +15,6 @@ public class TransactionController {
 
     public TransactionController(TransactionService transactionService) {
         this.transactionService = transactionService;
-        System.out.println("✅ TransactionController initialized!");
     }
 
     @GetMapping("/users/{userId}")

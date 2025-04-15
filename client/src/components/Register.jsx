@@ -12,29 +12,55 @@ export default function Register() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const validateForm = () => {
+    const nameRegex = /^[a-zA-Z\s]{2,50}$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+    if (!nameRegex.test(name)) {
+      setError("Name must be 2-50 characters and contain only letters and spaces.");
+      return false;
+    }
+
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return false;
+    }
+
+    if (!passwordRegex.test(password)) {
+      setError(
+        "Password must be at least 8 characters, include uppercase, lowercase, number, and special character."
+      );
+      return false;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return false;
+    }
+
+    setError("");
+    return true;
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+    if (!validateForm()) return;
 
     try {
       await api.post("/auth/register", { name, email, password });
       toast.success("User registered successfully!");
       navigate("/login");
-    } catch{
-      setError("Error registering user");
+    } catch {
+      setError("Error registering user. Try again.");
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Navbar */}
       <UserNavbar />
 
-      {/* Main Content */}
       <main className="flex items-center justify-center flex-grow px-5 bg-gradient-to-b from-[#AAD7B8] via-[#909CC2] to-[#306B34]">
         <section className="bg-[#909CC2] border-l-2 border-t-2 border-r-5 border-b-5 border-[#030303] p-8 sm:p-10 rounded-lg shadow-lg w-full max-w-md sm:w-96 md:w-[28rem]">
           <header className="text-center mb-6">
@@ -43,10 +69,10 @@ export default function Register() {
             </h2>
           </header>
 
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          {error && <p className="text-red-600 text-sm text-center font-semibold">{error}</p>}
 
           <form onSubmit={handleRegister} className="space-y-4">
-            {/* Name Input */}
+            {/* Name */}
             <article>
               <label className="block text-[#030C03] font-semibold">
                 Name <span className="text-red-600">*</span>
@@ -61,7 +87,7 @@ export default function Register() {
               />
             </article>
 
-            {/* Email Input */}
+            {/* Email */}
             <article>
               <label className="block text-[#030C03] font-semibold">
                 Email <span className="text-red-600">*</span>
@@ -76,7 +102,7 @@ export default function Register() {
               />
             </article>
 
-            {/* Password Input */}
+            {/* Password */}
             <article>
               <label className="block text-[#030C03] font-semibold">
                 Password <span className="text-red-600">*</span>
@@ -91,7 +117,7 @@ export default function Register() {
               />
             </article>
 
-            {/* Confirm Password Input */}
+            {/* Confirm Password */}
             <article>
               <label className="block text-[#030C03] font-semibold">
                 Confirm Password <span className="text-red-600">*</span>
@@ -100,7 +126,7 @@ export default function Register() {
                 type="password"
                 placeholder="Confirm password"
                 className={`w-full p-3 bg-white border rounded-md focus:outline-none ${
-                  error ? "border-red-500 focus:ring-red-500" : "border-gray-400 focus:ring-[#306B34]"
+                  error.includes("Passwords") ? "border-red-500 focus:ring-red-500" : "border-gray-400 focus:ring-[#306B34]"
                 }`}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -108,7 +134,7 @@ export default function Register() {
               />
             </article>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <button
               className="w-full bg-[#306B34] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-white py-2 rounded-md font-semibold hover:bg-[#245824] transition-all duration-300"
             >
@@ -116,7 +142,7 @@ export default function Register() {
             </button>
           </form>
 
-          {/* Login Link */}
+          {/* Login link */}
           <footer className="text-center text-sm mt-4 font-medium">
             Already have an account?{" "}
             <span

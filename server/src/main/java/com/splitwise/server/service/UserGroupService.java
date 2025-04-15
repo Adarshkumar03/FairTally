@@ -21,7 +21,6 @@ public class UserGroupService {
         UserGroup userGroup = new UserGroup();
         userGroup.setUser(user);
         userGroup.setGroup(group);
-
         return userGroupRepo.save(userGroup);
     }
 }

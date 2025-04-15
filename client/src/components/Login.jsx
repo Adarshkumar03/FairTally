@@ -10,15 +10,35 @@ export default function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  const validateInputs = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      return false;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return false;
+    }
+
+    setError("");
+    return true;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (!validateInputs()) return;
+
     try {
       await api.post("/auth/login", { email, password });
       navigate("/dashboard");
       toast.success("Login Successful!!");
     } catch (error) {
       console.error("Login error:", error.response?.data || error.message);
-      setError("Invalid email or password");
+      setError("Invalid email or password.");
     }
   };
 
@@ -41,7 +61,9 @@ export default function Login() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="w-full p-3 bg-white border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-[#306B34]"
+                className={`w-full p-3 bg-white border rounded-md focus:outline-none ${
+                  error.includes("email") ? "border-red-500 focus:ring-red-500" : "border-gray-400 focus:ring-[#306B34]"
+                }`}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -53,7 +75,9 @@ export default function Login() {
               <input
                 type="password"
                 placeholder="Enter your password"
-                className="w-full p-3 bg-white border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-[#306B34]"
+                className={`w-full p-3 bg-white border rounded-md focus:outline-none ${
+                  error.includes("Password") ? "border-red-500 focus:ring-red-500" : "border-gray-400 focus:ring-[#306B34]"
+                }`}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required

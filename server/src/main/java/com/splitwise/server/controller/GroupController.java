@@ -1,6 +1,7 @@
 package com.splitwise.server.controller;
 
 import com.splitwise.server.dto.AddUsersToGroupRequest;
+import com.splitwise.server.dto.BasicUserDTO;
 import com.splitwise.server.dto.GroupDTO;
 import com.splitwise.server.model.Group;
 import com.splitwise.server.model.User;
@@ -49,6 +50,20 @@ public class GroupController {
     public ResponseEntity<?> getGroupById(@PathVariable Long id) {
         GroupDTO group = groupService.getGroupById(id);
         return ResponseEntity.ok(group);
+    }
+
+    @GetMapping("/{id}/available-users")
+    public ResponseEntity<?> getNonGroupMembers(@PathVariable Long id) {
+        try {
+            List<User> users = userService.getUsersNotInGroup(id); // Service layer
+            List<BasicUserDTO> dtos = users.stream()
+                    .map(user -> new BasicUserDTO(user.getId(), user.getName()))
+                    .toList();
+            return ResponseEntity.ok(dtos);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("error", "Failed to fetch users not in group"));
+        }
     }
 
     @PostMapping("/{id}/users")

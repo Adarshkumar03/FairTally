@@ -47,4 +47,8 @@ public class UserService implements UserDetailsService {
 
         return userRepo.save(user);
     }
+
+    public List<User> getUsersNotInGroup(Long groupId) {
+        return userRepo.findUsersNotInGroup(groupId);
+    }
 }

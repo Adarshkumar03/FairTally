@@ -13,8 +13,8 @@ public class GroupDTO {
     private List<UserDTO> users;
 
     public GroupDTO(Long id, String name, List<UserDTO> users) {
-        this.id = id;
-        this.name = name;
+        this.id = id;        this.name = name;
         this.users = users;
     }
 }
+
