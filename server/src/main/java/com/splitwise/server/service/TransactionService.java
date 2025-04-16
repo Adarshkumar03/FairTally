@@ -1,6 +1,7 @@
 package com.splitwise.server.service;
 
 import com.splitwise.server.dto.FriendExpenseRequest;
+import com.splitwise.server.dto.FriendExpenseResponse;
 import com.splitwise.server.dto.OweDetailsDTO;
 import com.splitwise.server.dto.TransactionDTO;
 import com.splitwise.server.model.Transaction;
@@ -101,4 +102,27 @@ public class TransactionService {
         transaction.setType(Transaction.TransactionType.FRIEND);
         transactionRepo.save(transaction);
     }
+
+    public List<FriendExpenseResponse> getFriendExpenses(Long userId, Long friendId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        User friend = userRepo.findById(friendId)
+                .orElseThrow(() -> new IllegalArgumentException("Friend not found"));
+
+        List<Transaction> transactions = transactionRepo.findByPayerAndPayee(user, friend);
+
+        return transactions.stream()
+                .map(tx -> new FriendExpenseResponse(
+                        tx.getId(),
+                        tx.getPayer().getName(),
+                        tx.getPayee().getName(),
+                        tx.getAmount(),
+                        tx.getDescription(),
+                        tx.getDate(),
+                        tx.isSettled()
+                ))
+                .collect(Collectors.toList());
+    }
+
 }

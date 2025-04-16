@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 public class FriendExpenseRequest {
-    private Long friendId;
     private BigDecimal amount;
     private String description;
 }

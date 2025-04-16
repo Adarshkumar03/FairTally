@@ -1,6 +1,7 @@
 package com.splitwise.server.repo;
 
 import com.splitwise.server.model.Transaction;
+import com.splitwise.server.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -39,4 +40,6 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
 
     @Query("SELECT t FROM Transaction t WHERE (t.payee.id = :userId OR t.payer.id = :userId) AND t.settled = false")
     List<Transaction> findByUserIdAndSettledFalse(@Param("userId") Long userId);
+
+    public List<Transaction> findByPayerAndPayee(User payer, User payee);
 }

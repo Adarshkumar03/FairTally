@@ -25,6 +25,10 @@ public class FriendshipService {
     }
 
     public void addFriend(Long userId, Long friendId) throws Exception {
+        if (userId.equals(friendId)) {
+            throw new Exception("You cannot add yourself as a friend");
+        }
+
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new Exception("User not found"));
 
@@ -57,5 +61,12 @@ public class FriendshipService {
         }
 
         return friends;
+    }
+
+    public void removeFriend(Long userId, Long friendId) {
+        Friendship friendship = friendshipRepository.findByUserIds(userId, friendId)
+                .orElseThrow(() -> new IllegalArgumentException("Friendship not found"));
+
+        friendshipRepository.delete(friendship);
     }
 }

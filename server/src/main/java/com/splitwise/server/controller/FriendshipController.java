@@ -1,6 +1,8 @@
 package com.splitwise.server.controller;
 
 import com.splitwise.server.dto.FriendExpenseRequest;
+import com.splitwise.server.dto.FriendExpenseResponse;
+import com.splitwise.server.model.Transaction;
 import com.splitwise.server.model.User;
 import com.splitwise.server.service.FriendshipService;
 import com.splitwise.server.service.TransactionService;
@@ -12,6 +14,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -72,7 +75,7 @@ public class FriendshipController {
         }
 
         try {
-            transactionService.addFriendExpense(user.getId(), friendId, request);  // Pass the request object here
+            transactionService.addFriendExpense(user.getId(), friendId, request);
             return ResponseEntity.ok(Map.of("message", "Friend expense added successfully"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
@@ -80,7 +83,35 @@ public class FriendshipController {
     }
 
 
+    @GetMapping("/{friendId}/expenses")
+    public ResponseEntity<?> getFriendExpenses(@PathVariable Long friendId, HttpSession session) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        if (user == null) {
+            return ResponseEntity.status(401).body(Map.of("message", "User not authenticated"));
+        }
 
+        try {
+            List<FriendExpenseResponse> expenses = transactionService.getFriendExpenses(user.getId(), friendId);
+            return ResponseEntity.ok(expenses);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("message", "Error retrieving expenses"));
+        }
+    }
 
+    @DeleteMapping("/{friendId}")
+    public ResponseEntity<?> removeFriend(@PathVariable Long friendId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (user == null) {
+            return ResponseEntity.status(401).body(Map.of("message", "User not authenticated"));
+        }
+
+        try {
+            friendshipService.removeFriend(user.getId(), friendId);
+            return ResponseEntity.ok(Map.of("message", "Friend removed successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
 }
