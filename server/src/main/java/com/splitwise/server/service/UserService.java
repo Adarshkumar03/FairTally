@@ -1,5 +1,4 @@
 package com.splitwise.server.service;
-
 import com.splitwise.server.model.User;
 import com.splitwise.server.repo.UserRepo;
 import org.springframework.security.core.userdetails.UserDetailsService;

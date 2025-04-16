@@ -49,6 +49,14 @@ public class User implements UserDetails{
     @JsonIgnore
     private Set<Expense> expensesPaid;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Friendship> friends;
+
+    @OneToMany(mappedBy = "friend", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private Set<Friendship> friendOf;
+
     @Override
     public String getUsername() {
         return email;

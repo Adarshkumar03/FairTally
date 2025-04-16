@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="transactions")
+@Table(name = "transactions")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -23,7 +23,7 @@ public class Transaction {
     private User payer;
 
     @ManyToOne
-    @JoinColumn(name="payee_id", nullable = false)
+    @JoinColumn(name = "payee_id", nullable = false)
     private User payee;
 
     @Column(nullable = false)
@@ -33,7 +33,7 @@ public class Transaction {
     private LocalDateTime date = LocalDateTime.now();
 
     @ManyToOne
-    @JoinColumn(name = "group_id", nullable = false)
+    @JoinColumn(name = "group_id", nullable = true)
     private Group group;
 
     @Column(nullable = false)
@@ -41,4 +41,11 @@ public class Transaction {
 
     @Column(nullable = false)
     private String description;
+
+    @Enumerated(EnumType.STRING)
+    private TransactionType type;
+
+    public enum TransactionType {
+        GROUP, FRIEND
+    }
 }

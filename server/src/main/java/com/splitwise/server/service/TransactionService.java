@@ -1,9 +1,12 @@
 package com.splitwise.server.service;
 
+import com.splitwise.server.dto.FriendExpenseRequest;
 import com.splitwise.server.dto.OweDetailsDTO;
 import com.splitwise.server.dto.TransactionDTO;
 import com.splitwise.server.model.Transaction;
+import com.splitwise.server.model.User;
 import com.splitwise.server.repo.TransactionRepo;
+import com.splitwise.server.repo.UserRepo;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -13,9 +16,11 @@ import java.util.stream.Collectors;
 @Service
 public class TransactionService {
     private final TransactionRepo transactionRepo;
+    private final UserRepo userRepo;
 
-    public TransactionService(TransactionRepo transactionRepo) {
+    public TransactionService(TransactionRepo transactionRepo, UserRepo userRepo) {
         this.transactionRepo = transactionRepo;
+        this.userRepo = userRepo;
     }
 
     public void settleTransaction(Long transactionId) {
@@ -75,5 +80,25 @@ public class TransactionService {
                 ))
                 .collect(Collectors.toList());
     }
+    public void addFriendExpense(Long userId, Long friendId, FriendExpenseRequest request) {
+        User payer = userRepo.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Payer not found"));
 
+        User payee = userRepo.findById(friendId)
+                .orElseThrow(() -> new IllegalArgumentException("Friend not found"));
+
+        if (payer.getId().equals(payee.getId())) {
+            throw new IllegalArgumentException("Cannot add expense with yourself");
+        }
+
+        Transaction transaction = new Transaction();
+        transaction.setPayer(payer);
+        transaction.setPayee(payee);
+        transaction.setAmount(request.getAmount());
+        transaction.setDescription(request.getDescription());
+        transaction.setGroup(null);
+        transaction.setSettled(false);
+        transaction.setType(Transaction.TransactionType.FRIEND);
+        transactionRepo.save(transaction);
+    }
 }

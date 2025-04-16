@@ -34,6 +34,10 @@ public class Expense {
     @JoinColumn(name = "payer_id", nullable = false)
     private User payer;
 
+    @ManyToOne
+    @JoinColumn(name = "friend_id")
+    private User friend;
+
     @Column(nullable = false)
     private String description;
 
