@@ -50,7 +50,6 @@ const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
           <p className="text-red-500 text-sm mb-3 text-center">{error}</p>
         )}
 
-        {/* User List with Checkboxes */}
         {selectedUsers.length > 0 && (
           <p className="text-lg text-[#030303] my-2 text-center">
             {selectedUsers.length} user{selectedUsers.length > 1 ? "s" : ""}{" "}
@@ -91,7 +90,6 @@ const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
           )}
         </div>
 
-        {/* Buttons Section */}
         <div className="flex justify-between mt-6">
           <button
             onClick={onClose}

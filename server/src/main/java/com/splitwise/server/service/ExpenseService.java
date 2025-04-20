@@ -94,6 +94,7 @@ public class ExpenseService {
                 transaction.setDate(LocalDateTime.now());
                 transaction.setGroup(group);
                 transaction.setDescription(expenseRequestDTO.getDescription());
+                transaction.setType(Transaction.TransactionType.GROUP);
                 transactionRepo.save(transaction);
             }
         }

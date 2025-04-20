@@ -24,7 +24,6 @@ const AddGroupModal = ({ onClose, onGroupAdded }) => {
             <div className="bg-[#FEF5E4] w-96 p-6 rounded-lg shadow-lg relative">
                 <h2 className="text-2xl font-bold text-center text-[#030C03]">Create a Group</h2>
 
-                {/* Input */}
                 <input 
                     type="text" 
                     value={groupName} 
@@ -33,7 +32,6 @@ const AddGroupModal = ({ onClose, onGroupAdded }) => {
                     className="border p-2 w-full rounded-md mt-4 mb-3 text-[#030C03] text-lg font-medium"
                 />
 
-                {/* Action Buttons */}
                 <div className="flex justify-between">
                     <button 
                         onClick={onClose} 

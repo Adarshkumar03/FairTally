@@ -1,8 +1,11 @@
-const TransactionItem = ({ tx, isUserInvolved, onSettle }) => {
+const TransactionItem = ({ tx, isUserInvolved, onSettle, isFriendView }) => {
+    const backgroundColor = isFriendView ? "#E3F4E0" : "#FBE7A1";
+
     return (
         <li
             key={tx.id}
-            className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-[#FFD53B] text-[#1F0600] rounded-md shadow-md border-t-2 border-l-2 border-b-4 border-r-4 border-[#000] space-y-2 sm:space-y-0"
+            className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center rounded-md shadow-md border-t-2 border-l-2 border-b-4 border-r-4 border-[#000] space-y-2 sm:space-y-0"
+            style={{ backgroundColor }}
         >
             <div className="flex flex-col w-full sm:w-auto">
                 <span className="text-base sm:text-lg font-bold leading-tight">

@@ -69,4 +69,8 @@ public class FriendshipService {
 
         friendshipRepository.delete(friendship);
     }
+
+    public List<User> getPotentialFriends(Long currentUserId) {
+        return userRepository.findAllNonFriends(currentUserId);
+    }
 }

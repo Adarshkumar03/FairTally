@@ -24,12 +24,10 @@ const OweDetailsModal = ({ user, groupId, onClose }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
             <div className="bg-[#FEF5E4] w-96 p-6 rounded-lg shadow-lg relative">
-                {/* Modal Header */}
                 <h2 className="text-xl font-bold text-[#030C03] text-center">
                     {user.name} <span className="text-[#F7C236] font-semibold">Owes</span>
                 </h2>
 
-                {/* Owe Details List */}
                 {oweDetails.length > 0 ? (
                     <ul className="space-y-3 mt-4">
                         {oweDetails.map((debt) => (
@@ -43,7 +41,6 @@ const OweDetailsModal = ({ user, groupId, onClose }) => {
                     <p className="text-center text-gray-600 mt-4">No outstanding debts</p>
                 )}
 
-                {/* Close Button */}
                 <button 
                     onClick={onClose} 
                     className="absolute top-3 right-3 text-[#909CC2] hover:text-red-500 text-xl font-bold transition"

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import api from "../utils/api";
-import useAuthStore from "../store/authStore"; // Assuming Zustand for auth
+import useAuthStore from "../store/authStore";
 import { toast } from "react-toastify";
 import TransactionComponent from "./TransactionComponent";
 
 const UserTransactionList = () => {
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(true);
-    const { user } = useAuthStore(); // Get logged-in user
+    const { user } = useAuthStore();
 
     useEffect(() => {
         fetchUserTransactions(user.id);

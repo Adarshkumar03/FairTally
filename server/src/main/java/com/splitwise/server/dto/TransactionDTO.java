@@ -19,6 +19,7 @@ public class TransactionDTO {
     private String groupName;
     private boolean settled;
     private String description;
+    private String type; // "GROUP" or "FRIEND"
 
     public TransactionDTO(Long id, Long payerId, String payerName, Long payeeId, String payeeName,
                           BigDecimal amount, LocalDateTime date, Long groupId, String groupName,
@@ -34,5 +35,6 @@ public class TransactionDTO {
         this.groupName = groupName;
         this.settled = settled;
         this.description = description;
+        this.type = (groupId != null) ? "GROUP" : "FRIEND";
     }
 }

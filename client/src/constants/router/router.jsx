@@ -6,6 +6,7 @@ import Register from "../../components/Register";
 import Dashboard from "../../components/Dashboard";
 import GroupDashboard from "../../components/GroupDashboard";
 import { ProtectedRoute } from "../../components/ProtectedRoute";
+import FriendDashboard from "../../components/FriendDashboard";
 
 export const router = createBrowserRouter([
     {
@@ -29,12 +30,16 @@ export const router = createBrowserRouter([
         ),
         children: [
             {
-                index: true, // Default child route (dashboard)
+                index: true,
                 element: <Dashboard />
             },
             {
-                path: "groups/:groupId", // Nested inside /dashboard
+                path: "groups/:groupId",
                 element: <GroupDashboard />
+            },
+            {
+                path: "friends/:friendId",
+                element: <FriendDashboard />
             }
         ]
     }

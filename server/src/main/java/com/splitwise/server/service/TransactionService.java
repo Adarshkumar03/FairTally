@@ -74,13 +74,14 @@ public class TransactionService {
                         t.getPayee().getName(),
                         t.getAmount(),
                         t.getDate(),
-                        t.getGroup().getId(),
-                        t.getGroup().getName(),
+                        t.getGroup() != null ? t.getGroup().getId() : null,
+                        t.getGroup() != null ? t.getGroup().getName() : null,
                         t.isSettled(),
                         t.getDescription()
                 ))
                 .collect(Collectors.toList());
     }
+
     public void addFriendExpense(Long userId, Long friendId, FriendExpenseRequest request) {
         User payer = userRepo.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Payer not found"));
@@ -110,11 +111,13 @@ public class TransactionService {
         User friend = userRepo.findById(friendId)
                 .orElseThrow(() -> new IllegalArgumentException("Friend not found"));
 
-        List<Transaction> transactions = transactionRepo.findByPayerAndPayee(user, friend);
+        List<Transaction> transactions = transactionRepo.findByUsersInFriendContext(user, friend);
 
         return transactions.stream()
                 .map(tx -> new FriendExpenseResponse(
                         tx.getId(),
+                        tx.getPayer().getId(),      // payerId
+                        tx.getPayee().getId(),      // payeeId
                         tx.getPayer().getName(),
                         tx.getPayee().getName(),
                         tx.getAmount(),
@@ -124,5 +127,6 @@ public class TransactionService {
                 ))
                 .collect(Collectors.toList());
     }
+
 
 }

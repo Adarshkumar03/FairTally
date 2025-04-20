@@ -10,7 +10,6 @@ const UserNavbar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const location = useLocation();
 
-    // Routes where navbar should NOT be fixed
     const isAuthRoute = ["/", "/login", "/register"].includes(location.pathname);
     return (
         <header className={`w-full bg-[#AAD7B8] text-[#030303] flex justify-between items-center px-10 ${isAuthRoute ? "" : "fixed top-0 left-0 right-0 z-50"}`}>
@@ -21,7 +20,6 @@ const UserNavbar = () => {
                 Splitwise
             </Link>
 
-            {/* Desktop Menu (Hidden on Small Screens) */}
             <nav className="hidden md:flex items-center gap-6">
                 {user ? (
                     <div className="flex items-center gap-4">
@@ -48,7 +46,6 @@ const UserNavbar = () => {
                 )}
             </nav>
 
-            {/* Mobile Menu Button */}
             <button
                 className="md:hidden text-3xl text-[#030303]"
                 onClick={() => setMenuOpen(!menuOpen)}
@@ -56,7 +53,6 @@ const UserNavbar = () => {
                 {menuOpen ? <IoClose /> : <IoMenu />}
             </button>
 
-            {/* Mobile Dropdown Menu (Fixed Z-Index & Margin) */}
             {menuOpen && (
                 <nav className="absolute top-full left-0 w-full bg-[#AAD7B8] text-center flex flex-col items-center gap-4 py-6 shadow-lg z-[100] md:hidden">
                     {user ? (

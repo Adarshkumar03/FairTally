@@ -2,7 +2,6 @@ package com.splitwise.server.controller;
 
 import com.splitwise.server.dto.FriendExpenseRequest;
 import com.splitwise.server.dto.FriendExpenseResponse;
-import com.splitwise.server.model.Transaction;
 import com.splitwise.server.model.User;
 import com.splitwise.server.service.FriendshipService;
 import com.splitwise.server.service.TransactionService;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -83,7 +81,7 @@ public class FriendshipController {
     }
 
 
-    @GetMapping("/{friendId}/expenses")
+    @GetMapping("/{friendId}/transactions")
     public ResponseEntity<?> getFriendExpenses(@PathVariable Long friendId, HttpSession session) {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -113,5 +111,12 @@ public class FriendshipController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
+    }
+
+    @GetMapping("/potential")
+    public ResponseEntity<List<User>> getPotentialFriends(HttpSession session) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<User> potentialFriends = friendshipService.getPotentialFriends(user.getId());
+        return ResponseEntity.ok(potentialFriends);
     }
 }

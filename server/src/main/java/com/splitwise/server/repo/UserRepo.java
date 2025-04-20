@@ -20,4 +20,16 @@ public interface UserRepo extends JpaRepository<User, Long> {
     )
 """)
     List<User> findUsersNotInGroup(@Param("groupId") Long groupId);
+
+    @Query("""
+    SELECT u FROM User u
+    WHERE u.id != :currentUserId
+    AND u.id NOT IN (
+        SELECT f.friend.id FROM Friendship f WHERE f.user.id = :currentUserId
+    )
+    AND u.id NOT IN (
+        SELECT f.user.id FROM Friendship f WHERE f.friend.id = :currentUserId
+    )
+""")
+    List<User> findAllNonFriends(@Param("currentUserId") Long currentUserId);
 }

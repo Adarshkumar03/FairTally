@@ -72,7 +72,7 @@ export default function Register() {
           {error && <p className="text-red-600 text-sm text-center font-semibold">{error}</p>}
 
           <form onSubmit={handleRegister} className="space-y-4">
-            {/* Name */}
+            
             <article>
               <label className="block text-[#030C03] font-semibold">
                 Name <span className="text-red-600">*</span>
@@ -87,7 +87,6 @@ export default function Register() {
               />
             </article>
 
-            {/* Email */}
             <article>
               <label className="block text-[#030C03] font-semibold">
                 Email <span className="text-red-600">*</span>
@@ -102,7 +101,6 @@ export default function Register() {
               />
             </article>
 
-            {/* Password */}
             <article>
               <label className="block text-[#030C03] font-semibold">
                 Password <span className="text-red-600">*</span>
@@ -117,7 +115,6 @@ export default function Register() {
               />
             </article>
 
-            {/* Confirm Password */}
             <article>
               <label className="block text-[#030C03] font-semibold">
                 Confirm Password <span className="text-red-600">*</span>
@@ -134,7 +131,6 @@ export default function Register() {
               />
             </article>
 
-            {/* Submit */}
             <button
               className="w-full bg-[#306B34] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-white py-2 rounded-md font-semibold hover:bg-[#245824] transition-all duration-300"
             >
