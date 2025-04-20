@@ -121,7 +121,7 @@ const Layout = () => {
                 </aside>
 
                 <section className="md:col-span-3 p-8 border-4 bg-[#FFF6E5] min-h-[calc(100vh-4rem)] flex flex-col">
-                    <Outlet context={{ selectedGroup, selectedFriend, groups, friends, fetchGroups, fetchFriends }} />
+                <Outlet context={{ selectedGroup, selectedFriend, groups, friends, fetchGroups, fetchFriends }} />
                 </section>
             </main>
 

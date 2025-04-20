@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { useOutletContext } from "react-router";
+import { useOutletContext, useNavigate } from "react-router";
 import AddFriendExpenseModal from "./modals/AddFriendExpenseModal";
 import TransactionList from "./TransactionList";
 import useTransactionStore from "../store/transactionStore";
+import api from "../utils/api";
 
 const FriendDashboard = () => {
-    const { selectedFriend } = useOutletContext();
+    const { selectedFriend, fetchFriends } = useOutletContext();
     const [expenseModalOpen, setExpenseModalOpen] = useState(false);
+    const navigate = useNavigate();
 
     const { fetchFriendTransactions } = useTransactionStore();
 
@@ -16,6 +18,21 @@ const FriendDashboard = () => {
         }
     }, [selectedFriend, fetchFriendTransactions]);
 
+    const deleteFriend = async () => {
+        const confirmed = window.confirm(`Are you sure you want to remove ${selectedFriend.name} as a friend?`);
+        if (!confirmed) return;
+
+        try {
+            const res = await api.delete(`friends/${selectedFriend.id}`);
+            alert(res.data.message || "Friend removed successfully");
+            await fetchFriends();
+            navigate("/dashboard");
+        } catch (err) {
+            console.error("Error removing friend:", err);
+            alert(err.response?.data?.message || "Something went wrong while removing friend");
+        }
+    };
+
     if (!selectedFriend) return <p className="text-center text-gray-400">No friend selected</p>;
 
     return (
@@ -23,15 +40,25 @@ const FriendDashboard = () => {
             <article className="col-span-3 bg-[#C9B6E4] p-4 md:p-6 rounded-md shadow-2xl border-t-3 border-l-3 border-r-5 border-b-5 border-[#000] hover:shadow-3xl w-full">
                 <header className="flex justify-between items-center">
                     <h2 className="text-4xl font-bold text-[#030303] font-bebas">{selectedFriend.name}</h2>
-                    <button
-                        onClick={() => setExpenseModalOpen(true)}
-                        className="bg-[#030303] hover:brightness-75 text-[#fbfbfb] font-semibold px-4 py-2 rounded-md transition"
-                    >
-                        Add Expense
-                    </button>
+                    <div className="flex space-x-2">
+                        <button
+                            onClick={() => setExpenseModalOpen(true)}
+                            className="bg-[#030303] hover:brightness-75 text-[#fbfbfb] font-semibold px-4 py-2 rounded-md transition"
+                        >
+                            Add Expense
+                        </button>
+                        <button
+                            onClick={deleteFriend}
+                            className="bg-[#A31621] hover:bg-red-800 text-white font-semibold px-4 py-2 rounded-md transition"
+                        >
+                            Remove Friend
+                        </button>
+                    </div>
                 </header>
                 <section className="mt-6">
-                    <h3 className="text-xl font-bold text-[#040404] text-center mb-4">Your Transactions with {selectedFriend.name}</h3>
+                    <h3 className="text-xl font-bold text-[#040404] text-center mb-4">
+                        Your Transactions with {selectedFriend.name}
+                    </h3>
                     <TransactionList friendId={selectedFriend.id} isFriendView />
                 </section>
             </article>
