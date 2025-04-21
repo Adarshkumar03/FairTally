@@ -9,6 +9,7 @@ import com.splitwise.server.model.User;
 import com.splitwise.server.repo.TransactionRepo;
 import com.splitwise.server.repo.UserRepo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -35,9 +36,9 @@ public class TransactionService {
     public List<OweDetailsDTO> getOweDetails(Long userId, Long groupId) {
         return transactionRepo.getOweDetails(userId, groupId).stream()
                 .map(row -> new OweDetailsDTO(
-                        ((Number) row[1]).longValue(), // payer_id
-                        (String) row[2],              // payer_name
-                        (BigDecimal) row[0]           // total_owed
+                        ((Number) row[1]).longValue(),
+                        (String) row[2],
+                        (BigDecimal) row[0]
                 ))
                 .collect(Collectors.toList());
     }
@@ -128,5 +129,9 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
-
+    @Transactional
+    public void removeTransaction(Long transactionId){
+        Transaction tx = transactionRepo.findById(transactionId).orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
+        transactionRepo.deleteById(transactionId);
+    }
 }

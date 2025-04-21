@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../utils/api";
 import useAuthStore from "../store/authStore";
 import { toast } from "react-toastify";
-import TransactionComponent from "./TransactionComponent";
+import TransactionList from "./TransactionList";
 
 const UserTransactionList = () => {
     const [transactions, setTransactions] = useState([]);
@@ -35,7 +35,7 @@ const UserTransactionList = () => {
 
     if (loading) return <p className="text-center text-gray-400">Loading transactions...</p>;
 
-    return <TransactionComponent transactions={transactions} loading={loading} user={user} onSettle={handleSettleTransaction} />;
+    return <TransactionList transactions={transactions} loading={loading} user={user} onSettle={handleSettleTransaction} />;
 };
 
 export default UserTransactionList;

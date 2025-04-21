@@ -9,12 +9,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface TransactionRepo extends JpaRepository<Transaction, Long> {
-    @Query("SELECT t.payer.id, t.payer.name, SUM(t.amount) " +
-            "FROM Transaction t WHERE t.payee.id = :userId AND t.group.id = :groupId AND t.settled = false " +
-            "GROUP BY t.payer.id, t.payer.name")
-    List<Object[]> findDebtsByUser(@Param("userId") Long userId, @Param("groupId") Long groupId);
-
-
     @Query("""
     SELECT u.id, u.name, COALESCE(SUM(t.amount), 0)\s
     FROM User u
@@ -35,16 +29,15 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
     """)
     List<Object[]> getOweDetails(@Param("userId") Long userId, @Param("groupId") Long groupId);
 
-    @Query("SELECT t FROM Transaction t WHERE t.group.id = :groupId AND t.settled = false")
+    @Query("SELECT t FROM Transaction t WHERE t.group.id = :groupId")
     List<Transaction> findByGroupIdAndSettledFalse(@Param("groupId") Long groupId);
 
-    @Query("SELECT t FROM Transaction t WHERE (t.payee.id = :userId OR t.payer.id = :userId) AND t.settled = false")
+    @Query("SELECT t FROM Transaction t WHERE (t.payee.id = :userId OR t.payer.id = :userId)")
     List<Transaction> findByUserIdAndSettledFalse(@Param("userId") Long userId);
 
     public List<Transaction> findByPayerAndPayee(User payer, User payee);
 
     @Query("SELECT t FROM Transaction t WHERE t.type = 'FRIEND' AND " +
-            "((t.payer = :user AND t.payee = :friend) OR (t.payer = :friend AND t.payee = :user)) AND " +
-            "t.settled = false")
+            "((t.payer = :user AND t.payee = :friend) OR (t.payer = :friend AND t.payee = :user))")
     List<Transaction> findByUsersInFriendContext(@Param("user") User user, @Param("friend") User friend);
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -42,5 +43,16 @@ public class TransactionController {
 
         List<OweDetailsDTO> oweDetails = transactionService.getOweDetails(userId, groupId);
         return ResponseEntity.ok(oweDetails);
+    }
+
+    @DeleteMapping("/{transactionId}")
+    public ResponseEntity<?> removeTransaction(@PathVariable Long transactionId) {
+
+        try {
+            transactionService.removeTransaction(transactionId);
+            return ResponseEntity.ok(Map.of("message", "Transaction removed successfully"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
     }
 }

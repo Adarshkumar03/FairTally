@@ -11,7 +11,7 @@ const useTransactionStore = create((set) => ({
         if (!groupId) return;
         try {
             const { data } = await api.get(`/transactions/groups/${groupId}`);
-            set({ groupTransactions: data });
+            set({ groupTransactions: [...data] });
         } catch (error) {
             console.error("Error fetching group transactions:", error);
         }
@@ -32,19 +32,9 @@ const useTransactionStore = create((set) => ({
         if (!friendId) return;
         try {
             const response = await api.get(`/friends/${friendId}/transactions`);
-            set({ friendTransactions: response.data });
+            set({ friendTransactions: [...response.data] });
         } catch (error) {
             console.error("Error fetching friend expenses:", error);
-        }
-    },
-
-    refreshOweDetails: async (groupId) => {
-        if (!groupId) return;
-        try {
-            const { data } = await api.get(`/groups/${groupId}/owe-details`);
-            set({ groupDetails: (prevState) => ({ ...prevState, oweDetails: data }) });
-        } catch (error) {
-            console.error("Error fetching owe details:", error);
         }
     },
 }));

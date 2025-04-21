@@ -21,7 +21,7 @@ const GroupDashboard = () => {
   const [confirmLeaveOpen, setConfirmLeaveOpen] = useState(false);
   const navigate = useNavigate();
 
-  const { groupDetails, fetchGroupDetails, refreshOweDetails } =
+  const { groupDetails, fetchGroupDetails} =
     useTransactionStore();
 
   useEffect(() => {
@@ -34,7 +34,6 @@ const GroupDashboard = () => {
     try {
       await api.put(`/transactions/${transactionId}/settle`);
       fetchGroupDetails(selectedGroup.id);
-      refreshOweDetails(selectedGroup.id);
 
       toast.success("Transaction settled!");
     } catch (error) {
