@@ -44,6 +44,7 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
     public List<Transaction> findByPayerAndPayee(User payer, User payee);
 
     @Query("SELECT t FROM Transaction t WHERE t.type = 'FRIEND' AND " +
-            "((t.payer = :user AND t.payee = :friend) OR (t.payer = :friend AND t.payee = :user))")
+            "((t.payer = :user AND t.payee = :friend) OR (t.payer = :friend AND t.payee = :user)) AND " +
+            "t.settled = false")
     List<Transaction> findByUsersInFriendContext(@Param("user") User user, @Param("friend") User friend);
 }

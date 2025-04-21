@@ -7,73 +7,122 @@ import TransactionList from "./TransactionList";
 import GroupHeader from "./GroupHeader";
 import GroupMembersList from "./GroupMembersList";
 import useTransactionStore from "../store/transactionStore";
+import api from "../utils/api";
+import { toast } from "react-toastify";
+import ConfirmModal from "./modals/ConfirmModal";
+import { useNavigate } from "react-router";
 
 const GroupDashboard = () => {
-    const { selectedGroup } = useOutletContext();
-    const [userModalOpen, setUserModalOpen] = useState(false);
-    const [expenseModalOpen, setExpenseModalOpen] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [oweModalOpen, setOweModalOpen] = useState(false);
+  const { selectedGroup, fetchGroups } = useOutletContext();
+  const [userModalOpen, setUserModalOpen] = useState(false);
+  const [expenseModalOpen, setExpenseModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [oweModalOpen, setOweModalOpen] = useState(false);
+  const [confirmLeaveOpen, setConfirmLeaveOpen] = useState(false);
+  const navigate = useNavigate();
 
-    const { groupDetails, fetchGroupDetails } = useTransactionStore();
+  const { groupDetails, fetchGroupDetails, refreshOweDetails } =
+    useTransactionStore();
 
-    useEffect(() => {
-        if (selectedGroup?.id) {
+  useEffect(() => {
+    if (selectedGroup?.id) {
+      fetchGroupDetails(selectedGroup.id);
+    }
+  }, [selectedGroup, fetchGroupDetails]);
+
+  const handleSettleTransaction = async (transactionId) => {
+    try {
+      await api.put(`/transactions/${transactionId}/settle`);
+      fetchGroupDetails(selectedGroup.id);
+      refreshOweDetails(selectedGroup.id);
+
+      toast.success("Transaction settled!");
+    } catch (error) {
+      console.error("Error settling transaction:", error);
+      toast.error("Failed to settle transaction");
+    }
+  };
+
+  if (!selectedGroup)
+    return <p className="text-center text-gray-400">No group selected</p>;
+
+  return (
+    <main className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 md:p-6 w-full">
+      <article className="col-span-2 bg-[#F7C236] p-4 md:p-6 rounded-md shadow-2xl border-t-3 border-l-3 border-r-5 border-b-5 border-[#000] hover:shadow-3xl w-full">
+        <header>
+          <GroupHeader
+            groupName={selectedGroup.name}
+            onOpenExpenseModal={() => setExpenseModalOpen(true)}
+            setConfirmLeaveOpen={setConfirmLeaveOpen}
+          />
+        </header>
+        <section className="mt-4 md:mt-6">
+          <h3 className="text-xl md:text-2xl font-bold text-[#040404] text-center mb-4">
+            Group Transactions
+          </h3>
+          <TransactionList
+            groupId={selectedGroup.id}
+            onSettle={handleSettleTransaction}
+          />
+        </section>
+      </article>
+
+      <aside>
+        <GroupMembersList
+          groupDetails={groupDetails}
+          onOpenOweDetails={setSelectedUser}
+          setOweModalOpen={setOweModalOpen}
+          onOpenUserModal={() => setUserModalOpen(true)}
+          className="w-full"
+        />
+      </aside>
+
+      {userModalOpen && (
+        <AddUserModal
+          groupId={selectedGroup.id}
+          onClose={() => setUserModalOpen(false)}
+          refreshGroupDetails={() => fetchGroupDetails(selectedGroup.id)}
+        />
+      )}
+      {oweModalOpen && (
+        <OweDetailsModal
+          user={selectedUser}
+          groupId={selectedGroup.id}
+          onClose={() => setOweModalOpen(false)}
+        />
+      )}
+      {expenseModalOpen && (
+        <AddExpenseModal
+          groupId={selectedGroup.id}
+          groupName={selectedGroup.name}
+          groupMembers={groupDetails?.users || []}
+          onClose={() => {
+            setExpenseModalOpen(false);
             fetchGroupDetails(selectedGroup.id);
-        }
-    }, [selectedGroup, fetchGroupDetails]);
-
-    if (!selectedGroup) return <p className="text-center text-gray-400">No group selected</p>;
-
-    return (
-        <main className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 md:p-6 w-full">
-            <article className="col-span-2 bg-[#F7C236] p-4 md:p-6 rounded-md shadow-2xl border-t-3 border-l-3 border-r-5 border-b-5 border-[#000] hover:shadow-3xl w-full">
-                <header>
-                    <GroupHeader groupName={selectedGroup.name} onOpenExpenseModal={() => setExpenseModalOpen(true)} />
-                </header>
-                <section className="mt-4 md:mt-6">
-                    <h3 className="text-xl md:text-2xl font-bold text-[#040404] text-center mb-4">Group Transactions</h3>
-                    <TransactionList groupId={selectedGroup.id} />
-                </section>
-            </article>
-
-            <aside>
-                <GroupMembersList 
-                    groupDetails={groupDetails}
-                    onOpenOweDetails={setSelectedUser}
-                    setOweModalOpen={setOweModalOpen}
-                    onOpenUserModal={() => setUserModalOpen(true)}
-                    className="w-full"
-                />
-            </aside>
-
-            {userModalOpen && (
-                <AddUserModal
-                    groupId={selectedGroup.id}
-                    onClose={() => setUserModalOpen(false)}
-                    refreshGroupDetails={() => fetchGroupDetails(selectedGroup.id)}
-                />
-            )}
-            {oweModalOpen && (
-                <OweDetailsModal 
-                    user={selectedUser} 
-                    groupId={selectedGroup.id} 
-                    onClose={() => setOweModalOpen(false)} 
-                />
-            )}
-            {expenseModalOpen && (
-                <AddExpenseModal
-                    groupId={selectedGroup.id}
-                    groupName={selectedGroup.name}
-                    groupMembers={groupDetails?.users || []}
-                    onClose={() => {
-                        setExpenseModalOpen(false);
-                        fetchGroupDetails(selectedGroup.id);
-                    }}
-                />
-            )}
-        </main>
-    );
+          }}
+        />
+      )}
+      {confirmLeaveOpen && (
+        <ConfirmModal
+          open={confirmLeaveOpen}
+          title="Leave Group"
+          message={`Are you sure you want to leave the group "${selectedGroup.name}"?`}
+          onCancel={() => setConfirmLeaveOpen(false)}
+          onConfirm={async () => {
+            try {
+                await api.delete(`/groups/${selectedGroup.id}/leave`);
+                toast.success("Left group successfully");
+                await fetchGroups();
+                setConfirmLeaveOpen(false);
+                navigate("/dashboard");
+            } catch{
+              toast.error("Error leaving group");
+            }
+          }}
+        />
+      )}
+    </main>
+  );
 };
 
 export default GroupDashboard;

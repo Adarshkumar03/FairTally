@@ -6,65 +6,55 @@ import { toast } from "react-toastify";
 import TransactionComponent from "./TransactionComponent";
 
 const TransactionList = ({
-    groupId,
-    friendId,
-    isFriendView = false,
-    refreshGroupDetails,
-    refreshFriendDetails,
+  groupId,
+  friendId,
+  isFriendView = false,
+  onSettle,
 }) => {
-    const {
-        groupTransactions,
-        friendTransactions,
-        fetchGroupTransactions,
-        fetchFriendTransactions
-    } = useTransactionStore();
-    
-    const transactions = isFriendView ? friendTransactions : groupTransactions;
-    const [loading, setLoading] = useState(true);
-    const { user } = useAuthStore();
+  const {
+    groupTransactions,
+    friendTransactions,
+    fetchGroupTransactions,
+    fetchFriendTransactions,
+  } = useTransactionStore();
 
-    const fetchTransactions = useCallback(() => {
-        setLoading(true);
-        const fetchFn = isFriendView
-            ? () => fetchFriendTransactions(friendId)
-            : () => fetchGroupTransactions(groupId);
-    
-        fetchFn().finally(() => setLoading(false));
-    }, [isFriendView, friendId, groupId, fetchFriendTransactions, fetchGroupTransactions]);
+  const transactions = isFriendView ? friendTransactions : groupTransactions;
+  const [loading, setLoading] = useState(true);
+  const { user } = useAuthStore();
 
-    useEffect(() => {
-        fetchTransactions();
-    }, [fetchTransactions]);
+  const fetchTransactions = useCallback(() => {
+    setLoading(true);
+    const fetchFn = isFriendView
+      ? () => fetchFriendTransactions(friendId)
+      : () => fetchGroupTransactions(groupId);
 
-    const handleSettleTransaction = async (transactionId) => {
-        try {
-            await api.put(`/transactions/${transactionId}/settle`);
-            fetchTransactions();
+    fetchFn().finally(() => setLoading(false));
+  }, [isFriendView, friendId, groupId, fetchFriendTransactions, fetchGroupTransactions]);
 
-            if (isFriendView && refreshFriendDetails) {
-                refreshFriendDetails(friendId);
-            } else if (!isFriendView && refreshGroupDetails) {
-                refreshGroupDetails(groupId);
-            }
+  useEffect(() => {
+    fetchTransactions();
+  }, [fetchTransactions]);
 
-            toast.success("Transaction settled!!");
-        } catch (error) {
-            console.error("Error settling transaction:", error);
-            toast.error("Failed to settle transaction");
-        }
-    };
+  const handleSettleTransaction = async (transactionId) => {
+    try {
+      await api.put(`/transactions/${transactionId}/settle`);
+      fetchTransactions();
+      toast.success("Transaction settled!");
+    } catch (error) {
+      console.error("Error settling transaction:", error);
+      toast.error("Failed to settle transaction");
+    }
+  };
 
-    if (loading) return <p className="text-center text-gray-400">Loading transactions...</p>;
-
-    return (
-        <TransactionComponent
-            transactions={transactions}
-            loading={loading}
-            user={user}
-            onSettle={handleSettleTransaction}
-            isFriendView={isFriendView}
-        />
-    );
+  return (
+    <TransactionComponent
+      transactions={transactions}
+      loading={loading}
+      user={user}
+      onSettle={onSettle || handleSettleTransaction}
+      isFriendView={isFriendView}
+    />
+  );
 };
 
 export default TransactionList;

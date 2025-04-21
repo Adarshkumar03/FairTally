@@ -90,7 +90,7 @@ public class FriendshipController {
         }
 
         try {
-            List<FriendExpenseResponse> expenses = transactionService.getFriendExpenses(user.getId(), friendId);
+            List<FriendExpenseResponse> expenses = transactionService.getFriendTransactions(user.getId(), friendId);
             return ResponseEntity.ok(expenses);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("message", "Error retrieving expenses"));

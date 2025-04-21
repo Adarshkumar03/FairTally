@@ -37,6 +37,16 @@ const useTransactionStore = create((set) => ({
             console.error("Error fetching friend expenses:", error);
         }
     },
+
+    refreshOweDetails: async (groupId) => {
+        if (!groupId) return;
+        try {
+            const { data } = await api.get(`/groups/${groupId}/owe-details`);
+            set({ groupDetails: (prevState) => ({ ...prevState, oweDetails: data }) });
+        } catch (error) {
+            console.error("Error fetching owe details:", error);
+        }
+    },
 }));
 
 export default useTransactionStore;

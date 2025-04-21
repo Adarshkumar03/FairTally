@@ -104,7 +104,7 @@ public class TransactionService {
         transactionRepo.save(transaction);
     }
 
-    public List<FriendExpenseResponse> getFriendExpenses(Long userId, Long friendId) {
+    public List<FriendExpenseResponse> getFriendTransactions(Long userId, Long friendId) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 

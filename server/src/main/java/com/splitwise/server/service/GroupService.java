@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -102,6 +103,40 @@ public class GroupService {
         }
 
         return repo.save(group);
+    }
+
+    public List<Group> getGroupsUserNotIn(Long userId) {
+        return repo.findGroupsUserNotIn(userId);
+    }
+
+    public void joinGroup(Long userId, Long groupId) throws Exception {
+        Group group = repo.findById(groupId).orElseThrow(() -> new Exception("Group not found"));
+        User user = userRepo.findById(userId).orElseThrow(() -> new Exception("User not found"));
+
+        // Check if user is already part of the group
+        Optional<UserGroup> existingUserGroup = userGroupRepo.findByUserAndGroup(user, group);
+        if (existingUserGroup.isPresent()) {
+            throw new Exception("User is already a member of this group");
+        }
+
+        UserGroup userGroup = new UserGroup();
+        userGroup.setUser(user);
+        userGroup.setGroup(group);
+        userGroupRepo.save(userGroup);
+    }
+
+    public void leaveGroup(Long userId, Long groupId) throws Exception {
+        Group group = repo.findById(groupId)
+                .orElseThrow(() -> new Exception("Group not found"));
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new Exception("User not found"));
+
+        Optional<UserGroup> existingUserGroup = userGroupRepo.findByUserAndGroup(user, group);
+        if (existingUserGroup.isEmpty()) {
+            throw new Exception("User is not a member of this group");
+        }
+
+        userGroupRepo.deleteByUserAndGroup(user, group);
     }
 
 }

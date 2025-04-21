@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/groups")
@@ -106,6 +107,53 @@ public class GroupController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("error", "Failed to create group"));
+        }
+    }
+
+    @GetMapping("/potential")
+    public ResponseEntity<?> getJoinableGroups() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user == null) {
+            return ResponseEntity.status(401).body(Map.of("message", "User not authenticated"));
+        }
+
+        try {
+            return ResponseEntity.ok(groupService.getGroupsUserNotIn(user.getId()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("message", "Error retrieving join able groups"));
+        }
+    }
+
+    @PostMapping("/{groupId}/join")
+    public ResponseEntity<?> joinGroup(@PathVariable Long groupId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if (user == null) {
+            return ResponseEntity.status(401).body(Map.of("message", "User not authenticated"));
+        }
+
+        try {
+            groupService.joinGroup(user.getId(), groupId);
+            return ResponseEntity.ok(Map.of("message", "Successfully joined the group"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/{groupId}/leave")
+    public ResponseEntity<?> leaveGroup(@PathVariable Long groupId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (user == null) {
+            return ResponseEntity.status(401).body(Map.of("message", "User not authenticated"));
+        }
+
+        try {
+            groupService.leaveGroup(user.getId(), groupId);
+            return ResponseEntity.ok(Map.of("message", "Left group successfully"));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(400).body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("message", "Error leaving group"));
         }
     }
 
