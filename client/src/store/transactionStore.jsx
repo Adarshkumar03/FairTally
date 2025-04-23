@@ -37,6 +37,16 @@ const useTransactionStore = create((set) => ({
             console.error("Error fetching friend expenses:", error);
         }
     },
+    updateTransaction: (updatedTx, isFriendView) => {
+        set((state) => {
+            const key = isFriendView ? "friendTransactions" : "groupTransactions";
+            return {
+                [key]: state[key].map((tx) =>
+                    tx.id === updatedTx.id ? updatedTx : tx
+                ),
+            };
+        });
+    },
 }));
 
 export default useTransactionStore;

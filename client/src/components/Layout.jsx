@@ -17,7 +17,8 @@ const Layout = () => {
   const [loadingFriends, setLoadingFriends] = useState(true);
   const [isGroupModalOpen, setGroupModalOpen] = useState(false);
   const [isFriendModalOpen, setFriendModalOpen] = useState(false);
-  const [isJoinModalOpen, setJoinModalOpen] = useState(false); // State for the JoinGroupModal
+  const [isJoinModalOpen, setJoinModalOpen] = useState(false);
+  const [refreshTx, setRefreshTx] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -126,7 +127,7 @@ const Layout = () => {
         </aside>
 
         <section className="md:col-span-3 p-8 border-4 bg-[#FFF6E5] min-h-[calc(100vh-4rem)] flex flex-col">
-          <Outlet context={{ selectedGroup, selectedFriend, groups, friends, fetchGroups, fetchFriends }} />
+          <Outlet context={{ selectedGroup, selectedFriend, groups, friends, fetchGroups, fetchFriends, refreshTx, setRefreshTx }} />
         </section>
       </main>
 

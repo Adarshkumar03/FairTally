@@ -30,10 +30,10 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
     List<Object[]> getOweDetails(@Param("userId") Long userId, @Param("groupId") Long groupId);
 
     @Query("SELECT t FROM Transaction t WHERE t.group.id = :groupId")
-    List<Transaction> findByGroupIdAndSettledFalse(@Param("groupId") Long groupId);
+    List<Transaction> findByGroupId(@Param("groupId") Long groupId);
 
     @Query("SELECT t FROM Transaction t WHERE (t.payee.id = :userId OR t.payer.id = :userId)")
-    List<Transaction> findByUserIdAndSettledFalse(@Param("userId") Long userId);
+    List<Transaction> findByUserId(@Param("userId") Long userId);
 
     public List<Transaction> findByPayerAndPayee(User payer, User payee);
 

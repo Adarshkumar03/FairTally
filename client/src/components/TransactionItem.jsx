@@ -6,6 +6,7 @@ const TransactionItem = ({
   onSettle,
   isFriendView,
   onDelete,
+  onEdit,
 }) => {
   const backgroundColor = isFriendView ? "#E3F4E0" : "#FBE7A1";
   const [isSettled, setIsSettled] = useState(tx.settled);
@@ -63,6 +64,14 @@ const TransactionItem = ({
             className="bg-red-100 border-l-2 border-t-2 border-r-4 border-b-4 border-black text-black px-3 sm:px-4 py-2 rounded-md text-sm sm:text-base font-semibold shadow-sm hover:brightness-110 transition-all duration-300"
           >
             Delete
+          </button>
+        )}
+        {isUserInvolved && onEdit && (
+          <button
+            onClick={() => onEdit(tx)}
+            className="bg-blue-100 border-l-2 border-t-2 border-r-4 border-b-4 border-black text-black px-3 sm:px-4 py-2 rounded-md text-sm sm:text-base font-semibold shadow-sm hover:brightness-110 transition-all duration-300"
+          >
+            Update
           </button>
         )}
       </div>

@@ -1,9 +1,6 @@
 package com.splitwise.server.service;
 
-import com.splitwise.server.dto.FriendExpenseRequest;
-import com.splitwise.server.dto.FriendExpenseResponse;
-import com.splitwise.server.dto.OweDetailsDTO;
-import com.splitwise.server.dto.TransactionDTO;
+import com.splitwise.server.dto.*;
 import com.splitwise.server.model.Transaction;
 import com.splitwise.server.model.User;
 import com.splitwise.server.repo.TransactionRepo;
@@ -45,7 +42,7 @@ public class TransactionService {
 
 
     public List<TransactionDTO> getGroupTransactions(Long groupId) {
-        List<Transaction> transactions = transactionRepo.findByGroupIdAndSettledFalse(groupId);
+        List<Transaction> transactions = transactionRepo.findByGroupId(groupId);
         return transactions.stream()
                 .map(t -> new TransactionDTO(
                         t.getId(),
@@ -65,7 +62,7 @@ public class TransactionService {
 
 
     public List<TransactionDTO> getUserTransactions(Long userId) {
-        List<Transaction> transactions = transactionRepo.findByUserIdAndSettledFalse(userId);
+        List<Transaction> transactions = transactionRepo.findByUserId(userId);
         return transactions.stream()
                 .map(t -> new TransactionDTO(
                         t.getId(),
@@ -117,8 +114,8 @@ public class TransactionService {
         return transactions.stream()
                 .map(tx -> new FriendExpenseResponse(
                         tx.getId(),
-                        tx.getPayer().getId(),      // payerId
-                        tx.getPayee().getId(),      // payeeId
+                        tx.getPayer().getId(),
+                        tx.getPayee().getId(),
                         tx.getPayer().getName(),
                         tx.getPayee().getName(),
                         tx.getAmount(),
@@ -133,5 +130,25 @@ public class TransactionService {
     public void removeTransaction(Long transactionId){
         Transaction tx = transactionRepo.findById(transactionId).orElseThrow(() -> new IllegalArgumentException("Transaction not found"));
         transactionRepo.deleteById(transactionId);
+    }
+
+    public void updateTransaction(Long transactionId, TransactionUpdateDTO transactionUpdateDTO) {
+        // Fetch the existing transaction by ID
+        Transaction existingTransaction = transactionRepo.findById(transactionId)
+                .orElseThrow(() -> new RuntimeException("Transaction not found"));
+
+        User payee = userRepo.findById(transactionUpdateDTO.getPayeeId())
+                .orElseThrow(() -> new IllegalArgumentException("Payee not found"));
+
+        User payer = userRepo.findById(transactionUpdateDTO.getPayerId())
+                .orElseThrow(() -> new IllegalArgumentException("Payer not found"));
+
+        // Update fields
+        existingTransaction.setAmount(transactionUpdateDTO.getAmount());  // Convert amount to BigDecimal
+        existingTransaction.setDescription(transactionUpdateDTO.getDescription());
+        existingTransaction.setPayer(payer);
+        existingTransaction.setPayee(payee);
+
+        Transaction updatedTransaction = transactionRepo.save(existingTransaction);
     }
 }

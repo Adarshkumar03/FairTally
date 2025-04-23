@@ -2,6 +2,7 @@ package com.splitwise.server.controller;
 
 import com.splitwise.server.dto.OweDetailsDTO;
 import com.splitwise.server.dto.TransactionDTO;
+import com.splitwise.server.dto.TransactionUpdateDTO;
 import com.splitwise.server.service.TransactionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +54,22 @@ public class TransactionController {
             return ResponseEntity.ok(Map.of("message", "Transaction removed successfully"));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    @PutMapping("/{transactionId}")
+    public ResponseEntity<?> updateTransaction(
+            @PathVariable Long transactionId,
+            @RequestBody TransactionUpdateDTO transactionUpdateDTO) {
+        try {
+            transactionService.updateTransaction(transactionId, transactionUpdateDTO);
+            return ResponseEntity.ok(Map.of("message", "Transaction updated successfully"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", "An unexpected error occurred"));
         }
     }
 }

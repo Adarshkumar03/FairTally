@@ -11,18 +11,19 @@ import api from "../utils/api";
 import { toast } from "react-toastify";
 import ConfirmModal from "./modals/ConfirmModal";
 import { useNavigate } from "react-router";
+import UpdateExpenseModal from "./modals/UpdateExpenseModal";
 
 const GroupDashboard = () => {
-  const { selectedGroup, fetchGroups } = useOutletContext();
+  const { selectedGroup, fetchGroups, refreshTx, setRefreshTx } = useOutletContext();
   const [userModalOpen, setUserModalOpen] = useState(false);
   const [expenseModalOpen, setExpenseModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [oweModalOpen, setOweModalOpen] = useState(false);
   const [confirmLeaveOpen, setConfirmLeaveOpen] = useState(false);
+  const [editTx, setEditTx] = useState(null);
   const navigate = useNavigate();
 
-  const { groupDetails, fetchGroupDetails} =
-    useTransactionStore();
+  const { groupDetails, fetchGroupDetails, updateTransaction } = useTransactionStore();
 
   useEffect(() => {
     if (selectedGroup?.id) {
@@ -33,9 +34,8 @@ const GroupDashboard = () => {
   const handleSettleTransaction = async (transactionId) => {
     try {
       await api.put(`/transactions/${transactionId}/settle`);
-      fetchGroupDetails(selectedGroup.id);
-
       toast.success("Transaction settled!");
+      setRefreshTx((prev) => !prev);
     } catch (error) {
       console.error("Error settling transaction:", error);
       toast.error("Failed to settle transaction");
@@ -62,6 +62,9 @@ const GroupDashboard = () => {
           <TransactionList
             groupId={selectedGroup.id}
             onSettle={handleSettleTransaction}
+            onEdit={(tx) => setEditTx(tx)}
+            refreshTx={refreshTx}
+            setRefreshTx={setRefreshTx}
           />
         </section>
       </article>
@@ -97,10 +100,23 @@ const GroupDashboard = () => {
           groupMembers={groupDetails?.users || []}
           onClose={() => {
             setExpenseModalOpen(false);
-            fetchGroupDetails(selectedGroup.id);
+            setRefreshTx((prev) => !prev);
           }}
         />
       )}
+
+      {editTx && (
+        <UpdateExpenseModal
+        open={!!editTx}
+        transaction={editTx}
+        onClose={() => setEditTx(null)}
+        onUpdate={(updatedTx) => {
+          updateTransaction(updatedTx, false);
+          setEditTx(null);
+        }}
+      />
+      )}
+
       {confirmLeaveOpen && (
         <ConfirmModal
           open={confirmLeaveOpen}
@@ -109,12 +125,12 @@ const GroupDashboard = () => {
           onCancel={() => setConfirmLeaveOpen(false)}
           onConfirm={async () => {
             try {
-                await api.delete(`/groups/${selectedGroup.id}/leave`);
-                toast.success("Left group successfully");
-                await fetchGroups();
-                setConfirmLeaveOpen(false);
-                navigate("/dashboard");
-            } catch{
+              await api.delete(`/groups/${selectedGroup.id}/leave`);
+              toast.success("Left group successfully");
+              await fetchGroups();
+              setConfirmLeaveOpen(false);
+              navigate("/dashboard");
+            } catch {
               toast.error("Error leaving group");
             }
           }}

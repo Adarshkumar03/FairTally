@@ -2,18 +2,19 @@ import { useState } from "react";
 import { useOutletContext, useNavigate } from "react-router";
 import AddFriendExpenseModal from "./modals/AddFriendExpenseModal";
 import TransactionList from "./TransactionList";
-import useTransactionStore from "../store/transactionStore";
 import api from "../utils/api";
 import { toast } from "react-toastify";
 import ConfirmModal from "./modals/ConfirmModal";
+import UpdateExpenseModal from "./modals/UpdateExpenseModal";
+import useTransactionStore from "../store/transactionStore";
 
 const FriendDashboard = () => {
-  const { selectedFriend, fetchFriends } = useOutletContext();
+  const { selectedFriend, fetchFriends, refreshTx, setRefreshTx } = useOutletContext();
   const [expenseModalOpen, setExpenseModalOpen] = useState(false);
   const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
+  const [editTx, setEditTx] = useState(null);
   const navigate = useNavigate();
-
-  const { fetchFriendTransactions } = useTransactionStore();
+  const { updateTransaction } = useTransactionStore();
 
   if (!selectedFriend)
     return <p className="text-center text-gray-400">No friend selected</p>;
@@ -44,7 +45,13 @@ const FriendDashboard = () => {
           <h3 className="text-xl font-bold text-[#040404] text-center mb-4">
             Your Transactions with {selectedFriend.name}
           </h3>
-          <TransactionList friendId={selectedFriend.id} isFriendView />
+          <TransactionList
+            friendId={selectedFriend.id}
+            isFriendView
+            onEdit={(tx) => setEditTx(tx)}
+            refreshTx={refreshTx}
+            setRefreshTx={setRefreshTx}
+          />
         </section>
       </article>
 
@@ -54,9 +61,21 @@ const FriendDashboard = () => {
           friendName={selectedFriend.name}
           onClose={() => {
             setExpenseModalOpen(false);
-            fetchFriendTransactions(selectedFriend.id); // Refresh the transaction list after adding expense
+            setRefreshTx((prev) => !prev);
           }}
         />
+      )}
+
+      {editTx && (
+        <UpdateExpenseModal
+        open={!!editTx}
+        transaction={editTx}
+        onClose={() => setEditTx(null)}
+        onUpdate={(updatedTx) => {
+          updateTransaction(updatedTx, true);
+          setEditTx(null);
+        }}
+      />
       )}
 
       {confirmRemoveOpen && (
@@ -70,7 +89,7 @@ const FriendDashboard = () => {
               const res = await api.delete(`/friends/${selectedFriend.id}`);
               toast.success(res.data.message || "Friend removed");
               setConfirmRemoveOpen(false);
-              await fetchFriends(); // Refresh the friend list
+              await fetchFriends();
               navigate("/dashboard");
             } catch (err) {
               toast.error(

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import TransactionItem from "./TransactionItem";
 import ConfirmModal from "./modals/ConfirmModal";
 
-const TransactionList = ({ groupId, friendId, isFriendView = false, onSettle }) => {
+const TransactionList = ({ groupId, friendId, isFriendView = false, onSettle, onEdit, refreshTx, setRefreshTx }) => {
   const {
     fetchGroupTransactions,
     fetchFriendTransactions,
@@ -104,6 +104,7 @@ const TransactionList = ({ groupId, friendId, isFriendView = false, onSettle }) 
                 setSelectedTransactionId(id);
                 setConfirmDeleteOpen(true);
               }}
+              onEdit={onEdit}
             />
           ))}
         </ul>
