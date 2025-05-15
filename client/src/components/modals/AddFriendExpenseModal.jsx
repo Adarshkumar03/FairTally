@@ -2,6 +2,7 @@ import { useState } from "react";
 import useAuthStore from "../../store/authStore";
 import api from "../../utils/api";
 import { toast } from "react-toastify";
+import useTransactionStore from "../../store/transactionStore";
 
 const AddFriendExpenseModal = ({ friendId,friendName, onClose }) => {
     const { user } = useAuthStore();
@@ -9,6 +10,7 @@ const AddFriendExpenseModal = ({ friendId,friendName, onClose }) => {
     const [description, setDescription] = useState("");
     const [amountError, setAmountError] = useState("");
     const [descriptionError, setDescriptionError] = useState("");
+    const { fetchFriendTransactions } = useTransactionStore(); 
 
     const handleAmountChange = (e) => {
         const newAmount = e.target.value;
@@ -48,6 +50,7 @@ const AddFriendExpenseModal = ({ friendId,friendName, onClose }) => {
 
         try {
             await api.post(`/friends/${friendId}/expenses`, expenseData);
+            await fetchFriendTransactions(friendId);
             onClose();
             toast.success("Successfully Added Expense with Friend!!");
         } catch (error) {

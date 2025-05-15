@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import TransactionItem from "./TransactionItem";
 import ConfirmModal from "./modals/ConfirmModal";
 
-const TransactionList = ({ groupId, friendId, isFriendView = false, onSettle, onEdit, refreshTx, setRefreshTx }) => {
+const TransactionList = ({ groupId, friendId, isFriendView = false, onSettle, onEdit}) => {
   const {
     fetchGroupTransactions,
     fetchFriendTransactions,

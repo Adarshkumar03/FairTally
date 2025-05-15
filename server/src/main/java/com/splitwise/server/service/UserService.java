@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -36,11 +38,34 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User registerUser(User user) {
-        if (user.getPassword() == null || user.getPassword().isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be null or empty");
+    public User registerUser(User user) throws IllegalArgumentException {
+        // Validate name (2-50 characters, only letters and spaces)
+        String nameRegex = "^[a-zA-Z\\s]{2,50}$";
+        Pattern namePattern = Pattern.compile(nameRegex);
+        Matcher nameMatcher = namePattern.matcher(user.getName());
+        if (!nameMatcher.matches()) {
+            throw new IllegalArgumentException("Name must be 2-50 characters and contain only letters and spaces.");
         }
 
+        // Validate email (standard email format)
+        String emailRegex = "^[^\\s@]+@[^\s@]+\\.[^\\s@]+$";
+        Pattern emailPattern = Pattern.compile(emailRegex);
+        Matcher emailMatcher = emailPattern.matcher(user.getEmail());
+        if (!emailMatcher.matches()) {
+            throw new IllegalArgumentException("Please enter a valid email address.");
+        }
+
+        // Validate password (at least 8 characters, 1 uppercase, 1 lowercase, 1 digit, 1 special character)
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_]).{8,}$";
+        Pattern passwordPattern = Pattern.compile(passwordRegex);
+        Matcher passwordMatcher = passwordPattern.matcher(user.getPassword());
+        if (!passwordMatcher.matches()) {
+            throw new IllegalArgumentException(
+                    "Password must be at least 8 characters, include uppercase, lowercase, number, and special character."
+            );
+        }
+
+        // If validation passes, encrypt the password and save the user
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole("ROLE_USER");
 

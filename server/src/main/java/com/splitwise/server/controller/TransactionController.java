@@ -3,6 +3,7 @@ package com.splitwise.server.controller;
 import com.splitwise.server.dto.OweDetailsDTO;
 import com.splitwise.server.dto.TransactionDTO;
 import com.splitwise.server.dto.TransactionUpdateDTO;
+import com.splitwise.server.dto.UserSummaryDTO;
 import com.splitwise.server.service.TransactionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -70,6 +71,17 @@ public class TransactionController {
             return ResponseEntity.status(404).body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", "An unexpected error occurred"));
+        }
+    }
+
+    @GetMapping("/{userId}/summary")
+    public ResponseEntity<?> getUserSummary(@PathVariable Long userId) {
+        try {
+            UserSummaryDTO dashboardData = transactionService.getUserSummary(userId);
+            return ResponseEntity.ok(dashboardData);
+        } catch (Exception e) {
+            return ResponseEntity.status(500)
+                    .body("An error occurred: " + e.getMessage());
         }
     }
 }

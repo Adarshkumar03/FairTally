@@ -1,11 +1,14 @@
 package com.splitwise.server.repo;
 
+import com.splitwise.server.dto.TransactionDTO;
 import com.splitwise.server.model.Transaction;
 import com.splitwise.server.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.awt.print.Pageable;
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface TransactionRepo extends JpaRepository<Transaction, Long> {
@@ -40,4 +43,15 @@ public interface TransactionRepo extends JpaRepository<Transaction, Long> {
     @Query("SELECT t FROM Transaction t WHERE t.type = 'FRIEND' AND " +
             "((t.payer = :user AND t.payee = :friend) OR (t.payer = :friend AND t.payee = :user))")
     List<Transaction> findByUsersInFriendContext(@Param("user") User user, @Param("friend") User friend);
+
+    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.payer.id = :userId AND t.settled = false")
+    BigDecimal findTotalOwedByUser(@Param("userId") Long userId);
+
+    @Query("SELECT COALESCE(SUM(t.amount), 0) FROM Transaction t WHERE t.payee.id = :userId AND t.settled = false")
+    BigDecimal findTotalOwedToUser(@Param("userId") Long userId);
+
+    @Query(value = "SELECT t FROM Transaction t " +
+            "WHERE t.payer.id = :userId OR t.payee.id = :userId " +
+            "ORDER BY t.date DESC")
+    List<Transaction> last5Transactions(@Param("userId") Long userId, Pageable pageable);
 }
