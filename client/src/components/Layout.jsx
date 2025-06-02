@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import GroupList from "./GroupList";
 import FriendList from "./FriendList";
 import UserNavbar from "./UserNavbar";
-import AddGroupModal from "./modals/AddGroupModal";
+import CreateGroupModal from "./modals/CreateGroupModal";
 import AddFriendModal from "./modals/AddFriendModal";
 import JoinGroupModal from "./modals/JoinGroupModal";
 import api from "../utils/api";
@@ -79,7 +79,7 @@ const Layout = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col bg-[#FFF6E5] p-0 m-0">
+    <div className="h-screen flex flex-col bg-[#FDF2E5] p-0 m-0">
       <header>
         <UserNavbar />
       </header>
@@ -92,7 +92,7 @@ const Layout = () => {
               setSelectedFriend(null);
               navigate("/dashboard");
             }}
-            className="w-full bg-[#F7C236] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-black font-bold py-2 rounded-md shadow-md hover:brightness-110 transition duration-300"
+            className="w-full bg-[#306B34] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-white font-bold py-2 rounded-md shadow-md hover:brightness-110 hover:bg-[#2b5c31] transition duration-300"
           >
             Go to Dashboard
           </button>
@@ -132,7 +132,7 @@ const Layout = () => {
       </main>
 
       {isGroupModalOpen && (
-        <AddGroupModal
+        <CreateGroupModal
           onClose={() => setGroupModalOpen(false)}
           onGroupAdded={handleGroupAdded}
         />

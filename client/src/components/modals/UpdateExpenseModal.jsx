@@ -45,7 +45,7 @@ const UpdateExpenseModal = ({ open, onClose, transaction, onUpdate }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] z-[9999]">
       <div className="bg-[#FCF5E5] p-6 rounded-2xl shadow-lg w-full max-w-md border-2 border-black">
-        <h2 className="text-xl font-bold mb-4">Update Expense</h2>
+        <h2 className="text-3xl font-bold mb-4 text-center font-bebas">Update Expense</h2>
 
         <div className="space-y-4">
           <input
@@ -67,7 +67,7 @@ const UpdateExpenseModal = ({ open, onClose, transaction, onUpdate }) => {
         <div className="flex justify-end gap-3 mt-6">
           <button
             onClick={onClose}
-            className="bg-gray-200 border-2 border-black text-black px-4 py-2 rounded-md hover:brightness-105 transition-all"
+            className="bg-[#D9534F] text-[#FFF6E5] hover:bg-[#C9302C] border-2 border-black px-4 py-2 rounded-md hover:brightness-105 transition-all"
           >
             Cancel
           </button>

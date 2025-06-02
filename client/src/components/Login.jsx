@@ -34,66 +34,72 @@ export default function Login() {
 
     try {
       await api.post("/auth/login", { email, password });
+      toast.success("Login Successful!");
       navigate("/dashboard");
-      toast.success("Login Successful!!");
     } catch (error) {
-      console.error("Login error:", error.response?.data || error.message);
       setError("Invalid email or password.");
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-[#AAD7B8]">
       <header>
         <UserNavbar />
       </header>
 
-      <main className="flex items-center justify-center flex-grow px-5 bg-gradient-to-b from-[#AAD7B8] via-[#F7C236] to-[#306B34]">
-        <section className="bg-[#F7C236] border-l-2 border-t-2 border-r-5 border-b-5 border-[#030303] p-8 sm:p-10 rounded-lg shadow-lg w-full max-w-md sm:w-96 md:w-[28rem]">
-          <h2 className="text-4xl font-bold text-center mb-6 text-[#030303] font-bebas tracking-wider">
-            Login
+      <main className="flex flex-grow justify-center items-center px-4 py-12 bg-gradient-to-b from-[#AAD7B8] to-white">
+        <section className="bg-white shadow-md rounded-xl w-full max-w-md p-8 sm:p-10 border border-[#CDE9DC]">
+          <h2 className="text-3xl font-semibold text-center text-[#030303] mb-2 font-bebas">
+            Hey! Welcome back,
           </h2>
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+          <p className="text-center text-[#306B34] font-medium mb-6">
+            Track your expenses effortlessly and stay on top of your finances.
+          </p>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <article>
-              <label className="block text-[#030C03] font-semibold mb-1">Email</label>
+          {error && (
+            <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
+          )}
+
+          <form onSubmit={handleLogin} className="space-y-3">
+            <div>
+              <label className="block text-[#030C03] font-medium mb-1">
+                Email Address
+              </label>
               <input
                 type="email"
-                placeholder="Enter your email"
-                className={`w-full p-3 bg-white border rounded-md focus:outline-none ${
-                  error.includes("email") ? "border-red-500 focus:ring-red-500" : "border-gray-400 focus:ring-[#306B34]"
-                }`}
+                placeholder="e.g. abc@company.com"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#69B99D] border-gray-300"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
-            </article>
+            </div>
 
-            <article>
-              <label className="block text-[#030C03] font-semibold mb-1">Password</label>
+            <div>
+              <label className="block text-[#030C03] font-medium mb-1">
+                Password
+              </label>
               <input
                 type="password"
                 placeholder="Enter your password"
-                className={`w-full p-3 bg-white border rounded-md focus:outline-none ${
-                  error.includes("Password") ? "border-red-500 focus:ring-red-500" : "border-gray-400 focus:ring-[#306B34]"
-                }`}
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#69B99D] border-gray-300"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
               />
-            </article>
+            </div>
 
-            <button className="w-full bg-[#306B34] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-white py-2 rounded-md font-semibold hover:bg-[#245824] transition-all duration-300">
-              Login
+            <button
+              type="submit"
+              className="w-full mt-2 bg-[#69B99D] hover:bg-[#55a48a] text-white border-t-3 border-l-3 border-b-5 border-r-5 border-[#030303] font-bold py-3 rounded-md transition-all"
+            >
+              Log In
             </button>
           </form>
 
-          <p className="text-center text-sm mt-4 font-medium">
-            Don't have an account?{" "}
+          <p className="text-center text-sm mt-6 font-medium">
+            Don’t have an account?{" "}
             <span
               onClick={() => navigate("/register")}
-              className="text-[#306B34] cursor-pointer hover:underline font-semibold"
+              className="text-[#306B34] hover:underline cursor-pointer font-semibold"
             >
               Register
             </span>

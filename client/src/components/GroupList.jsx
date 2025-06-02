@@ -1,3 +1,5 @@
+import { MdGroupAdd } from "react-icons/md";
+import { FaUserGroup } from "react-icons/fa6";
 const GroupList = ({ groups, selectedGroup, onSelectGroup, onAddGroup, onJoinGroup }) => {
   return (
     <div className="flex flex-col justify-between h-full">
@@ -6,7 +8,7 @@ const GroupList = ({ groups, selectedGroup, onSelectGroup, onAddGroup, onJoinGro
         {groups.length === 0 ? (
           <p className="font-semibold text-center text-[#030303] mb-4">No groups available</p>
         ) : (
-          <ul className="mb-4 space-y-2">
+          <ul className="mb-5 space-y-3">
             {groups.map((group) => (
               <li 
                 key={group.id} 
@@ -27,15 +29,17 @@ const GroupList = ({ groups, selectedGroup, onSelectGroup, onAddGroup, onJoinGro
       <div className="flex flex-col gap-2">
         <button 
           onClick={onAddGroup}
-          className="w-full bg-[#F7C236] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-black p-2 rounded-md font-semibold hover:brightness-110 transition-all duration-300"
+          className="w-full bg-[#255E3B] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-white p-2 rounded-md font-semibold hover:bg-[#1f4a2b] transition-all duration-300"
         >
+          <FaUserGroup className="inline mr-2" />
           Create Group
         </button>
 
         <button 
           onClick={onJoinGroup}
-          className="w-full bg-[#306B34] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-white p-2 rounded-md font-semibold hover:bg-[#245824] transition-all duration-300"
+          className="w-full bg-[#255E3B] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-white p-2 rounded-md font-semibold hover:bg-[#1f4a2b] transition-all duration-300"
         >
+          <MdGroupAdd className="inline mr-2" />
           Join Group
         </button>
       </div>

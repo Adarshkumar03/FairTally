@@ -5,6 +5,7 @@ import useTransactionStore from "../store/transactionStore";
 import { toast } from "react-toastify";
 import TransactionItem from "./TransactionItem";
 import ConfirmModal from "./modals/ConfirmModal";
+import { FiSearch } from "react-icons/fi";
 
 const TransactionList = ({ groupId, friendId, isFriendView = false, onSettle, onEdit}) => {
   const {
@@ -83,16 +84,19 @@ const TransactionList = ({ groupId, friendId, isFriendView = false, onSettle, on
 
   return (
     <div className="mt-4">
-      <input
-        type="text"
-        placeholder="Search transactions..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full mb-4 px-4 py-2 border-2 border-black rounded-lg bg-[#FCF5E5] text-[#030303] placeholder:text-[#666] focus:outline-none focus:ring-2 focus:ring-[#306B34] focus:border-[#306B34] transition-all duration-300 shadow-md"
-      />
+      <div className="relative w-full mb-4">
+  <FiSearch className="absolute top-1/2 left-3 transform -translate-y-1/2 text-gray-500 text-lg" />
+  <input
+    type="text"
+    placeholder="Search transactions..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    className="w-full pl-10 pr-4 py-2 border-2 border-black rounded-lg bg-[#FCF5E5] text-[#030303] placeholder:text-[#666] focus:outline-none focus:ring-2 focus:ring-[#306B34] focus:border-[#306B34] transition-all duration-300 shadow-md"
+  />
+</div>
 
       {filteredTransactions.length > 0 ? (
-        <ul className="space-y-4">
+        <ul className="space-y-8">
           {filteredTransactions.map((tx) => (
             <TransactionItem
               key={tx.id}

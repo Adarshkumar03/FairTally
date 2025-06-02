@@ -10,7 +10,7 @@ const Home = () => {
         <section className="flex flex-col md:flex-row items-center justify-between w-full max-w-5xl gap-12 md:gap-x-24">
           <article className="text-center md:text-left max-w-lg">
             <h1 className="text-5xl sm:text-6xl font-bebas tracking-wide font-extrabold text-[#030303] drop-shadow-md mb-6 leading-tight">
-              Splitwise
+              FairTally
             </h1>
 
             <ul className="mt-4 text-lg text-[#1B1B1B] font-semibold space-y-4">
@@ -37,7 +37,7 @@ const Home = () => {
               </Link>
               <Link
                 to="/login"
-                className="px-7 py-3 border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-[#030303] rounded-lg shadow-md text-lg font-semibold hover:bg-[#F7C236] transition duration-300"
+                className="px-7 py-3 border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-[#030303] rounded-lg shadow-md text-lg font-semibold hover:bg-[#69B99D] transition duration-300"
               >
                 Log In
               </Link>

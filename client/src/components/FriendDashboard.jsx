@@ -7,9 +7,11 @@ import { toast } from "react-toastify";
 import ConfirmModal from "./modals/ConfirmModal";
 import UpdateExpenseModal from "./modals/UpdateExpenseModal";
 import useTransactionStore from "../store/transactionStore";
+import { FaPlusCircle, FaUserSlash } from "react-icons/fa";
 
 const FriendDashboard = () => {
-  const { selectedFriend, fetchFriends, refreshTx, setRefreshTx } = useOutletContext();
+  const { selectedFriend, fetchFriends, refreshTx, setRefreshTx } =
+    useOutletContext();
   const [expenseModalOpen, setExpenseModalOpen] = useState(false);
   const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false);
   const [editTx, setEditTx] = useState(null);
@@ -20,31 +22,38 @@ const FriendDashboard = () => {
     return <p className="text-center text-gray-400">No friend selected</p>;
 
   return (
-    <main className="grid grid-cols-1 md:grid-cols-3 gap-6 p-4 md:p-6 w-4/5 mx-auto">
-      <article className="col-span-3 bg-[#C9B6E4] p-4 md:p-6 rounded-md shadow-2xl border-t-3 border-l-3 border-r-5 border-b-5 border-[#000] hover:shadow-3xl w-full">
-        <header className="flex justify-between items-center">
-          <h2 className="text-4xl font-bold text-[#030303] font-bebas">
-            {selectedFriend.name}
-          </h2>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => setExpenseModalOpen(true)}
-              className="bg-[#030303] hover:brightness-75 text-[#fbfbfb] font-semibold px-4 py-2 rounded-md transition"
-            >
-              Add Expense
-            </button>
-            <button
-              onClick={() => setConfirmRemoveOpen(true)}
-              className="bg-[#A31621] hover:bg-red-800 text-white font-semibold px-4 py-2 rounded-md transition"
-            >
-              Remove Friend
-            </button>
+    <main className="w-11/12 max-w-screen-lg mx-auto md:p-6 grid grid-cols-1 md:grid-cols-3">
+      <article className="col-span-3 p-0 w-full">
+        {/* Header as a separate visual block */}
+        <header className="mb-6">
+          <div className="flex justify-between items-center flex-wrap gap-4 bg-[#C9B6E4] p-4 md:p-6 rounded-md shadow-md border-t-3 border-l-3 border-r-5 border-b-5 border-[#000]">
+            <h2 className="text-4xl font-extrabold text-[#1C1F25] font-bebas tracking-wide">
+              {selectedFriend.name}
+            </h2>
+            <div className="flex gap-4 flex-wrap md:flex-nowrap">
+              <button
+                onClick={() => setExpenseModalOpen(true)}
+                className="bg-[#030303] hover:brightness-75 text-[#fbfbfb] font-semibold px-4 py-2 rounded-md transition whitespace-nowrap"
+              >
+                <FaPlusCircle className="inline mr-2 text-lg md:text-xl" />
+                Add Expense
+              </button>
+              <button
+                onClick={() => setConfirmRemoveOpen(true)}
+                className="bg-[#A31621] hover:bg-red-800 text-white font-semibold px-4 py-2 rounded-md transition whitespace-nowrap"
+              >
+                <FaUserSlash className="inline mr-2 text-lg md:text-xl" />
+                Remove Friend
+              </button>
+            </div>
           </div>
         </header>
-        <section className="mt-6">
-          <h3 className="text-xl font-bold text-[#040404] text-center mb-4">
+
+        {/* Section with border and background */}
+        <section className="bg-[#FFF7EC] p-6 rounded-md shadow-2xl border-t-3 border-l-3 border-r-5 border-b-5 border-[#000]">
+          <h2 className="text-2xl font-bold text-[#040404] text-center mb-4">
             Your Transactions with {selectedFriend.name}
-          </h3>
+          </h2>
           <TransactionList
             friendId={selectedFriend.id}
             isFriendView
@@ -68,14 +77,14 @@ const FriendDashboard = () => {
 
       {editTx && (
         <UpdateExpenseModal
-        open={!!editTx}
-        transaction={editTx}
-        onClose={() => setEditTx(null)}
-        onUpdate={(updatedTx) => {
-          updateTransaction(updatedTx, true);
-          setEditTx(null);
-        }}
-      />
+          open={!!editTx}
+          transaction={editTx}
+          onClose={() => setEditTx(null)}
+          onUpdate={(updatedTx) => {
+            updateTransaction(updatedTx, true);
+            setEditTx(null);
+          }}
+        />
       )}
 
       {confirmRemoveOpen && (

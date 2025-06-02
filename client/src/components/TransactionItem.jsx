@@ -8,7 +8,7 @@ const TransactionItem = ({
   onDelete,
   onEdit,
 }) => {
-  const backgroundColor = isFriendView ? "#E3F4E0" : "#FBE7A1";
+  const backgroundColor = isFriendView ? "#e1d7f0" : "#ffdaaa";
   const [isSettled, setIsSettled] = useState(tx.settled);
 
   const handleSettleClick = async () => {
@@ -22,7 +22,7 @@ const TransactionItem = ({
 
   return (
     <li
-      className="p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center rounded-md shadow-md border-t-2 border-l-2 border-b-4 border-r-4 border-black space-y-2 sm:space-y-0"
+      className="p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center rounded-md shadow-md border-t-2 border-l-2 border-b-4 border-r-4 border-black space-y-4 sm:space-y-0"
       style={{ backgroundColor }}
     >
       <div className="flex flex-col w-full sm:w-auto">

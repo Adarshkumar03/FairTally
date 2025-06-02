@@ -26,14 +26,15 @@ const AddFriendModal = ({ currentUserId, onClose, onFriendAdded }) => {
                 friendId: selectedUserId,
             });
             onFriendAdded();
+            onClose();
         } catch (error) {
             console.error("Error adding friend:", error);
         }
     };
 
     return (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.3)] flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-md w-[90%] max-w-md border-black">
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.3)] flex items-center justify-center z-50 px-4">
+            <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md border border-black">
                 <h2 className="text-3xl font-bold mb-4 text-center font-bebas">Add a Friend</h2>
 
                 {users.length === 0 ? (
@@ -55,15 +56,17 @@ const AddFriendModal = ({ currentUserId, onClose, onFriendAdded }) => {
                     </select>
                 )}
 
-                <div className="flex justify-end gap-4">
+                <div className="flex justify-between mt-6">
                     <button
-                        className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+                        className="bg-[#D9534F] text-[#FFF6E5] hover:bg-[#C9302C] font-bold py-2 px-6 rounded"
                         onClick={onClose}
                     >
                         Cancel
                     </button>
                     <button
-                        className="bg-[#F7C236] hover:brightness-110 border-black border-2 text-black font-bold py-2 px-4 rounded"
+                        className={`${
+                            selectedUserId ? "bg-[#7C3AED] hover:bg-[#6D28D9]" : "bg-gray-300 cursor-not-allowed"
+                        } text-white font-bold py-2 px-6 rounded transition`}
                         onClick={handleAddFriend}
                         disabled={!selectedUserId}
                     >

@@ -18,7 +18,9 @@ export default function Register() {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
     if (!nameRegex.test(name)) {
-      setError("Name must be 2-50 characters and contain only letters and spaces.");
+      setError(
+        "Name must be 2-50 characters and contain only letters and spaces."
+      );
       return false;
     }
 
@@ -58,96 +60,91 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <UserNavbar />
+    <div className="min-h-screen flex flex-col bg-[#AAD7B8]">
+      <header>
+        <UserNavbar />
+      </header>
 
-      <main className="flex items-center justify-center flex-grow px-5 bg-gradient-to-b from-[#AAD7B8] via-[#909CC2] to-[#306B34]">
-        <section className="bg-[#909CC2] border-l-2 border-t-2 border-r-5 border-b-5 border-[#030303] p-8 sm:p-10 rounded-lg shadow-lg w-full max-w-md sm:w-96 md:w-[28rem]">
-          <header className="text-center mb-6">
-            <h2 className="text-4xl font-bold text-[#030C03] font-bebas tracking-wider">
-              Register
-            </h2>
-          </header>
+      <main className="flex flex-grow justify-center items-start pt-28 sm:pt-6 px-3 sm:px-4 py-6 bg-gradient-to-b from-[#AAD7B8] to-white">
+        <section className="bg-white shadow-md rounded-xl w-full max-w-md p-6 sm:p-10 border border-[#CDE9DC] mt-0 sm:mt-4">
+          <h2 className="text-3xl font-semibold text-center text-[#030303] mb-6 font-bebas">
+            Create Your Account
+          </h2>
 
-          {error && <p className="text-red-600 text-sm text-center font-semibold">{error}</p>}
+          {error && (
+            <p className="text-red-500 text-sm mb-4 text-center">{error}</p>
+          )}
 
-          <form onSubmit={handleRegister} className="space-y-4">
-            
-            <article>
-              <label className="block text-[#030C03] font-semibold">
-                Name <span className="text-red-600">*</span>
+          <form onSubmit={handleRegister} className="space-y-3">
+            <div>
+              <label className="block text-[#030C03] font-medium mb-1">
+                Full Name
               </label>
               <input
                 type="text"
                 placeholder="Enter your name"
-                className="w-full p-3 bg-white border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-[#306B34]"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#69B99D] border-gray-300"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                required
               />
-            </article>
+            </div>
 
-            <article>
-              <label className="block text-[#030C03] font-semibold">
-                Email <span className="text-red-600">*</span>
+            <div>
+              <label className="block text-[#030C03] font-medium mb-1">
+                Email Address
               </label>
               <input
                 type="email"
-                placeholder="Enter your email"
-                className="w-full p-3 bg-white border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-[#306B34]"
+                placeholder="e.g. abc@company.com"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#69B99D] border-gray-300"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
-            </article>
+            </div>
 
-            <article>
-              <label className="block text-[#030C03] font-semibold">
-                Password <span className="text-red-600">*</span>
+            <div>
+              <label className="block text-[#030C03] font-medium mb-1">
+                Password
               </label>
               <input
                 type="password"
                 placeholder="Enter password"
-                className="w-full p-3 bg-white border border-gray-400 rounded-md focus:outline-none focus:ring-2 focus:ring-[#306B34]"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#69B99D] border-gray-300"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
               />
-            </article>
+            </div>
 
-            <article>
-              <label className="block text-[#030C03] font-semibold">
-                Confirm Password <span className="text-red-600">*</span>
+            <div>
+              <label className="block text-[#030C03] font-medium mb-1">
+                Confirm Password
               </label>
               <input
                 type="password"
-                placeholder="Confirm password"
-                className={`w-full p-3 bg-white border rounded-md focus:outline-none ${
-                  error.includes("Passwords") ? "border-red-500 focus:ring-red-500" : "border-gray-400 focus:ring-[#306B34]"
-                }`}
+                placeholder="Re-enter password"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#69B99D] border-gray-300"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                required
               />
-            </article>
+            </div>
 
             <button
-              className="w-full bg-[#306B34] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-white py-2 rounded-md font-semibold hover:bg-[#245824] transition-all duration-300"
+              type="submit"
+              className="w-full mt-2 bg-[#69B99D] hover:bg-[#55a48a] text-white border-t-3 border-l-3 border-b-5 border-r-5 border-[#030303] font-bold py-3 rounded-md transition-all"
             >
               Register
             </button>
           </form>
 
-          {/* Login link */}
-          <footer className="text-center text-sm mt-4 font-medium">
+          <p className="text-center text-sm mt-6 font-medium">
             Already have an account?{" "}
             <span
               onClick={() => navigate("/login")}
-              className="text-[#306B34] cursor-pointer hover:underline font-semibold"
+              className="text-[#306B34] hover:underline cursor-pointer font-semibold"
             >
-              Login
+              Log in
             </span>
-          </footer>
+          </p>
         </section>
       </main>
     </div>

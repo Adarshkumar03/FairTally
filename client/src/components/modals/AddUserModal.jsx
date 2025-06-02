@@ -40,9 +40,9 @@ const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
-      <div className="bg-[#FFF6E5] w-[400px] max-h-[500px] p-6 rounded-lg shadow-lg relative">
-        <h2 className="text-2xl font-bold mb-4 text-center text-[#030303]">
+    <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] px-4">
+      <div className="bg-[#FFF6E5] w-11/12 max-w-md p-6 rounded-lg shadow-lg relative">
+        <h2 className="text-3xl font-bold mb-2 text-center font-bebas">
           Add Users to Group
         </h2>
 
@@ -52,11 +52,11 @@ const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
 
         {selectedUsers.length > 0 && (
           <p className="text-lg text-[#030303] my-2 text-center">
-            {selectedUsers.length} user{selectedUsers.length > 1 ? "s" : ""}{" "}
-            selected
+            {selectedUsers.length} user{selectedUsers.length > 1 ? "s" : ""} selected
           </p>
         )}
-        <div className="max-h-60 overflow-y-auto bg-[#F7C236] p-3 rounded-md">
+
+        <div className="max-h-60 overflow-y-auto p-3 rounded-md">
           {users.length === 0 ? (
             <p className="text-gray-700 text-sm text-center">
               No users available to add.
@@ -66,7 +66,7 @@ const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
               {users.map((user) => (
                 <li
                   key={user.id}
-                  className="flex items-center gap-3 p-3 bg-[#FCEBB6] rounded-md transition-all hover:bg-[#f5d77a] cursor-pointer"
+                  className="flex items-center gap-3 p-3 bg-[#fef0c3] rounded-md transition-all hover:bg-[#fbd889] cursor-pointer"
                 >
                   <input
                     type="checkbox"
@@ -81,19 +81,17 @@ const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
                     }}
                     className="form-checkbox w-5 h-5 accent-[#306B34] cursor-pointer"
                   />
-                  <span className="text-[#030303] font-medium">
-                    {user.name}
-                  </span>
+                  <span className="text-[#030303] font-medium">{user.name}</span>
                 </li>
               ))}
             </ul>
           )}
         </div>
 
-        <div className="flex justify-between mt-6">
+        <div className="flex justify-between flex-wrap gap-4 mt-6">
           <button
             onClick={onClose}
-            className="bg-[#909CC2] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] text-[#fbfbfb] px-4 py-2 rounded-md font-semibold hover:brightness-110 transition"
+            className="bg-[#D9534F] text-[#FFF6E5] hover:bg-[#C9302C] border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] px-6 py-3 rounded-md font-semibold w-full sm:w-auto hover:brightness-110 transition"
           >
             Cancel
           </button>
@@ -101,9 +99,9 @@ const AddUserModal = ({ groupId, onClose, refreshGroupDetails }) => {
           <button
             onClick={handleAddUsers}
             disabled={loading || selectedUsers.length === 0}
-            className={`px-4 py-2 rounded-md font-semibold transition border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] ${
+            className={`border-l-2 border-t-2 border-r-4 border-b-4 border-[#030303] px-6 py-3 rounded-md font-semibold w-full sm:w-auto transition ${
               selectedUsers.length === 0
-                ? "bg-gray-400 cursor-not-allowed"
+                ? "bg-gray-400 text-white cursor-not-allowed"
                 : "bg-[#306B34] text-[#fbfbfb] hover:brightness-110"
             }`}
           >

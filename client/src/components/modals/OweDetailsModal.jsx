@@ -24,7 +24,7 @@ const OweDetailsModal = ({ user, groupId, onClose }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
             <div className="bg-[#FEF5E4] w-96 p-6 rounded-lg shadow-lg relative">
-                <h2 className="text-xl font-bold text-[#030C03] text-center">
+                <h2 className="text-3xl font-bold mb-4 text-center font-bebas">
                     {user.name} <span className="text-[#F7C236] font-semibold">Owes</span>
                 </h2>
 
