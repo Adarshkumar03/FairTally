@@ -64,7 +64,7 @@ const AddFriendExpenseModal = ({ friendId,friendName, onClose }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] mt-16">
             <div className="bg-[#FEF5E4] w-96 p-6 rounded-lg shadow-lg relative">
-                <h2 className="text-2xl font-bold text-center text-[#030C03] mb-4">Add an Expense with {friendName}</h2>
+                <h2 className="text-2xl font-bold text-center text-[#030C03] mb-4 font-sora">Add an Expense with {friendName}</h2>
                 <input 
                     type="text"
                     value={description}

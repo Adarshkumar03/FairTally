@@ -67,7 +67,7 @@ export default function Register() {
 
       <main className="flex flex-grow justify-center items-start pt-28 sm:pt-6 px-3 sm:px-4 py-6 bg-gradient-to-b from-[#AAD7B8] to-white">
         <section className="bg-white shadow-md rounded-xl w-full max-w-md p-6 sm:p-10 border border-[#CDE9DC] mt-0 sm:mt-4">
-          <h2 className="text-3xl font-semibold text-center text-[#030303] mb-6 font-bebas">
+          <h2 className="text-3xl font-semibold text-center text-[#030303] mb-6 font-sora">
             Create Your Account
           </h2>
 

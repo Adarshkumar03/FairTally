@@ -88,7 +88,7 @@ const AddExpenseModal = ({ groupId, groupName, groupMembers, onClose }) => {
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] mt-16">
             <div className="bg-[#FEF5E4] w-96 p-6 rounded-lg shadow-lg relative">
-                <h2 className="text-2xl font-bold text-center text-[#030C03]">Add an Expense</h2>
+                <h2 className="text-2xl font-bold text-center text-[#030C03] font-sora">Add an Expense</h2>
 
                 <div className="flex items-center justify-center bg-[#F7C236] p-3 rounded-md mt-3 mb-3">
                     <span className="text-[#030C03] text-lg font-medium">

@@ -22,7 +22,7 @@ const UserNavbar = () => {
     >
       <Link
         to={logoLink}
-        className="text-[#fff6e5] bg-[#030303] text-3xl hover:text-[#030303] hover:bg-[#fff6e5] transition-all duration-500 font-bebas px-3 py-3 tracking-wide"
+        className="text-[#fff6e5] uppercase font-extrabold bg-[#030303] text-2xl hover:text-[#030303] hover:bg-[#fff6e5] transition-all duration-500 font-sora px-3 py-3"
       >
         FairTally
       </Link>
@@ -41,13 +41,13 @@ const UserNavbar = () => {
             <div className="flex gap-4">
               <Link
                 to="/login"
-                className="px-4 py-2 text-sm font-semibold bg-[#69B99D] text-white rounded-lg border-t-2 border-l-2 border-b-4 border-r-4 border-[#030303] hover:bg-[#55a48a] transition"
+                className="px-4 py-2 text-sm font-semibold bg-[#69B99D] text-white rounded-md border-t-2 border-l-2 border-b-4 border-r-4 border-[#030303] hover:bg-[#55a48a] transition"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="px-4 py-2 text-sm font-semibold bg-[#306B34] text-white rounded-lg border-t-2 border-l-2 border-b-4 border-r-4 border-[#030303] hover:bg-[#245824] transition"
+                className="px-4 py-2 text-sm font-semibold bg-[#306B34] text-white rounded-md border-t-2 border-l-2 border-b-4 border-r-4 border-[#030303] hover:bg-[#245824] transition"
               >
                 Register
               </Link>

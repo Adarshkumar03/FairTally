@@ -45,7 +45,7 @@ const UpdateExpenseModal = ({ open, onClose, transaction, onUpdate }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] z-[9999]">
       <div className="bg-[#FCF5E5] p-6 rounded-2xl shadow-lg w-full max-w-md border-2 border-black">
-        <h2 className="text-3xl font-bold mb-4 text-center font-bebas">Update Expense</h2>
+        <h2 className="text-3xl font-bold mb-4 text-center font-sora">Update Expense</h2>
 
         <div className="space-y-4">
           <input

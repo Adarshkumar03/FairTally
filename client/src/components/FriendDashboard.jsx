@@ -27,7 +27,7 @@ const FriendDashboard = () => {
         {/* Header as a separate visual block */}
         <header className="mb-6">
           <div className="flex justify-between items-center flex-wrap gap-4 bg-[#C9B6E4] p-4 md:p-6 rounded-md shadow-md border-t-3 border-l-3 border-r-5 border-b-5 border-[#000]">
-            <h2 className="text-4xl font-extrabold text-[#1C1F25] font-bebas tracking-wide">
+            <h2 className="text-4xl font-extrabold text-[#1C1F25] font-sora">
               {selectedFriend.name}
             </h2>
             <div className="flex gap-4 flex-wrap md:flex-nowrap">
@@ -51,7 +51,7 @@ const FriendDashboard = () => {
 
         {/* Section with border and background */}
         <section className="bg-[#FFF7EC] p-6 rounded-md shadow-2xl border-t-3 border-l-3 border-r-5 border-b-5 border-[#000]">
-          <h2 className="text-2xl font-bold text-[#040404] text-center mb-4">
+          <h2 className="text-2xl font-bold text-[#040404] text-center mb-4 font-sora">
             Your Transactions with {selectedFriend.name}
           </h2>
           <TransactionList

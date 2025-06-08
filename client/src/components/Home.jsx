@@ -6,10 +6,10 @@ const Home = () => {
     <div className="flex flex-col min-h-screen">
       <UserNavbar />
 
-      <main className="flex flex-1 items-center justify-center px-6 sm:px-10 overflow-hidden bg-gradient-to-b from-[#AAD7B8] via-[#CDC1FF] to-[#A594F9] pb-16">
+      <main className="flex flex-1 items-center justify-center px-6 sm:px-10 overflow-hidden bg-gradient-to-b from-[#AAD7B8] to-white pb-16">
         <section className="flex flex-col md:flex-row items-center justify-between w-full max-w-5xl gap-12 md:gap-x-24">
           <article className="text-center md:text-left max-w-lg">
-            <h1 className="text-5xl sm:text-6xl font-bebas tracking-wide font-extrabold text-[#030303] drop-shadow-md mb-6 leading-tight">
+            <h1 className="text-5xl sm:text-6xl font-sora font-extrabold text-[#030303] drop-shadow-md mb-6 leading-tight">
               FairTally
             </h1>
 

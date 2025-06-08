@@ -61,7 +61,7 @@ const GroupDashboard = () => {
         {/* Transactions Section */}
         <article className="md:col-span-2 bg-[#FFF7EC] p-4 md:p-6 rounded-md shadow-2xl border-t-3 border-l-3 border-r-5 border-b-5 border-[#000]">
           <section>
-            <h3 className="text-xl md:text-2xl font-bold text-[#040404] text-center mb-4">
+            <h3 className="text-2xl font-bold text-[#040404] text-center mb-4 font-sora">
               Group Transactions
             </h3>
             <TransactionList

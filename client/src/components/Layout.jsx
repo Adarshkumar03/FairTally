@@ -84,7 +84,7 @@ const Layout = () => {
         <UserNavbar />
       </header>
 
-      <main className="flex flex-grow flex-col md:grid md:grid-cols-4 mt-15">
+      <main className="flex flex-grow flex-col md:grid md:grid-cols-4 mt-14">
         <aside className="md:col-span-1 bg-[#AAD7B8] p-6 border-r border-[#AAD7B8] min-h-[80px] md:min-h-screen overflow-y-auto">
           <button
             onClick={() => {
@@ -126,7 +126,7 @@ const Layout = () => {
           </section>
         </aside>
 
-        <section className="md:col-span-3 p-8 border-4 bg-[#FFF6E5] min-h-[calc(100vh-4rem)] flex flex-col">
+        <section className="md:col-span-3 p-8 border-t-4 border-l-4 bg-[#FFF6E5] min-h-[calc(100vh-4rem)] flex flex-col">
           <Outlet context={{ selectedGroup, selectedFriend, groups, friends, fetchGroups, fetchFriends, refreshTx, setRefreshTx }} />
         </section>
       </main>

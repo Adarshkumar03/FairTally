@@ -4,7 +4,7 @@ const Dashboard = () => {
     return (
         <main className="p-4 sm:p-6 md:p-8 lg:p-10 xl:p-12 w-full max-w-6xl mx-auto">
             <header>
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#030303] font-bebas tracking-wide text-center sm:text-left">
+                <h2 className="text-3xl sm:text-4xl font-bold text-[#030303] font-bebas tracking-wide text-center sm:text-left font-sora">
                     Dashboard
                 </h2>
             </header>

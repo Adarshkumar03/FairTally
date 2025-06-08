@@ -31,7 +31,7 @@ const JoinGroupModal = ({ open, onClose, onGroupJoined }) => {
     open && (
       <div className="fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)] px-4">
         <div className="bg-[#FEF5E4] w-11/12 max-w-md p-6 rounded-lg shadow-lg">
-          <h2 className="text-3xl font-bold mb-4 text-center font-bebas">
+          <h2 className="text-3xl font-bold mb-4 text-center font-sora">
             Join a Group
           </h2>
 

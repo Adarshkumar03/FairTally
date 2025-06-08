@@ -49,9 +49,9 @@ export default function Login() {
 
       <main className="flex flex-grow justify-center items-center px-4 py-12 bg-gradient-to-b from-[#AAD7B8] to-white">
         <section className="bg-white shadow-md rounded-xl w-full max-w-md p-8 sm:p-10 border border-[#CDE9DC]">
-          <h2 className="text-3xl font-semibold text-center text-[#030303] mb-2 font-bebas">
+          <p className="text-3xl font-semibold text-center text-[#030303] mb-2  font-sora">
             Hey! Welcome back,
-          </h2>
+          </p>
           <p className="text-center text-[#306B34] font-medium mb-6">
             Track your expenses effortlessly and stay on top of your finances.
           </p>

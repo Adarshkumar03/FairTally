@@ -7,7 +7,7 @@ const GroupHeader = ({
 }) => {
   return (
     <div className="flex justify-between items-center flex-wrap gap-4">
-      <h2 className="text-4xl font-extrabold text-[#1C1F25] font-bebas tracking-wide">
+      <h2 className="text-4xl font-extrabold text-[#1C1F25] font-sora">
         {groupName}
       </h2>
       <div className="flex gap-4">
