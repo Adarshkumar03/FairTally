@@ -1,4 +1,4 @@
-# SplitwiseClone
+# FairTally
 A full-stack web application that emulates the core functionalities of Splitwise, allowing users to manage shared expenses seamlessly. This project leverages a microservices architecture with a Java Spring Boot backend and a React frontend.
 
 ## 🛠️ Tech Stack
