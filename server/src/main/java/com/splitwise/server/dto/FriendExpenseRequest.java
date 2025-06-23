@@ -1,6 +1,5 @@
 package com.splitwise.server.dto;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
