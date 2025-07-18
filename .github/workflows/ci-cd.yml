@@ -7,16 +7,15 @@ on:
     branches: ["main"]
 
 jobs:
-  # Run Backend Tests (Spring Boot with Maven)
   run-backend-tests:
     name: Run Backend Tests
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgres:15-alpine # Using Alpine for smaller image in CI
+        image: postgres:15-alpine
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: Mniaki@22yo # Use a test password for CI. Consider a GitHub Secret for this if sensitive.
+          POSTGRES_PASSWORD: Mniaki@22yo
           POSTGRES_DB: postgres
         ports: ["5432:5432"]
         options: >-
@@ -24,6 +23,12 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Set up Java
         uses: actions/setup-java@v4
