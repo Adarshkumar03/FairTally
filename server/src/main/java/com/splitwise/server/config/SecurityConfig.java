@@ -17,6 +17,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.Arrays; // Changed List.of to Arrays.asList for broader method support if needed
 import java.util.List;
 
 @Configuration
@@ -66,13 +67,14 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
+        // Allow both the Dockerized frontend (port 80) and potentially local dev (port 5173)
+        configuration.setAllowedOrigins(List.of("http://localhost", "http://localhost:5173")); // <-- UPDATED ORIGINS
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // <-- ADDED OPTIONS METHOD
+        configuration.setAllowedHeaders(List.of("*")); // Allow all headers
+        configuration.setAllowCredentials(true); // Allow sending cookies/auth headers
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", configuration); // Apply to all paths
         return source;
     }
 }

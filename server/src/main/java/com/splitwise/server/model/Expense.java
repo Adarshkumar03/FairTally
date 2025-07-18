@@ -48,6 +48,4 @@ public class Expense {
             inverseJoinColumns = @JoinColumn(name="user_id")
     )
     private Set<User> sharedWith;
-
-
 }

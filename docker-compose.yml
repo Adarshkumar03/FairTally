@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # Frontend service
+  client:
+    build:
+      context: ./client # Specifies the path to the Dockerfile for the client
+      dockerfile: Dockerfile
+    ports:
+      - "80:80" # Map host port 80 to container port 80 (where Nginx runs)
+    # Optional: If your React app needs to know the backend URL at build time,
+    # you might pass it as a build arg or environment variable.
+    # More often, React apps fetch from relative paths or rely on Nginx proxying.
+    networks:
+      - app-network
+
+  # Backend service
+  server:
+    build:
+      context: ./server # Specifies the path to the Dockerfile for the server
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080" # Map host port 8080 to container port 8080 (Spring Boot default)
+    environment:
+      # Database connection for the backend, using the 'db' service name
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/postgres # Use 'db' as hostname for service discovery
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Mniaki@22yo # Replace with a secure method for production!
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.PostgreSQLDialect
+      # Consider adding other environment variables your Spring Boot app needs
+    depends_on:
+      - db # Ensures the 'db' service starts before 'server'
+    networks:
+      - app-network
+
+  # Database service (PostgreSQL)
+  db:
+    image: postgres:15-alpine # Use a specific, stable PostgreSQL version with Alpine for smaller size
+    restart: always # Always restart if it stops
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Mniaki@22yo # Replace with a secure method for production!
+    ports:
+      - "5432:5432" # Optional: Expose DB port if you need to access it from your host (e.g., DBeaver)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data # Persist database data
+    networks:
+      - app-network
+
+# Define networks for inter-service communication
+networks:
+  app-network:
+    driver: bridge # Default bridge network
+
+# Define volumes for persistent data
+volumes:
+  postgres_data:
